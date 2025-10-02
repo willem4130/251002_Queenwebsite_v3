@@ -141,7 +141,7 @@ export function Hero({ onScrollToSection }: HeroProps) {
 
         {/* Scroll indicator */}
         <motion.button
-          onClick={() => scrollToSection("about")}
+          onClick={() => scrollToSection("shows")}
           className="absolute bottom-8 rounded-full p-2 text-white/60 transition-all duration-500 hover:bg-amber-900/20 hover:text-white/90 hover:shadow-lg hover:shadow-amber-900/30"
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}

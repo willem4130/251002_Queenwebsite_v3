@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -214,6 +214,16 @@ function HomeContent() {
               </div>
             </div>
           </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.button
+            onClick={() => scrollToSection("gallery")}
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 rounded-full p-2 text-white/60 transition-all duration-500 hover:bg-amber-900/20 hover:text-white/90 hover:shadow-lg hover:shadow-amber-900/30"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <ChevronDown className="h-8 w-8 drop-shadow-lg" />
+          </motion.button>
         </div>
       </section>
 
@@ -311,11 +321,6 @@ function HomeContent() {
                 })}
               </div>
             </div>
-
-            {/* Info text */}
-            <p className="mt-16 text-center text-sm font-light uppercase tracking-widest text-amber-500/70">
-              Click any image to view
-            </p>
           </motion.div>
         </div>
       </section>
