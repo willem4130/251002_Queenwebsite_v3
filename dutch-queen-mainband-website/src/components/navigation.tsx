@@ -55,7 +55,7 @@ export function Navigation() {
                   key={item.name}
                   href={item.href}
                   onClick={(e) => handleClick(e, item.href)}
-                  className="rounded-lg px-3 py-1 text-base uppercase tracking-wider text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:shadow-lg hover:shadow-amber-900/20 hover:backdrop-blur-sm"
+                  className="rounded-lg px-3 py-1 text-base uppercase tracking-wider text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:font-semibold hover:text-white"
                 >
                   {item.name}
                 </a>
@@ -69,7 +69,7 @@ export function Navigation() {
               href={content.social.facebook || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:shadow-lg hover:shadow-amber-900/20 hover:backdrop-blur-sm"
+              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
             >
               <Facebook className="h-6 w-6" />
             </a>
@@ -77,7 +77,7 @@ export function Navigation() {
               href={content.social.instagram || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:shadow-lg hover:shadow-amber-900/20 hover:backdrop-blur-sm"
+              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
             >
               <Instagram className="h-6 w-6" />
             </a>
@@ -85,19 +85,19 @@ export function Navigation() {
               href={content.social.youtube || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:shadow-lg hover:shadow-amber-900/20 hover:backdrop-blur-sm"
+              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
             >
               <Youtube className="h-7 w-7" />
             </a>
             <a
               href={`mailto:${content.contact.email}`}
-              className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:shadow-lg hover:shadow-amber-900/20 hover:backdrop-blur-sm"
+              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
             >
               <Mail className="h-6 w-6" />
             </a>
             <a
               href={`tel:${content.contact.phone}`}
-              className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:shadow-lg hover:shadow-amber-900/20 hover:backdrop-blur-sm"
+              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
             >
               <Phone className="h-6 w-6" />
             </a>
@@ -107,7 +107,7 @@ export function Navigation() {
           <div className="md:hidden">
             <button
               type="button"
-              className="text-white/60 transition-opacity duration-300 hover:text-white/80"
+              className="text-white/60 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white/80"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
@@ -129,7 +129,7 @@ export function Navigation() {
                 key={item.name}
                 href={item.href}
                 onClick={(e) => handleClick(e, item.href)}
-                className="block rounded-lg px-3 py-2 text-base uppercase tracking-wider text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:backdrop-blur-sm"
+                className="block rounded-lg px-3 py-2 text-base uppercase tracking-wider text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:font-semibold hover:text-white"
               >
                 {item.name}
               </a>
@@ -141,7 +141,7 @@ export function Navigation() {
                 href={content.social.facebook || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:backdrop-blur-sm"
+                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
               >
                 <Facebook className="h-7 w-7" />
               </a>
@@ -149,7 +149,7 @@ export function Navigation() {
                 href={content.social.instagram || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:backdrop-blur-sm"
+                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
               >
                 <Instagram className="h-7 w-7" />
               </a>
@@ -157,19 +157,19 @@ export function Navigation() {
                 href={content.social.youtube || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:backdrop-blur-sm"
+                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
               >
                 <Youtube className="h-7 w-7" />
               </a>
               <a
                 href={`mailto:${content.contact.email}`}
-                className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:backdrop-blur-sm"
+                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
               >
                 <Mail className="h-7 w-7" />
               </a>
               <a
                 href={`tel:${content.contact.phone}`}
-                className="rounded-lg p-2 text-white/80 transition-all duration-500 hover:bg-amber-900/20 hover:text-white hover:backdrop-blur-sm"
+                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
               >
                 <Phone className="h-7 w-7" />
               </a>
