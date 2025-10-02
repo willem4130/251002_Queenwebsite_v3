@@ -25,9 +25,46 @@ export function Hero({ onScrollToSection }: HeroProps) {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.muted = isMuted;
+      // Handle React bug with muted attribute (open since 2017)
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+
+      // Play immediately (Supabase pattern - call play multiple times)
+      const promise = videoRef.current.play();
+
+      if (promise !== undefined) {
+        promise
+          .then(() => {
+            console.log("✓ Video playing successfully");
+            console.log(`📊 Video muted: ${videoRef.current?.muted}`);
+            console.log(`📊 Video volume: ${videoRef.current?.volume}`);
+            // Call play again to ensure it works (Supabase pattern)
+            videoRef.current?.play();
+          })
+          .catch((error) => {
+            console.warn("⚠ Autoplay blocked. Video will play on user interaction:", error);
+            // Add click listener to play on first interaction
+            const playOnInteraction = () => {
+              videoRef.current?.play().then(() => {
+                console.log("✓ Video playing after user interaction");
+                console.log(`📊 Video muted: ${videoRef.current?.muted}`);
+                console.log(`📊 Video volume: ${videoRef.current?.volume}`);
+              });
+            };
+            document.addEventListener("click", playOnInteraction, { once: true });
+          });
+      }
+
+      // Log errors
+      videoRef.current.addEventListener("error", (e) => {
+        console.error("✗ Video error:", e);
+        const video = videoRef.current;
+        if (video?.error) {
+          console.error(`Error code: ${video.error.code} - ${video.error.message}`);
+        }
+      });
     }
-  }, [isMuted]);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     if (onScrollToSection) {
@@ -40,7 +77,28 @@ export function Hero({ onScrollToSection }: HeroProps) {
   };
 
   const toggleMute = () => {
-    setIsMuted(!isMuted);
+    if (videoRef.current) {
+      const newMutedState = !videoRef.current.muted;
+
+      // Ensure volume is 1 when unmuting (critical for audio playback)
+      if (!newMutedState) {
+        videoRef.current.volume = 1;
+      }
+
+      videoRef.current.muted = newMutedState;
+      setIsMuted(newMutedState);
+
+      // Log audio state for debugging
+      console.log(`🔊 Audio ${newMutedState ? 'MUTED' : 'UNMUTED'}`);
+      console.log(`📊 Video element muted property: ${videoRef.current.muted}`);
+      console.log(`📊 Video element volume: ${videoRef.current.volume}`);
+      console.log(`📊 Video has audio track: ${videoRef.current.audioTracks?.length > 0 || 'unknown'}`);
+
+      // Check if video actually has audio
+      if (!newMutedState && videoRef.current.volume === 0) {
+        console.warn('⚠️ Volume is 0 - audio will not play!');
+      }
+    }
   };
 
   return (
@@ -50,7 +108,6 @@ export function Hero({ onScrollToSection }: HeroProps) {
         <video
           ref={videoRef}
           autoPlay
-          muted
           loop
           playsInline
           preload="auto"
@@ -68,7 +125,7 @@ export function Hero({ onScrollToSection }: HeroProps) {
         {/* Mute toggle button */}
         <motion.button
           onClick={toggleMute}
-          className="absolute right-8 top-8 rounded-full bg-black/30 p-3 text-white/80 backdrop-blur-sm transition-all duration-300 hover:bg-amber-900/40 hover:text-white hover:shadow-lg hover:shadow-amber-900/30"
+          className="absolute bottom-6 right-6 rounded-full bg-black/30 p-3 text-white/80 backdrop-blur-sm transition-all duration-300 hover:bg-amber-900/40 hover:text-white hover:shadow-lg hover:shadow-amber-900/30 md:bottom-8 md:right-8"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0, x: 20 }}
