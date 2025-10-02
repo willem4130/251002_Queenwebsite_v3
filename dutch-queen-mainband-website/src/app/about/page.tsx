@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { useBandContent } from "@/hooks/useConfig";
 
@@ -25,36 +24,28 @@ export default function AboutPage() {
         </div>
 
         <div className="relative z-10 mx-auto max-w-4xl px-6">
-          <motion.div
-            className="mb-16 text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-          >
+          <div className="mb-16 text-center">
             <h1 className="mb-8 text-4xl font-thin uppercase tracking-widest text-white/80 md:text-6xl">
               About
             </h1>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="space-y-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-          >
-            {paragraphs.map((paragraph, index) => (
-              <p
-                key={index}
-                className={
-                  index === 0
-                    ? "text-xl font-medium leading-relaxed text-white"
-                    : "text-lg font-normal leading-relaxed text-white"
-                }
-              >
-                {paragraph}
-              </p>
-            ))}
-          </motion.div>
+          <div className="bg-black/70 backdrop-blur-sm px-6 py-3.5 md:px-10 md:py-6 rounded-lg">
+            <div className="space-y-6">
+              {paragraphs.map((paragraph, index) => (
+                <p
+                  key={index}
+                  className={
+                    index === 0
+                      ? "text-xl font-medium leading-relaxed text-white"
+                      : "text-lg font-normal leading-relaxed text-white"
+                  }
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
     </div>

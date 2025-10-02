@@ -376,22 +376,27 @@ function HomeContent() {
         </div>
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+          <motion.h2
+            className="mb-12 text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
+            style={{
+              textShadow:
+                "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
+              WebkitTextStroke: "0.5px rgba(255, 255, 255, 0.3)",
+            }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            <h2
-              className="mb-12 text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
-              style={{
-                textShadow:
-                  "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
-                WebkitTextStroke: "0.5px rgba(255, 255, 255, 0.3)",
-              }}
-            >
-              About
-            </h2>
+            About
+          </motion.h2>
+          <motion.div
+            className="bg-black/70 backdrop-blur-sm px-6 py-3.5 md:px-10 md:py-6 rounded-lg"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            viewport={{ once: true }}
+          >
             <div
               className="space-y-6 text-white"
               style={{
