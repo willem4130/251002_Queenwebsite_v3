@@ -1,19 +1,33 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
-import Image from "next/image";
-import { heroConfig } from "../../config/hero.config";
-import { LogoHero } from "./LogoHero";
-import { TextHero } from "./TextHero";
-import { useMediaPaths } from "@/hooks/useConfig";
+import { ChevronDown, Volume2, VolumeX } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 
 interface HeroProps {
   onScrollToSection?: (sectionId: string) => void;
 }
 
 export function Hero({ onScrollToSection }: HeroProps) {
-  const media = useMediaPaths();
+  const [isMuted, setIsMuted] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
 
   const scrollToSection = (sectionId: string) => {
     if (onScrollToSection) {
@@ -25,25 +39,48 @@ export function Hero({ onScrollToSection }: HeroProps) {
     }
   };
 
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  };
+
   return (
     <section id="home" className="relative h-screen overflow-hidden">
-      {/* Background image */}
+      {/* Background video */}
       <div className="absolute inset-0">
-        <Image
-          src={media.hero.background}
-          alt="Hero background"
-          fill
-          priority
-          quality={85}
-          className="object-cover"
-          sizes="100vw"
-        />
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="h-full w-full object-cover"
+        >
+          <source
+            src={isMobile ? "/videos/hero-mobile.mp4" : "/videos/hero-desktop.mp4"}
+            type="video/mp4"
+          />
+        </video>
       </div>
 
       {/* Hero content */}
       <div className="relative z-10 flex h-screen flex-col items-center justify-center">
-        {/* Conditional rendering: Logo or Text */}
-        {heroConfig.displayMode === "logo" ? <LogoHero /> : <TextHero />}
+        {/* Mute toggle button */}
+        <motion.button
+          onClick={toggleMute}
+          className="absolute right-8 top-8 rounded-full bg-black/30 p-3 text-white/80 backdrop-blur-sm transition-all duration-300 hover:bg-amber-900/40 hover:text-white hover:shadow-lg hover:shadow-amber-900/30"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 1 }}
+        >
+          {isMuted ? (
+            <VolumeX className="h-5 w-5 drop-shadow-lg" />
+          ) : (
+            <Volume2 className="h-5 w-5 drop-shadow-lg" />
+          )}
+        </motion.button>
 
         {/* Scroll indicator */}
         <motion.button
