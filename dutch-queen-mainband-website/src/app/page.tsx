@@ -105,7 +105,7 @@ function HomeContent() {
             viewport={{ once: true }}
           >
             <h2
-              className="mb-8 text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
+              className="mb-8 text-center text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
               style={{
                 textShadow:
                   "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
@@ -343,9 +343,9 @@ function HomeContent() {
           />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+        <div className="relative z-10 w-full px-6">
           <motion.h2
-            className="mb-12 text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
+            className="mb-12 text-center text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
             style={{
               textShadow:
                 "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
@@ -358,34 +358,36 @@ function HomeContent() {
           >
             About
           </motion.h2>
-          <motion.div
-            className="bg-black/70 backdrop-blur-sm px-6 py-3.5 md:px-10 md:py-6 rounded-lg"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            viewport={{ once: true }}
-          >
-            <div
-              className="space-y-6 text-white"
-              style={{
-                textShadow:
-                  "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
-              }}
-            >
-              {content.description.long.split("\n\n").map((paragraph, i) => (
-                <p
-                  key={i}
-                  className={
-                    i === 0
-                      ? "text-xl font-medium leading-relaxed"
-                      : "text-lg font-normal leading-relaxed"
-                  }
-                >
-                  {paragraph}
-                </p>
-              ))}
+
+          {/* Flex container for 50/50 split */}
+          <div className="w-full flex">
+            {/* Left section - text content */}
+            <div className="w-full lg:w-1/2 px-[30px]">
+              <div
+                className="space-y-6 text-white text-left"
+                style={{
+                  textShadow:
+                    "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
+                }}
+              >
+                {content.description.long.split("\n\n").map((paragraph, i) => (
+                  <p
+                    key={i}
+                    className={
+                      i === 0
+                        ? "text-xl font-medium leading-relaxed"
+                        : "text-lg font-normal leading-relaxed"
+                    }
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
             </div>
-          </motion.div>
+
+            {/* Right section - empty for background visibility */}
+            <div className="hidden lg:block lg:w-1/2"></div>
+          </div>
         </div>
       </section>
 
