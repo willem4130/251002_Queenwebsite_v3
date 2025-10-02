@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import { ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Hero } from "@/components/Hero";
 import { useBandContent, useMediaPaths } from "@/hooks/useConfig";
@@ -26,6 +26,64 @@ function HomeContent() {
   // Configuration hooks
   const content = useBandContent();
   const media = useMediaPaths();
+
+  // Scroll animation refs
+  const heroRef = useRef<HTMLDivElement>(null);
+  const showsRef = useRef<HTMLElement>(null);
+  const galleryRef = useRef<HTMLElement>(null);
+  const aboutRef = useRef<HTMLElement>(null);
+
+  // Hero section scroll animations - DRAMATIC: zoom + blur + tilt exit
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroOpacity = useTransform(heroProgress, [0, 0.6], [1, 0]);
+  const heroScale = useSpring(
+    useTransform(heroProgress, [0, 0.6], [1, 1.35]),
+    { stiffness: 100, damping: 25 }
+  );
+  const heroBlur = useTransform(heroProgress, [0, 0.6], [0, 20]);
+  const heroRotate = useTransform(heroProgress, [0, 0.6], [0, -8]);
+  const heroFilter = useTransform(heroBlur, (value) => `blur(${value}px)`);
+
+  // Shows section - DRAMATIC: 3D depth + massive parallax + dramatic scale
+  const { scrollYProgress: showsProgress } = useScroll({
+    target: showsRef,
+    offset: ["start end", "end start"],
+  });
+  const showsBgY = useTransform(showsProgress, [0, 1], [100, -250]);
+  const showsRotateX = useTransform(showsProgress, [0, 0.3], [15, 0]);
+  const showsOpacity = useTransform(showsProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const showsScale = useSpring(
+    useTransform(showsProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 1.15]),
+    { stiffness: 120, damping: 20 }
+  );
+
+  // Gallery section - DRAMATIC: explosive reveal with spring physics
+  const { scrollYProgress: galleryProgress } = useScroll({
+    target: galleryRef,
+    offset: ["start end", "end start"],
+  });
+  const galleryOpacity = useTransform(galleryProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 0.7]);
+  const galleryY = useTransform(galleryProgress, [0, 0.25, 0.75, 1], [180, 0, 0, -100]);
+  const galleryScale = useSpring(
+    useTransform(galleryProgress, [0, 0.25], [0.85, 1]),
+    { stiffness: 120, damping: 20 }
+  );
+
+  // About section - DRAMATIC: deep parallax + rotation entrance
+  const { scrollYProgress: aboutProgress } = useScroll({
+    target: aboutRef,
+    offset: ["start end", "end start"],
+  });
+  const aboutBgY = useTransform(aboutProgress, [0, 1], [200, -400]);
+  const aboutOpacity = useTransform(aboutProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 1]);
+  const aboutScale = useSpring(
+    useTransform(aboutProgress, [0, 0.4], [0.8, 1]),
+    { stiffness: 100, damping: 25 }
+  );
+  const aboutRotate = useTransform(aboutProgress, [0, 0.4], [5, 0]);
 
   const getBentoPattern = (index: number) => {
     return bentoPatterns[index % bentoPatterns.length];
@@ -76,16 +134,38 @@ function HomeContent() {
 
   return (
     <div className="bg-black">
-      {/* Hero Section */}
-      <Hero onScrollToSection={scrollToSection} />
+      {/* Hero Section - DRAMATIC: zoom + blur + tilt */}
+      <motion.div
+        ref={heroRef}
+        style={{
+          opacity: heroOpacity,
+          scale: heroScale,
+          rotate: heroRotate,
+          filter: heroFilter,
+        }}
+      >
+        <Hero onScrollToSection={scrollToSection} />
+      </motion.div>
 
-      {/* Shows Section */}
-      <section
+      {/* Shows Section - DRAMATIC: 3D tilt + massive parallax */}
+      <motion.section
+        ref={showsRef}
         id="shows"
         className="relative flex min-h-screen items-center justify-center overflow-hidden py-20"
+        style={{
+          opacity: showsOpacity,
+          scale: showsScale,
+          rotateX: showsRotateX,
+          transformPerspective: 1200,
+        }}
       >
-        {/* Background image */}
-        <div className="absolute inset-0">
+        {/* Parallax background image (moves slower than content) */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            y: showsBgY,
+          }}
+        >
           <Image
             src="/shows-bg-1920.jpg"
             alt="Shows background"
@@ -95,7 +175,7 @@ function HomeContent() {
             className="object-cover"
             sizes="100vw"
           />
-        </div>
+        </motion.div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 w-full">
           <motion.div
@@ -225,10 +305,19 @@ function HomeContent() {
             <ChevronDown className="h-8 w-8 drop-shadow-lg" />
           </motion.button>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Gallery Section */}
-      <section id="gallery" className="relative min-h-screen overflow-hidden py-16">
+      {/* Gallery Section - DRAMATIC: explosive reveal with spring */}
+      <motion.section
+        ref={galleryRef}
+        id="gallery"
+        className="relative min-h-screen overflow-hidden py-16"
+        style={{
+          opacity: galleryOpacity,
+          y: galleryY,
+          scale: galleryScale,
+        }}
+      >
         <div className="relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -323,15 +412,26 @@ function HomeContent() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* About Section */}
-      <section
+      {/* About Section - DRAMATIC: deep parallax + rotation */}
+      <motion.section
+        ref={aboutRef}
         id="about"
         className="relative flex min-h-screen items-center justify-center overflow-hidden py-20"
+        style={{
+          opacity: aboutOpacity,
+          scale: aboutScale,
+          rotate: aboutRotate,
+        }}
       >
-        {/* Background image */}
-        <div className="absolute inset-0">
+        {/* Parallax background image (slower scroll) */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            y: aboutBgY,
+          }}
+        >
           <Image
             src="/about-bg-1920.jpg"
             alt="About background"
@@ -341,7 +441,7 @@ function HomeContent() {
             className="object-cover"
             sizes="100vw"
           />
-        </div>
+        </motion.div>
 
         <div className="relative z-10 w-full px-6">
           <motion.h2
@@ -389,7 +489,7 @@ function HomeContent() {
             <div className="hidden lg:block lg:w-1/2"></div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Lightbox Modal */}
       <AnimatePresence>
