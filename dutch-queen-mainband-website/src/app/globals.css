@@ -552,6 +552,35 @@ section {
   z-index: 2;
 }
 
+/* Magazine-style gallery utilities */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.magazine-frame {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.magazine-frame-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.magazine-frame-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 8px 24px rgba(251, 191, 36, 0.3),
+    0 16px 48px rgba(245, 158, 11, 0.2);
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   * {
