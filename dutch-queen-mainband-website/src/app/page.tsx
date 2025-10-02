@@ -123,7 +123,7 @@ function HomeContent() {
                   "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
               }}
             >
-              <div className="grid md:grid-cols-2 gap-5">
+              <div className="grid md:grid-cols-2 gap-x-[165px] gap-y-5">
                 {tourDates.map((show, index) => (
                   <motion.div
                     key={index}
