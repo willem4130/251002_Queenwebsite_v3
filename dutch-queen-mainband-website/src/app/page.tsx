@@ -135,7 +135,7 @@ function HomeContent() {
                     whileHover={{ scale: 1.02 }}
                   >
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-[#cd7f32]/0 via-[#cd7f32]/20 to-[#cd7f32]/0"
+                      className="absolute inset-0 bg-gradient-to-br from-emerald-600/0 via-emerald-600/20 to-emerald-600/0"
                       initial={{ opacity: 0, scale: 0.8 }}
                       whileHover={{ opacity: 1, scale: 1.2 }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -144,7 +144,7 @@ function HomeContent() {
                       {/* Date - Large and Bold */}
                       <div className="flex items-baseline gap-3">
                         <span
-                          className="text-xl md:text-2xl font-bold text-white transition-all duration-500 group-hover:text-[#e9b870]"
+                          className="text-xl md:text-2xl font-bold text-white transition-all duration-500 group-hover:text-emerald-400"
                           style={{
                             textShadow:
                               "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
@@ -165,7 +165,7 @@ function HomeContent() {
 
                       {/* Venue - Prominent */}
                       <div
-                        className="text-base md:text-lg font-semibold text-white uppercase tracking-wide transition-all duration-500 group-hover:text-[#d4a76a]"
+                        className="text-base md:text-lg font-semibold text-white uppercase tracking-wide transition-all duration-500 group-hover:text-emerald-400"
                         style={{
                           textShadow:
                             "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
@@ -202,7 +202,7 @@ function HomeContent() {
                           href={show.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-6 py-2.5 bg-[#cd7f32] hover:bg-[#b87333] text-white font-semibold rounded transition-all duration-300 shadow-lg hover:shadow-[#cd7f32]/50"
+                          className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded transition-all duration-300 shadow-lg hover:shadow-emerald-600/50"
                           onClick={(e) => e.stopPropagation()}
                         >
                           Get Tickets
