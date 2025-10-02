@@ -47,7 +47,7 @@ export default function GalleryBentoGridPage() {
 
   return (
     <div className="bg-black">
-      <section className="relative min-h-screen overflow-hidden py-20">
+      <section className="relative min-h-screen overflow-hidden py-16">
         <div className="relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -71,7 +71,7 @@ export default function GalleryBentoGridPage() {
                 className="grid gap-4 md:gap-6"
                 style={{
                   gridTemplateColumns: "repeat(4, 1fr)",
-                  gridAutoRows: "200px",
+                  gridAutoRows: "160px",
                   gridAutoFlow: "dense",
                 }}
               >
