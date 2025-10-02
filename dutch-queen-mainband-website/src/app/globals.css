@@ -575,10 +575,15 @@ section {
 }
 
 .magazine-frame-hover:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-8px) scale(1.08);
   box-shadow:
     0 8px 24px rgba(251, 191, 36, 0.3),
     0 16px 48px rgba(245, 158, 11, 0.2);
+}
+
+.magazine-frame-hover:hover img {
+  transform: scale(1.15);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Reduced motion support */

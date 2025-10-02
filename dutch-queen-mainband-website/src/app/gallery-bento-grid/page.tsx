@@ -96,7 +96,7 @@ export default function GalleryBentoGridPage() {
                       }}
                       viewport={{ once: true, margin: "-50px" }}
                       whileHover={{
-                        scale: 0.98,
+                        scale: 1.05,
                         transition: { duration: 0.3 },
                       }}
                       whileTap={{ scale: 0.96 }}
@@ -122,7 +122,7 @@ export default function GalleryBentoGridPage() {
                           src={`/gallery/${image}`}
                           alt={`Gallery image ${i + 1}`}
                           fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          className="scale-125 object-cover transition-transform duration-500 group-hover:scale-100"
                           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           draggable={false}
                         />
@@ -135,9 +135,6 @@ export default function GalleryBentoGridPage() {
                           {i + 1}/{galleryImages.length}
                         </div>
                       </div>
-
-                      {/* Border accent on hover */}
-                      <div className="absolute inset-0 rounded-2xl border border-amber-500/0 transition-all duration-300 group-hover:border-amber-500/30" />
                     </motion.div>
                   );
                 })}
