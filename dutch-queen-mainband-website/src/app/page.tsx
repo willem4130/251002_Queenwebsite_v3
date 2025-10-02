@@ -102,25 +102,22 @@ function HomeContent() {
 
             {/* Scrollable Grid Container */}
             <div
-              className="overflow-y-auto max-h-[60vh] pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
+              className="overflow-y-auto max-h-[65vh] pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
               style={{
                 textShadow:
                   "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
               }}
             >
-              <div className="grid md:grid-cols-2 gap-20">
+              <div className="grid md:grid-cols-2 gap-6">
                 {tourDates.map((show, index) => (
-                  <motion.a
+                  <motion.div
                     key={index}
-                    href={show.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-3 bg-black/50 backdrop-blur-sm"
+                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-6 bg-black/50 backdrop-blur-sm"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: index * 0.05 }}
                     viewport={{ once: true, margin: "-50px" }}
-                    whileHover={{ scale: 1.01 }}
+                    whileHover={{ scale: 1.02 }}
                   >
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-br from-teal-900/0 via-teal-800/20 to-teal-900/0"
@@ -128,33 +125,76 @@ function HomeContent() {
                       whileHover={{ opacity: 1, scale: 1.2 }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
                     />
-                    <div className="relative z-10 flex items-center justify-between gap-4">
+                    <div className="relative z-10 flex flex-col gap-4">
+                      {/* Date - Large and Bold */}
+                      <div className="flex items-baseline gap-3">
+                        <span
+                          className="text-2xl md:text-3xl font-bold text-white transition-all duration-500 group-hover:text-teal-300"
+                          style={{
+                            textShadow:
+                              "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
+                          }}
+                        >
+                          {show.date}
+                        </span>
+                        <span
+                          className="text-lg text-white/60"
+                          style={{
+                            textShadow:
+                              "0 2px 4px rgba(0, 0, 0, 0.9)",
+                          }}
+                        >
+                          {show.year}
+                        </span>
+                      </div>
+
+                      {/* Venue - Prominent */}
                       <div
-                        className="flex items-center gap-2 text-sm font-light transition-all duration-500 group-hover:text-teal-300 text-white"
+                        className="text-lg md:text-xl font-semibold text-white uppercase tracking-wide transition-all duration-500 group-hover:text-teal-200"
                         style={{
                           textShadow:
                             "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
                         }}
                       >
-                        <span className="font-medium">{show.date}</span>
-                        <span className="text-white/40">•</span>
-                        <span className="font-medium uppercase tracking-wide">{show.venue}</span>
-                        <span className="text-white/40">•</span>
-                        <span>{show.city}</span>
+                        {show.venue}
                       </div>
+
+                      {/* City and Time */}
                       <div
-                        className="flex items-center gap-2 text-sm text-white whitespace-nowrap"
+                        className="flex items-center gap-2 text-base text-white/80"
                         style={{
                           textShadow:
-                            "0 2px 4px rgba(0, 0, 0, 0.9), 0 3px 6px rgba(0, 0, 0, 0.6)",
+                            "0 2px 4px rgba(0, 0, 0, 0.9)",
                         }}
                       >
-                        <span>{show.time}</span>
+                        <span>{show.city}</span>
                         <span className="text-white/40">•</span>
-                        <span className="font-medium">{show.price}</span>
+                        <span>{show.time}</span>
+                      </div>
+
+                      {/* Price and CTA Button */}
+                      <div className="flex items-center justify-between mt-2 pt-4 border-t border-white/10">
+                        <span
+                          className="text-lg font-bold text-white"
+                          style={{
+                            textShadow:
+                              "0 2px 4px rgba(0, 0, 0, 0.9)",
+                          }}
+                        >
+                          {show.price}
+                        </span>
+                        <a
+                          href={show.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-6 py-2.5 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded transition-all duration-300 shadow-lg hover:shadow-teal-500/50"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Get Tickets
+                        </a>
                       </div>
                     </div>
-                  </motion.a>
+                  </motion.div>
                 ))}
               </div>
             </div>
