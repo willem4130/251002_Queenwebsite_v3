@@ -36,14 +36,23 @@ export function Navigation() {
     <nav className="fixed top-0 z-50 w-full bg-black/20 backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo - Far Left */}
-          <div className="flex items-center">
+          {/* Website Toggle - Far Left */}
+          <div className="flex items-center gap-2 pl-2">
             <a
               href="#home"
               onClick={(e) => handleClick(e, "#home")}
-              className="text-2xl font-semibold uppercase tracking-wide text-white/90"
+              className="text-lg font-semibold uppercase tracking-wide text-white/90 transition-transform duration-200 will-change-transform hover:scale-110 md:text-xl"
             >
-              {content.bandName}
+              full show
+            </a>
+            <span className="text-white/40">|</span>
+            <a
+              href="https://thedutchqueenunplugged.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-lg font-semibold uppercase tracking-wide text-white/60 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white/80 md:text-xl"
+            >
+              unplugged
             </a>
           </div>
 
