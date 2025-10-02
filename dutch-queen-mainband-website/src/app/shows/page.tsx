@@ -6,68 +6,144 @@ import { Calendar, MapPin, Clock, Ticket, AlertCircle } from "lucide-react";
 
 const upcomingShows = [
   {
-    date: "Mar 15, 2024",
-    time: "8:00 PM",
-    venue: "The Grand Theater",
-    city: "Los Angeles, CA",
+    date: "Dec 4, 2025",
+    time: "20:30",
+    venue: "Vorstin",
+    city: "Hilversum",
     status: "tickets",
-    ticketUrl: "#",
+    ticketUrl: "https://vorstin.stager.co/shop/default/events/111493445",
     featured: true,
   },
   {
-    date: "Mar 22, 2024",
-    time: "9:00 PM",
-    venue: "Blue Note",
-    city: "New York, NY",
+    date: "Dec 6, 2025",
+    time: "20:30",
+    venue: "Boerderij",
+    city: "Zoetermeer",
     status: "tickets",
-    ticketUrl: "#",
+    ticketUrl: "https://poppodiumboerderij.nl/programma/thedutchqueen2025/",
     featured: false,
   },
   {
-    date: "Apr 05, 2024",
-    time: "7:00 PM",
-    venue: "Summer Music Festival",
-    city: "Austin, TX",
-    status: "sold-out",
-    ticketUrl: "#",
+    date: "Dec 11, 2025",
+    time: "20:30",
+    venue: "Victorie",
+    city: "Alkmaar",
+    status: "tickets",
+    ticketUrl: "https://www.podiumvictorie.nl/programma/the-dutch-queen-2025",
     featured: false,
   },
   {
-    date: "Apr 12, 2024",
-    time: "8:30 PM",
-    venue: "The Fillmore",
-    city: "San Francisco, CA",
+    date: "Dec 12, 2025",
+    time: "20:15",
+    venue: "Vereeniging",
+    city: "Nijmegen",
     status: "tickets",
-    ticketUrl: "#",
+    ticketUrl: "https://www.stadsschouwburgendevereeniging.nl/programma/8266/50-jaar-bohemian-rhapsody/the-dutch-queen",
     featured: false,
   },
   {
-    date: "Apr 20, 2024",
-    time: "8:00 PM",
-    venue: "House of Blues",
-    city: "Chicago, IL",
+    date: "Dec 13, 2025",
+    time: "20:15",
+    venue: "Dru fabriek",
+    city: "Ulft",
     status: "tickets",
-    ticketUrl: "#",
+    ticketUrl: "https://www.dru-industriepark.nl/agenda/pop/2025/12/the-dutch-queen",
+    featured: false,
+  },
+  {
+    date: "Dec 18, 2025",
+    time: "20:15",
+    venue: "Metropool",
+    city: "Enschede",
+    status: "tickets",
+    ticketUrl: "https://metropool.nl/agenda/the-dutch-queen-18-dec",
+    featured: false,
+  },
+  {
+    date: "Dec 19, 2025",
+    time: "20:15",
+    venue: "Lantaarn",
+    city: "Hellendoorn",
+    status: "tickets",
+    ticketUrl: "https://mijnetickets.shop/de-lantaarn-exploitatie/67acf1f2dfc06",
+    featured: false,
+  },
+  {
+    date: "Dec 20, 2025",
+    time: "19:30",
+    venue: "Hedon",
+    city: "Zwolle",
+    status: "tickets",
+    ticketUrl: "https://hedon-zwolle.nl/voorstelling/32447/the-dutch-queen",
+    featured: false,
+  },
+  {
+    date: "Dec 28, 2025",
+    time: "20:30",
+    venue: "Effenaar",
+    city: "Eindhoven",
+    status: "tickets",
+    ticketUrl: "https://www.effenaar.nl/agenda/dutch-queen-50-jaar-bohemian-rhapsody",
+    featured: false,
+  },
+  {
+    date: "Dec 29, 2025",
+    time: "20:30",
+    venue: "Oosterpoort",
+    city: "Groningen",
+    status: "tickets",
+    ticketUrl: "https://www.spotgroningen.nl/programma/the-dutch-queen-3/",
+    featured: false,
+  },
+  {
+    date: "Dec 30, 2025",
+    time: "20:30",
+    venue: "Mezz",
+    city: "Breda",
+    status: "tickets",
+    ticketUrl: "https://www.mezz.nl/programma/the-dutch-queen/",
+    featured: false,
+  },
+  {
+    date: "Jan 2, 2026",
+    time: "20:30",
+    venue: "Groene Engel",
+    city: "Oss",
+    status: "tickets",
+    ticketUrl: "https://groene-engel.stager.co/web/tickets/111471691",
+    featured: false,
+  },
+  {
+    date: "Jan 3, 2026",
+    time: "20:30",
+    venue: "Grenswerk",
+    city: "Venlo",
+    status: "tickets",
+    ticketUrl: "https://www.grenswerk.nl/agenda/the-dutch-queen///",
+    featured: false,
+  },
+  {
+    date: "Jan 9, 2026",
+    time: "20:30",
+    venue: "Gigant",
+    city: "Apeldoorn",
+    status: "tickets",
+    ticketUrl: "https://www.gigant.nl/concert/the-dutch-queen",
+    featured: false,
+  },
+  {
+    date: "Jan 10, 2026",
+    time: "20:30",
+    venue: "Bibelot",
+    city: "Dordrecht",
+    status: "tickets",
+    ticketUrl: "https://bibelot.stager.co/web/tickets/111500178",
     featured: false,
   },
 ];
 
 const pastShows = [
-  {
-    date: "Feb 28, 2024",
-    venue: "The Troubadour",
-    city: "Los Angeles, CA",
-  },
-  {
-    date: "Feb 14, 2024",
-    venue: "Mercury Lounge",
-    city: "New York, NY",
-  },
-  {
-    date: "Jan 31, 2024",
-    venue: "The Crocodile",
-    city: "Seattle, WA",
-  },
+  // Past shows will be added here after the tour
 ];
 
 export default function ShowsPage() {
@@ -226,34 +302,36 @@ export default function ShowsPage() {
           </motion.div>
 
           {/* Past Shows */}
-          <motion.div
-            className="mt-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="mb-6 text-2xl font-bold text-white md:text-3xl">
-              Past Shows
-            </h2>
+          {pastShows.length > 0 && (
+            <motion.div
+              className="mt-16"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="mb-6 text-2xl font-bold text-white md:text-3xl">
+                Past Shows
+              </h2>
 
-            <div className="grid gap-4 md:grid-cols-3">
-              {pastShows.map((show, index) => (
-                <motion.div
-                  key={index}
-                  className="rounded-lg border border-white/10 bg-white/5 p-4 text-center backdrop-blur-sm"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="mb-1 text-sm text-gray-400">{show.date}</div>
-                  <div className="font-medium text-white">{show.venue}</div>
-                  <div className="text-sm text-gray-400">{show.city}</div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+              <div className="grid gap-4 md:grid-cols-3">
+                {pastShows.map((show, index) => (
+                  <motion.div
+                    key={index}
+                    className="rounded-lg border border-white/10 bg-white/5 p-4 text-center backdrop-blur-sm"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    <div className="mb-1 text-sm text-gray-400">{show.date}</div>
+                    <div className="font-medium text-white">{show.venue}</div>
+                    <div className="text-sm text-gray-400">{show.city}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
       </section>
 

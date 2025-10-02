@@ -40,6 +40,25 @@ function HomeContent() {
     path.replace("/gallery/", "")
   );
 
+  // All tour dates
+  const tourDates = [
+    { date: "DEC 4", year: "2025", venue: "Vorstin", city: "Hilversum", time: "20:30", price: "€30.50", url: "https://vorstin.stager.co/shop/default/events/111493445" },
+    { date: "DEC 6", year: "2025", venue: "Boerderij", city: "Zoetermeer", time: "20:30", price: "€32.00", url: "https://poppodiumboerderij.nl/programma/thedutchqueen2025/" },
+    { date: "DEC 11", year: "2025", venue: "Victorie", city: "Alkmaar", time: "20:30", price: "€33.90", url: "https://www.podiumvictorie.nl/programma/the-dutch-queen-2025" },
+    { date: "DEC 12", year: "2025", venue: "Vereeniging", city: "Nijmegen", time: "20:15", price: "€29.50", url: "https://www.stadsschouwburgendevereeniging.nl/programma/8266/50-jahr-bohemian-rhapsody/the-dutch-queen" },
+    { date: "DEC 13", year: "2025", venue: "Dru fabriek", city: "Ulft", time: "20:15", price: "€28.50", url: "https://www.dru-industriepark.nl/agenda/pop/2025/12/the-dutch-queen" },
+    { date: "DEC 18", year: "2025", venue: "Metropool", city: "Enschede", time: "20:15", price: "€30.00", url: "https://metropool.nl/agenda/the-dutch-queen-18-dec" },
+    { date: "DEC 19", year: "2025", venue: "Lantaarn", city: "Hellendoorn", time: "20:15", price: "€25.60", url: "https://mijnetickets.shop/de-lantaarn-exploitatie/67acf1f2dfc06" },
+    { date: "DEC 20", year: "2025", venue: "Hedon", city: "Zwolle", time: "19:30", price: "€29.50", url: "https://hedon-zwolle.nl/voorstelling/32447/the-dutch-queen" },
+    { date: "DEC 28", year: "2025", venue: "Effenaar", city: "Eindhoven", time: "20:30", price: "€29.50", url: "https://www.effenaar.nl/agenda/dutch-queen-50-jaar-bohemian-rhapsody" },
+    { date: "DEC 29", year: "2025", venue: "Oosterpoort", city: "Groningen", time: "20:30", price: "€29.50", url: "https://www.spotgroningen.nl/programma/the-dutch-queen-3/" },
+    { date: "DEC 30", year: "2025", venue: "Mezz", city: "Breda", time: "20:30", price: "€29.50", url: "https://www.mezz.nl/programma/the-dutch-queen/" },
+    { date: "JAN 2", year: "2026", venue: "Groene Engel", city: "Oss", time: "20:30", price: "€29.50", url: "https://groene-engel.stager.co/web/tickets/111471691" },
+    { date: "JAN 3", year: "2026", venue: "Grenswerk", city: "Venlo", time: "20:30", price: "€29.50", url: "https://www.grenswerk.nl/agenda/the-dutch-queen///" },
+    { date: "JAN 9", year: "2026", venue: "Gigant", city: "Apeldoorn", time: "20:30", price: "€29.50", url: "https://www.gigant.nl/concert/the-dutch-queen" },
+    { date: "JAN 10", year: "2026", venue: "Bibelot", city: "Dordrecht", time: "20:30", price: "€29.00", url: "https://bibelot.stager.co/web/tickets/111500178" },
+  ];
+
   return (
     <div className="bg-black">
       {/* Hero Section */}
@@ -63,7 +82,7 @@ function HomeContent() {
           />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-4xl px-6">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -71,7 +90,7 @@ function HomeContent() {
             viewport={{ once: true }}
           >
             <h2
-              className="mb-12 text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
+              className="mb-8 text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
               style={{
                 textShadow:
                   "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
@@ -80,54 +99,64 @@ function HomeContent() {
             >
               Shows
             </h2>
+
+            {/* Scrollable Grid Container */}
             <div
-              className="space-y-6 text-white"
+              className="overflow-y-auto max-h-[60vh] pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
               style={{
                 textShadow:
                   "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
               }}
             >
-              <motion.div
-                className="group relative cursor-pointer overflow-hidden border border-white/20 p-8 backdrop-blur-sm"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-              >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-teal-900/0 via-teal-800/20 to-teal-900/0"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileHover={{ opacity: 1, scale: 1.2 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                />
-                <div className="relative z-10">
-                  <div
-                    className="mb-2 text-3xl font-light transition-all duration-500 group-hover:text-teal-300"
-                    style={{
-                      textShadow:
-                        "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
-                    }}
+              <div className="grid md:grid-cols-2 gap-20">
+                {tourDates.map((show, index) => (
+                  <motion.a
+                    key={index}
+                    href={show.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-3 bg-black/50 backdrop-blur-sm"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    whileHover={{ scale: 1.01 }}
                   >
-                    NOV 15, 2025
-                  </div>
-                  <div
-                    className="mb-1 text-lg font-medium uppercase tracking-wider"
-                    style={{
-                      textShadow:
-                        "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.6)",
-                    }}
-                  >
-                    Astrant
-                  </div>
-                  <div
-                    className="text-sm"
-                    style={{
-                      textShadow:
-                        "0 2px 4px rgba(0, 0, 0, 0.9), 0 3px 6px rgba(0, 0, 0, 0.6)",
-                    }}
-                  >
-                    Ede, NL
-                  </div>
-                </div>
-              </motion.div>
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-br from-teal-900/0 via-teal-800/20 to-teal-900/0"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileHover={{ opacity: 1, scale: 1.2 }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                    />
+                    <div className="relative z-10 flex items-center justify-between gap-4">
+                      <div
+                        className="flex items-center gap-2 text-sm font-light transition-all duration-500 group-hover:text-teal-300 text-white"
+                        style={{
+                          textShadow:
+                            "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
+                        }}
+                      >
+                        <span className="font-medium">{show.date}</span>
+                        <span className="text-white/40">•</span>
+                        <span className="font-medium uppercase tracking-wide">{show.venue}</span>
+                        <span className="text-white/40">•</span>
+                        <span>{show.city}</span>
+                      </div>
+                      <div
+                        className="flex items-center gap-2 text-sm text-white whitespace-nowrap"
+                        style={{
+                          textShadow:
+                            "0 2px 4px rgba(0, 0, 0, 0.9), 0 3px 6px rgba(0, 0, 0, 0.6)",
+                        }}
+                      >
+                        <span>{show.time}</span>
+                        <span className="text-white/40">•</span>
+                        <span className="font-medium">{show.price}</span>
+                      </div>
+                    </div>
+                  </motion.a>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
