@@ -64,7 +64,7 @@ export function Navigation() {
                   key={item.name}
                   href={item.href}
                   onClick={(e) => handleClick(e, item.href)}
-                  className="rounded-lg px-3 py-1 text-base uppercase tracking-wider text-white/80 transition-all duration-300 will-change-transform hover:scale-105 hover:font-semibold hover:text-white hover:bg-[#cd7f32]/20"
+                  className="rounded-lg px-3 py-1 text-base uppercase tracking-wider text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
                 >
                   {item.name}
                 </a>
@@ -138,7 +138,7 @@ export function Navigation() {
                 key={item.name}
                 href={item.href}
                 onClick={(e) => handleClick(e, item.href)}
-                className="block rounded-lg px-3 py-2 text-base uppercase tracking-wider text-white/80 transition-all duration-300 will-change-transform hover:font-semibold hover:text-white hover:bg-[#cd7f32]/20"
+                className="block rounded-lg px-3 py-2 text-base uppercase tracking-wider text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
               >
                 {item.name}
               </a>

@@ -100,19 +100,19 @@ function HomeContent() {
               Shows
             </h2>
 
-            {/* Scrollable Grid Container */}
+            {/* Scrollable Grid Container - Optimized for 2x4 layout */}
             <div
-              className="overflow-y-auto max-h-[65vh] pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
+              className="overflow-y-auto max-h-[78vh] pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
               style={{
                 textShadow:
                   "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
               }}
             >
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-5">
                 {tourDates.map((show, index) => (
                   <motion.div
                     key={index}
-                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-6 bg-black/50 backdrop-blur-sm"
+                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-5 bg-black/50 backdrop-blur-sm"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: index * 0.05 }}
@@ -125,11 +125,11 @@ function HomeContent() {
                       whileHover={{ opacity: 1, scale: 1.2 }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
                     />
-                    <div className="relative z-10 flex flex-col gap-4">
+                    <div className="relative z-10 flex flex-col gap-2">
                       {/* Date - Large and Bold */}
                       <div className="flex items-baseline gap-3">
                         <span
-                          className="text-2xl md:text-3xl font-bold text-white transition-all duration-500 group-hover:text-[#e9b870]"
+                          className="text-xl md:text-2xl font-bold text-white transition-all duration-500 group-hover:text-[#e9b870]"
                           style={{
                             textShadow:
                               "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
@@ -150,7 +150,7 @@ function HomeContent() {
 
                       {/* Venue - Prominent */}
                       <div
-                        className="text-lg md:text-xl font-semibold text-white uppercase tracking-wide transition-all duration-500 group-hover:text-[#d4a76a]"
+                        className="text-base md:text-lg font-semibold text-white uppercase tracking-wide transition-all duration-500 group-hover:text-[#d4a76a]"
                         style={{
                           textShadow:
                             "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
@@ -173,7 +173,7 @@ function HomeContent() {
                       </div>
 
                       {/* Price and CTA Button */}
-                      <div className="flex items-center justify-between mt-2 pt-4 border-t border-white/10">
+                      <div className="flex items-center justify-between mt-1 pt-2 border-t border-white/10">
                         <span
                           className="text-lg font-bold text-white"
                           style={{
