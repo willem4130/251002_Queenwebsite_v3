@@ -45,65 +45,6 @@ function HomeContent() {
       {/* Hero Section */}
       <Hero onScrollToSection={scrollToSection} />
 
-      {/* About Section */}
-      <section
-        id="about"
-        className="relative flex min-h-screen items-center justify-center overflow-hidden py-20"
-      >
-        {/* Background image */}
-        <div className="absolute inset-0">
-          <Image
-            src="/about-bg-1920.jpg"
-            alt="About background"
-            fill
-            priority
-            quality={85}
-            className="object-cover"
-            sizes="100vw"
-          />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-          >
-            <h2
-              className="mb-12 text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
-              style={{
-                textShadow:
-                  "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
-                WebkitTextStroke: "0.5px rgba(255, 255, 255, 0.3)",
-              }}
-            >
-              About
-            </h2>
-            <div
-              className="space-y-6 text-white"
-              style={{
-                textShadow:
-                  "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
-              }}
-            >
-              {content.description.long.split("\n\n").map((paragraph, i) => (
-                <p
-                  key={i}
-                  className={
-                    i === 0
-                      ? "text-xl font-medium leading-relaxed"
-                      : "text-lg font-normal leading-relaxed"
-                  }
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Shows Section */}
       <section
         id="shows"
@@ -342,6 +283,65 @@ function HomeContent() {
                   </motion.div>
                 ))}
               </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section
+        id="about"
+        className="relative flex min-h-screen items-center justify-center overflow-hidden py-20"
+      >
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/about-bg-1920.jpg"
+            alt="About background"
+            fill
+            priority
+            quality={85}
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true }}
+          >
+            <h2
+              className="mb-12 text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
+              style={{
+                textShadow:
+                  "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
+                WebkitTextStroke: "0.5px rgba(255, 255, 255, 0.3)",
+              }}
+            >
+              About
+            </h2>
+            <div
+              className="space-y-6 text-white"
+              style={{
+                textShadow:
+                  "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
+              }}
+            >
+              {content.description.long.split("\n\n").map((paragraph, i) => (
+                <p
+                  key={i}
+                  className={
+                    i === 0
+                      ? "text-xl font-medium leading-relaxed"
+                      : "text-lg font-normal leading-relaxed"
+                  }
+                >
+                  {paragraph}
+                </p>
+              ))}
             </div>
           </motion.div>
         </div>

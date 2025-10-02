@@ -13,9 +13,9 @@ import {
 import { useBandContent } from "@/hooks/useConfig";
 
 const navigation = [
-  { name: "About", href: "#about" },
   { name: "Shows", href: "#shows" },
   { name: "Gallery", href: "#gallery" },
+  { name: "About", href: "#about" },
 ];
 
 export function Navigation() {
