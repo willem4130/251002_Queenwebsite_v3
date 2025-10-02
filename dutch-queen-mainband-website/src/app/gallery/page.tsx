@@ -1,46 +1,30 @@
 "use client";
 
-import { motion, AnimatePresence, useMotionValue } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useMediaPaths } from "@/hooks/useConfig";
 
-const magazineLayout = [
-  { width: 400, height: 500, offsetY: 20 },
-  { width: 550, height: 350, offsetY: -10 },
-  { width: 350, height: 525, offsetY: 40 },
-  { width: 600, height: 400, offsetY: 0 },
-  { width: 450, height: 600, offsetY: -20 },
-  { width: 500, height: 350, offsetY: 30 },
+const bentoPatterns = [
+  { row: "span 2", col: "span 2" },
+  { row: "span 1", col: "span 1" },
+  { row: "span 1", col: "span 2" },
+  { row: "span 2", col: "span 1" },
+  { row: "span 1", col: "span 1" },
+  { row: "span 2", col: "span 2" },
+  { row: "span 1", col: "span 2" },
+  { row: "span 1", col: "span 1" },
 ];
 
 export default function GalleryPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [dragConstraint, setDragConstraint] = useState(0);
-  const constraintsRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const dragX = useMotionValue(0);
 
   const media = useMediaPaths();
   const galleryImages = media.gallery.map((path) =>
     path.replace("/gallery/", "")
   );
-
-  useEffect(() => {
-    const updateConstraints = () => {
-      if (contentRef.current && constraintsRef.current) {
-        const contentWidth = contentRef.current.scrollWidth;
-        const containerWidth = constraintsRef.current.offsetWidth;
-        setDragConstraint(-(contentWidth - containerWidth));
-      }
-    };
-
-    updateConstraints();
-    window.addEventListener("resize", updateConstraints);
-    return () => window.removeEventListener("resize", updateConstraints);
-  }, [galleryImages.length]);
 
   const handleImageClick = (image: string, index: number) => {
     setSelectedImage(`/gallery/${image}`);
@@ -57,19 +41,21 @@ export default function GalleryPage() {
     setSelectedImage(`/gallery/${galleryImages[newIndex]}`);
   };
 
+  const getBentoPattern = (index: number) => {
+    return bentoPatterns[index % bentoPatterns.length];
+  };
+
   return (
     <div className="bg-black">
-      {/* Gallery Section */}
-      <section className="relative min-h-screen overflow-hidden py-20">
-        <div className="relative z-10 flex h-full flex-col justify-center">
+      <section className="relative min-h-screen overflow-hidden py-16">
+        <div className="relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            viewport={{ once: true }}
           >
             <h2
-              className="mb-12 text-center text-3xl font-light uppercase tracking-widest text-white md:text-4xl"
+              className="mb-16 text-center text-3xl font-light uppercase tracking-widest text-white md:text-4xl"
               style={{
                 textShadow:
                   "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
@@ -79,134 +65,86 @@ export default function GalleryPage() {
               GALLERY
             </h2>
 
-            {/* Magazine-style Horizontal Scroll */}
-            <div className="relative">
-              {/* Left Navigation Arrow */}
-              <button
-                onClick={() => {
-                  if (constraintsRef.current) {
-                    constraintsRef.current.scrollBy({
-                      left: -500,
-                      behavior: "smooth",
-                    });
-                  }
-                }}
-                className="absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-black/70"
-                aria-label="Scroll left"
-              >
-                <ChevronLeft className="h-6 w-6" />
-              </button>
-
-              {/* Right Navigation Arrow */}
-              <button
-                onClick={() => {
-                  if (constraintsRef.current) {
-                    constraintsRef.current.scrollBy({
-                      left: 500,
-                      behavior: "smooth",
-                    });
-                  }
-                }}
-                className="absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-black/70"
-                aria-label="Scroll right"
-              >
-                <ChevronRight className="h-6 w-6" />
-              </button>
-
-              {/* Scrollable Container */}
+            {/* Bento Grid */}
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
               <div
-                ref={constraintsRef}
-                className="scrollbar-hide overflow-x-scroll px-8 py-12 md:px-20"
+                className="grid gap-4 md:gap-6"
+                style={{
+                  gridTemplateColumns: "repeat(4, 1fr)",
+                  gridAutoRows: "160px",
+                  gridAutoFlow: "dense",
+                }}
               >
-                <motion.div
-                  ref={contentRef}
-                  drag="x"
-                  dragConstraints={{ left: dragConstraint, right: 0 }}
-                  dragElastic={0.1}
-                  dragMomentum={false}
-                  style={{ x: dragX }}
-                  className="flex gap-8 pb-4"
-                >
-                  {galleryImages.map((image, i) => {
-                    const layout = magazineLayout[i % magazineLayout.length];
-                    return (
+                {galleryImages.map((image, i) => {
+                  const pattern = getBentoPattern(i);
+                  return (
+                    <motion.div
+                      key={`gallery-${i}`}
+                      className="group relative cursor-pointer overflow-hidden rounded-2xl"
+                      style={{
+                        gridRow: pattern.row,
+                        gridColumn: pattern.col,
+                      }}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      whileInView={{
+                        opacity: 1,
+                        scale: 1,
+                        transition: {
+                          duration: 0.5,
+                          delay: i * 0.05,
+                        },
+                      }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      whileHover={{
+                        scale: 1.05,
+                        transition: { duration: 0.3 },
+                      }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => handleImageClick(image, i)}
+                    >
+                      {/* Ambient glow effect */}
                       <motion.div
-                        key={`gallery-${i}`}
-                        className="magazine-frame magazine-frame-hover group relative flex-shrink-0 cursor-pointer"
+                        className="absolute -inset-2 -z-10 rounded-2xl opacity-0 group-hover:opacity-100"
                         style={{
-                          width: layout.width,
-                          marginTop: layout.offsetY,
+                          background: `radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.3) 0%, rgba(245, 158, 11, 0.15) 50%, transparent 70%)`,
+                          filter: "blur(20px)",
                         }}
-                        initial={{ opacity: 0, y: 60, rotateZ: -2 }}
-                        whileInView={{
-                          opacity: 1,
-                          y: 0,
-                          rotateZ: 0,
-                          transition: {
-                            duration: 0.6,
-                            delay: i * 0.1,
-                          },
-                        }}
-                        viewport={{ once: true, margin: "-100px" }}
+                        initial={{ scale: 0.9 }}
                         whileHover={{
-                          rotateZ: Math.random() > 0.5 ? 2 : -2,
-                          transition: { duration: 0.3 },
+                          scale: 1.1,
+                          transition: { duration: 0.4 },
                         }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => handleImageClick(image, i)}
-                      >
-                        {/* Ambient glow effect */}
-                        <motion.div
-                          className="absolute -inset-6 -z-10 rounded-xl opacity-0 group-hover:opacity-100"
-                          style={{
-                            background: `radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.3) 0%, rgba(245, 158, 11, 0.15) 50%, transparent 70%)`,
-                            filter: "blur(20px)",
-                          }}
-                          initial={{ scale: 0.8 }}
-                          whileHover={{
-                            scale: 1.2,
-                            transition: { duration: 0.4 },
-                          }}
+                      />
+
+                      {/* Image */}
+                      <div className="relative h-full w-full overflow-hidden rounded-2xl bg-gray-900">
+                        <Image
+                          src={`/gallery/${image}`}
+                          alt={`Gallery image ${i + 1}`}
+                          fill
+                          className="scale-125 object-cover transition-transform duration-500 group-hover:scale-100"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          draggable={false}
                         />
 
-                        {/* Image container */}
-                        <div
-                          className="relative overflow-hidden bg-gray-100"
-                          style={{
-                            height: layout.height,
-                          }}
-                        >
-                          <Image
-                            src={`/gallery/${image}`}
-                            alt={`Gallery image ${i + 1}`}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 600px"
-                          />
+                        {/* Gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-                          {/* Hover overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                        </div>
-
-                        {/* Optional: Photo number badge */}
-                        <div className="absolute bottom-4 right-4 rounded-full bg-black/60 px-3 py-1 text-xs font-light tracking-wider text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+                        {/* Image counter */}
+                        <div className="absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-light tracking-wider text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
                           {i + 1}/{galleryImages.length}
                         </div>
-                      </motion.div>
-                    );
-                  })}
-                </motion.div>
-              </div>
-
-              {/* Scroll indicator */}
-              <div className="mx-auto mt-8 flex items-center justify-center gap-2">
-                <ChevronLeft className="h-4 w-4 text-amber-500/50" />
-                <p className="text-sm font-light uppercase tracking-widest text-amber-500/70">
-                  Drag to explore
-                </p>
-                <ChevronRight className="h-4 w-4 text-amber-500/50" />
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
             </div>
+
+            {/* Info text */}
+            <p className="mt-16 text-center text-sm font-light uppercase tracking-widest text-amber-500/70">
+              Click any image to view
+            </p>
           </motion.div>
         </div>
       </section>
@@ -221,7 +159,6 @@ export default function GalleryPage() {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-8"
             onClick={() => setSelectedImage(null)}
           >
-            {/* Image container */}
             <div
               className="relative h-full max-h-[85vh] w-full max-w-5xl"
               onClick={(e) => e.stopPropagation()}
