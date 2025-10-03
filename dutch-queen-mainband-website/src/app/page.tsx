@@ -225,7 +225,7 @@ function HomeContent() {
 
             {/* Scrollable Grid Container - Responsive layout */}
             <div
-              className="overflow-y-auto max-h-[70vh] sm:max-h-[75vh] lg:max-h-[78vh] pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
+              className="overflow-y-auto max-h-[70vh] sm:max-h-[75vh] lg:max-h-[78vh] pr-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
               style={{
                 textShadow:
                   "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
