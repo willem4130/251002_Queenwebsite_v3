@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd dutch-queen-mainband-website && npm run build",
+  "installCommand": "cd dutch-queen-mainband-website && npm install",
+  "outputDirectory": "dutch-queen-mainband-website/.next"
+}
