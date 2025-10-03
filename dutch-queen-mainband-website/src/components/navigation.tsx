@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Menu,
   X,
@@ -20,7 +20,17 @@ const navigation = [
 
 export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const content = useBandContent();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -33,15 +43,15 @@ export function Navigation() {
   };
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-black/20 backdrop-blur-sm">
+    <nav className="fixed top-0 z-50 w-full bg-black/20 backdrop-blur-sm transition-all duration-300">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className={`flex items-center justify-between transition-all duration-300 ${isScrolled ? "h-12" : "h-16"}`}>
           {/* Website Toggle - Far Left */}
           <div className="flex items-center gap-2 pl-2">
             <a
               href="#home"
               onClick={(e) => handleClick(e, "#home")}
-              className="text-lg font-semibold uppercase tracking-wide text-white/90 transition-transform duration-200 will-change-transform hover:scale-110 md:text-xl"
+              className={`font-semibold uppercase tracking-wide text-white/90 transition-all duration-300 will-change-transform hover:scale-110 ${isScrolled ? "text-base md:text-lg" : "text-lg md:text-xl"}`}
             >
               full show
             </a>
@@ -50,7 +60,7 @@ export function Navigation() {
               href="https://thedutchqueenunplugged.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-lg font-semibold uppercase tracking-wide text-white/60 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white/80 md:text-xl"
+              className={`font-semibold uppercase tracking-wide text-white/60 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white/80 ${isScrolled ? "text-base md:text-lg" : "text-lg md:text-xl"}`}
             >
               unplugged
             </a>
@@ -64,7 +74,7 @@ export function Navigation() {
                   key={item.name}
                   href={item.href}
                   onClick={(e) => handleClick(e, item.href)}
-                  className="rounded-lg px-3 py-1 text-base uppercase tracking-wider text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+                  className={`rounded-lg px-3 py-1 uppercase tracking-wider text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white ${isScrolled ? "text-sm" : "text-base"}`}
                 >
                   {item.name}
                 </a>
@@ -78,37 +88,37 @@ export function Navigation() {
               href={content.social.facebook || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+              className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
             >
-              <Facebook className="h-6 w-6" />
+              <Facebook className={`transition-all duration-300 ${isScrolled ? "h-5 w-5" : "h-6 w-6"}`} />
             </a>
             <a
               href={content.social.instagram || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+              className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
             >
-              <Instagram className="h-6 w-6" />
+              <Instagram className={`transition-all duration-300 ${isScrolled ? "h-5 w-5" : "h-6 w-6"}`} />
             </a>
             <a
               href={content.social.youtube || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+              className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
             >
-              <Youtube className="h-7 w-7" />
+              <Youtube className={`transition-all duration-300 ${isScrolled ? "h-6 w-6" : "h-7 w-7"}`} />
             </a>
             <a
               href={`mailto:${content.contact.email}`}
-              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+              className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
             >
-              <Mail className="h-6 w-6" />
+              <Mail className={`transition-all duration-300 ${isScrolled ? "h-5 w-5" : "h-6 w-6"}`} />
             </a>
             <a
               href={`tel:${content.contact.phone}`}
-              className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+              className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
             >
-              <Phone className="h-6 w-6" />
+              <Phone className={`transition-all duration-300 ${isScrolled ? "h-5 w-5" : "h-6 w-6"}`} />
             </a>
           </div>
 
@@ -116,13 +126,13 @@ export function Navigation() {
           <div className="md:hidden">
             <button
               type="button"
-              className="text-white/60 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white/80"
+              className="text-white/60 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white/80"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
+                <X className={`transition-all duration-300 ${isScrolled ? "h-5 w-5" : "h-6 w-6"}`} />
               ) : (
-                <Menu className="h-6 w-6" />
+                <Menu className={`transition-all duration-300 ${isScrolled ? "h-5 w-5" : "h-6 w-6"}`} />
               )}
             </button>
           </div>
@@ -138,7 +148,7 @@ export function Navigation() {
                 key={item.name}
                 href={item.href}
                 onClick={(e) => handleClick(e, item.href)}
-                className="block rounded-lg px-3 py-2 text-base uppercase tracking-wider text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+                className={`block rounded-lg px-3 py-2 uppercase tracking-wider text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white ${isScrolled ? "text-sm" : "text-base"}`}
               >
                 {item.name}
               </a>
@@ -150,37 +160,37 @@ export function Navigation() {
                 href={content.social.facebook || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+                className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
               >
-                <Facebook className="h-7 w-7" />
+                <Facebook className={`transition-all duration-300 ${isScrolled ? "h-6 w-6" : "h-7 w-7"}`} />
               </a>
               <a
                 href={content.social.instagram || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+                className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
               >
-                <Instagram className="h-7 w-7" />
+                <Instagram className={`transition-all duration-300 ${isScrolled ? "h-6 w-6" : "h-7 w-7"}`} />
               </a>
               <a
                 href={content.social.youtube || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+                className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
               >
-                <Youtube className="h-7 w-7" />
+                <Youtube className={`transition-all duration-300 ${isScrolled ? "h-6 w-6" : "h-7 w-7"}`} />
               </a>
               <a
                 href={`mailto:${content.contact.email}`}
-                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+                className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
               >
-                <Mail className="h-7 w-7" />
+                <Mail className={`transition-all duration-300 ${isScrolled ? "h-6 w-6" : "h-7 w-7"}`} />
               </a>
               <a
                 href={`tel:${content.contact.phone}`}
-                className="rounded-lg p-2 text-white/80 transition-transform duration-200 will-change-transform hover:scale-110 hover:text-white"
+                className="rounded-lg p-2 text-white/80 transition-all duration-300 will-change-transform hover:scale-110 hover:text-white"
               >
-                <Phone className="h-7 w-7" />
+                <Phone className={`transition-all duration-300 ${isScrolled ? "h-6 w-6" : "h-7 w-7"}`} />
               </a>
             </div>
           </div>
