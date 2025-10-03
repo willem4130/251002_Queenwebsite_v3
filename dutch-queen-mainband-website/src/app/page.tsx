@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
 import { useState, useRef } from "react";
@@ -33,57 +33,41 @@ function HomeContent() {
   const galleryRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
 
-  // Hero section scroll animations - DRAMATIC: zoom + blur + tilt exit
+  // Hero section scroll animations - OPTIMIZED: zoom + tilt exit (blur removed for performance)
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(heroProgress, [0, 0.6], [1, 0]);
-  const heroScale = useSpring(
-    useTransform(heroProgress, [0, 0.6], [1, 1.35]),
-    { stiffness: 100, damping: 25 }
-  );
-  const heroBlur = useTransform(heroProgress, [0, 0.6], [0, 20]);
-  const heroRotate = useTransform(heroProgress, [0, 0.6], [0, -8]);
-  const heroFilter = useTransform(heroBlur, (value) => `blur(${value}px)`);
+  const heroScale = useTransform(heroProgress, [0, 0.6], [1, 1.2]);
+  const heroRotate = useTransform(heroProgress, [0, 0.6], [0, -5]);
 
-  // Shows section - DRAMATIC: 3D depth + massive parallax + dramatic scale
+  // Shows section - OPTIMIZED: reduced parallax + simplified transforms
   const { scrollYProgress: showsProgress } = useScroll({
     target: showsRef,
     offset: ["start end", "end start"],
   });
-  const showsBgY = useTransform(showsProgress, [0, 1], [100, -250]);
-  const showsRotateX = useTransform(showsProgress, [0, 0.3], [15, 0]);
-  const showsOpacity = useTransform(showsProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-  const showsScale = useSpring(
-    useTransform(showsProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 1.15]),
-    { stiffness: 120, damping: 20 }
-  );
+  const showsBgY = useTransform(showsProgress, [0, 1], [50, -50]);
+  const showsOpacity = useTransform(showsProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.95]);
+  const showsScale = useTransform(showsProgress, [0, 0.2, 0.8, 1], [0.95, 1, 1, 1.02]);
 
-  // Gallery section - DRAMATIC: explosive reveal with spring physics
+  // Gallery section - OPTIMIZED: smooth reveal without spring overhead
   const { scrollYProgress: galleryProgress } = useScroll({
     target: galleryRef,
     offset: ["start end", "end start"],
   });
-  const galleryOpacity = useTransform(galleryProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 0.7]);
-  const galleryY = useTransform(galleryProgress, [0, 0.25, 0.75, 1], [180, 0, 0, -100]);
-  const galleryScale = useSpring(
-    useTransform(galleryProgress, [0, 0.25], [0.85, 1]),
-    { stiffness: 120, damping: 20 }
-  );
+  const galleryOpacity = useTransform(galleryProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 0.9]);
+  const galleryY = useTransform(galleryProgress, [0, 0.25, 0.75, 1], [80, 0, 0, -40]);
+  const galleryScale = useTransform(galleryProgress, [0, 0.25], [0.95, 1]);
 
-  // About section - DRAMATIC: deep parallax + rotation entrance
+  // About section - OPTIMIZED: reduced parallax for smooth performance
   const { scrollYProgress: aboutProgress } = useScroll({
     target: aboutRef,
     offset: ["start end", "end start"],
   });
-  const aboutBgY = useTransform(aboutProgress, [0, 1], [200, -400]);
+  const aboutBgY = useTransform(aboutProgress, [0, 1], [80, -80]);
   const aboutOpacity = useTransform(aboutProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 1]);
-  const aboutScale = useSpring(
-    useTransform(aboutProgress, [0, 0.4], [0.8, 1]),
-    { stiffness: 100, damping: 25 }
-  );
-  const aboutRotate = useTransform(aboutProgress, [0, 0.4], [5, 0]);
+  const aboutScale = useTransform(aboutProgress, [0, 0.4], [0.95, 1]);
 
   const getBentoPattern = (index: number) => {
     return bentoPatterns[index % bentoPatterns.length];
@@ -134,20 +118,20 @@ function HomeContent() {
 
   return (
     <div className="bg-black">
-      {/* Hero Section - DRAMATIC: zoom + blur + tilt */}
+      {/* Hero Section - OPTIMIZED: zoom + tilt (will-change for GPU) */}
       <motion.div
         ref={heroRef}
         style={{
           opacity: heroOpacity,
           scale: heroScale,
           rotate: heroRotate,
-          filter: heroFilter,
+          willChange: "transform, opacity",
         }}
       >
         <Hero onScrollToSection={scrollToSection} />
       </motion.div>
 
-      {/* Shows Section - DRAMATIC: 3D tilt + massive parallax */}
+      {/* Shows Section - OPTIMIZED: reduced parallax for smooth scrolling */}
       <motion.section
         ref={showsRef}
         id="shows"
@@ -155,8 +139,7 @@ function HomeContent() {
         style={{
           opacity: showsOpacity,
           scale: showsScale,
-          rotateX: showsRotateX,
-          transformPerspective: 1200,
+          willChange: "transform, opacity",
         }}
       >
         {/* Parallax background image (moves slower than content) */}
@@ -164,6 +147,7 @@ function HomeContent() {
           className="absolute inset-0"
           style={{
             y: showsBgY,
+            willChange: "transform",
           }}
         >
           <Image
@@ -210,8 +194,8 @@ function HomeContent() {
                     className="group relative block cursor-pointer overflow-hidden border border-white/20 p-5 bg-black/50 backdrop-blur-sm"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.05 }}
-                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.3, delay: index * 0.02, ease: "easeOut" }}
+                    viewport={{ once: true, amount: 0.1 }}
                     whileHover={{ scale: 1.02 }}
                   >
                     <motion.div
@@ -307,7 +291,7 @@ function HomeContent() {
         </div>
       </motion.section>
 
-      {/* Gallery Section - DRAMATIC: explosive reveal with spring */}
+      {/* Gallery Section - OPTIMIZED: smooth reveal */}
       <motion.section
         ref={galleryRef}
         id="gallery"
@@ -316,6 +300,7 @@ function HomeContent() {
           opacity: galleryOpacity,
           y: galleryY,
           scale: galleryScale,
+          willChange: "transform, opacity",
         }}
       >
         <div className="relative z-10">
@@ -360,11 +345,12 @@ function HomeContent() {
                         opacity: 1,
                         scale: 1,
                         transition: {
-                          duration: 0.5,
-                          delay: i * 0.05,
+                          duration: 0.4,
+                          delay: i * 0.03,
+                          ease: "easeOut",
                         },
                       }}
-                      viewport={{ once: true, margin: "-50px" }}
+                      viewport={{ once: true, amount: 0.1 }}
                       whileHover={{
                         scale: 1.05,
                         transition: { duration: 0.3 },
@@ -392,6 +378,7 @@ function HomeContent() {
                           src={`/gallery/${image}`}
                           alt={`Gallery image ${i + 1}`}
                           fill
+                          loading={i < 4 ? "eager" : "lazy"}
                           className="scale-125 object-cover transition-transform duration-500 group-hover:scale-100"
                           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           draggable={false}
@@ -414,7 +401,7 @@ function HomeContent() {
         </div>
       </motion.section>
 
-      {/* About Section - DRAMATIC: deep parallax + rotation */}
+      {/* About Section - OPTIMIZED: smooth parallax */}
       <motion.section
         ref={aboutRef}
         id="about"
@@ -422,7 +409,7 @@ function HomeContent() {
         style={{
           opacity: aboutOpacity,
           scale: aboutScale,
-          rotate: aboutRotate,
+          willChange: "transform, opacity",
         }}
       >
         {/* Parallax background image (slower scroll) */}
@@ -430,6 +417,7 @@ function HomeContent() {
           className="absolute inset-0"
           style={{
             y: aboutBgY,
+            willChange: "transform",
           }}
         >
           <Image

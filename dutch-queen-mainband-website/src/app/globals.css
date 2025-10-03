@@ -443,15 +443,14 @@ body {
 
 /* Removed complex SVG backgrounds for cleaner design */
 
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
+/* REMOVED: scroll-behavior: smooth - conflicts with framer-motion scroll animations */
 
-/* Smooth section transitions with psychedelic effects */
+/* Optimized section rendering with paint containment */
 section {
   position: relative;
   overflow: hidden;
+  contain: paint layout;
+  will-change: transform, opacity;
 }
 
 /* Hero to About transition */
