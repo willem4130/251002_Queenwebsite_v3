@@ -235,24 +235,17 @@ function HomeContent() {
                 {tourDates.map((show, index) => (
                   <motion.div
                     key={index}
-                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-4 sm:p-5 bg-black/50 backdrop-blur-sm"
+                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-4 sm:p-5 bg-black/50 backdrop-blur-sm transition-all duration-200 ease-in-out hover:border-emerald-400"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.02, ease: "easeOut" }}
                     viewport={{ once: true, amount: 0.1 }}
-                    whileHover={{ scale: 1.02 }}
                   >
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-emerald-600/0 via-emerald-600/20 to-emerald-600/0"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileHover={{ opacity: 1, scale: 1.2 }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
-                    />
                     <div className="relative z-10 flex flex-col gap-2">
                       {/* Date - Large and Bold */}
                       <div className="flex items-baseline gap-3">
                         <span
-                          className="text-xl md:text-2xl font-bold text-white transition-all duration-500 group-hover:text-emerald-400"
+                          className="text-xl md:text-2xl font-bold text-white"
                           style={{
                             textShadow:
                               "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
@@ -273,7 +266,7 @@ function HomeContent() {
 
                       {/* Venue - Prominent */}
                       <div
-                        className="text-base md:text-lg font-semibold text-white uppercase tracking-wide transition-all duration-500 group-hover:text-emerald-400"
+                        className="text-base md:text-lg font-semibold text-white uppercase tracking-wide"
                         style={{
                           textShadow:
                             "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
@@ -310,8 +303,9 @@ function HomeContent() {
                           href={show.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-4 sm:px-6 py-3 sm:py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold rounded transition-all duration-300 shadow-lg hover:shadow-emerald-600/50 min-h-[44px] flex items-center justify-center"
+                          className="px-4 sm:px-6 py-3 sm:py-2.5 bg-emerald-600 text-white hover:bg-white hover:text-black text-sm sm:text-base font-semibold rounded transition-all duration-200 ease-in-out min-h-[44px] flex items-center justify-center"
                           onClick={(e) => e.stopPropagation()}
+                          style={{ textShadow: 'none' }}
                         >
                           Get Tickets
                         </a>

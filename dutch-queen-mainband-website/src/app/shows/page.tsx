@@ -230,7 +230,8 @@ export default function ShowsPage() {
                   <div className="flex items-center justify-center md:justify-end">
                     <a
                       href={show.ticketUrl}
-                      className="inline-flex transform items-center space-x-2 rounded-full bg-orange-600 px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-orange-700"
+                      className="inline-flex items-center space-x-2 rounded-full bg-orange-600 px-8 py-4 font-semibold text-white hover:bg-white hover:text-black transition-all duration-200 ease-in-out"
+                      style={{ textShadow: 'none' }}
                     >
                       <Ticket className="h-5 w-5" />
                       <span>Get Tickets</span>
@@ -296,7 +297,8 @@ export default function ShowsPage() {
                         ) : (
                           <a
                             href={show.ticketUrl}
-                            className="inline-flex items-center space-x-2 rounded-full bg-white px-6 py-2 font-medium text-black transition-colors hover:bg-gray-200"
+                            className="inline-flex items-center space-x-2 rounded-full bg-white px-6 py-2 font-medium text-black hover:bg-orange-600 hover:text-white transition-all duration-200 ease-in-out"
+                            style={{ textShadow: 'none' }}
                           >
                             <Ticket className="h-4 w-4" />
                             <span>Tickets</span>
