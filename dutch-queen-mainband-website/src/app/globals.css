@@ -18,12 +18,20 @@
   --font-sans: var(--font-inter);
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
 body {
   position: relative;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* Smooth hover effect for navigation */
@@ -450,8 +458,11 @@ body {
 section {
   position: relative;
   overflow: hidden;
+  overflow-x: hidden;
   contain: paint layout;
   will-change: transform, opacity;
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* Hero to About transition */
