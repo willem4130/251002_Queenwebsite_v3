@@ -23,10 +23,31 @@ function HomeContent() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [direction, setDirection] = useState<"next" | "prev" | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   // Configuration hooks
   const content = useBandContent();
   const media = useMediaPaths();
+
+  // Detect desktop for bento grid patterns and check motion preferences
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+    const checkMotion = () => setPrefersReducedMotion(
+      window.innerWidth < 1024 || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
+
+    checkDesktop();
+    checkMotion();
+    window.addEventListener('resize', () => {
+      checkDesktop();
+      checkMotion();
+    });
+    return () => window.removeEventListener('resize', () => {
+      checkDesktop();
+      checkMotion();
+    });
+  }, []);
 
   // Scroll animation refs
   const heroRef = useRef<HTMLDivElement>(null);
@@ -137,16 +158,17 @@ function HomeContent() {
   ];
 
   return (
-    <div className="relative bg-black">
+    <div className="relative bg-black overflow-x-hidden w-full max-w-full">
       {/* Hero Section - OPTIMIZED: zoom + tilt (will-change for GPU) */}
       <motion.div
         ref={heroRef}
+        className="overflow-x-hidden w-full max-w-full"
         style={{
           position: 'relative',
-          opacity: heroOpacity,
-          scale: heroScale,
-          rotate: heroRotate,
-          willChange: "transform, opacity",
+          opacity: prefersReducedMotion ? 1 : heroOpacity,
+          scale: prefersReducedMotion ? 1 : heroScale,
+          rotate: prefersReducedMotion ? 0 : heroRotate,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         <Hero onScrollToSection={scrollToSection} />
@@ -156,20 +178,20 @@ function HomeContent() {
       <motion.section
         ref={showsRef}
         id="shows"
-        className="flex min-h-screen items-center justify-center overflow-hidden py-20"
+        className="flex min-h-screen items-center justify-center overflow-hidden overflow-x-hidden w-full max-w-full py-20"
         style={{
           position: 'relative',
-          opacity: showsOpacity,
-          scale: showsScale,
-          willChange: "transform, opacity",
+          opacity: prefersReducedMotion ? 1 : showsOpacity,
+          scale: prefersReducedMotion ? 1 : showsScale,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         {/* Parallax background image (moves slower than content) */}
         <motion.div
           className="absolute inset-0"
           style={{
-            y: showsBgY,
-            willChange: "transform",
+            y: prefersReducedMotion ? 0 : showsBgY,
+            willChange: prefersReducedMotion ? "auto" : "transform",
           }}
         >
           <Image
@@ -177,7 +199,7 @@ function HomeContent() {
             alt="Shows background"
             fill
             priority
-            quality={85}
+            quality={isDesktop ? 85 : 70}
             className="object-cover"
             sizes="100vw"
           />
@@ -191,7 +213,7 @@ function HomeContent() {
             viewport={{ once: true }}
           >
             <h2
-              className="mb-8 text-center text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
+              className="mb-6 sm:mb-8 text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light uppercase tracking-widest text-white"
               style={{
                 textShadow:
                   "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
@@ -201,19 +223,19 @@ function HomeContent() {
               Shows
             </h2>
 
-            {/* Scrollable Grid Container - Optimized for 2x4 layout */}
+            {/* Scrollable Grid Container - Responsive layout */}
             <div
-              className="overflow-y-auto max-h-[78vh] pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
+              className="overflow-y-auto max-h-[70vh] sm:max-h-[75vh] lg:max-h-[78vh] pr-2 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent"
               style={{
                 textShadow:
                   "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
               }}
             >
-              <div className="grid md:grid-cols-2 gap-x-[165px] gap-y-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8 md:gap-x-12 lg:gap-x-[165px] gap-y-4 sm:gap-y-5">
                 {tourDates.map((show, index) => (
                   <motion.div
                     key={index}
-                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-5 bg-black/50 backdrop-blur-sm"
+                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-4 sm:p-5 bg-black/50 backdrop-blur-sm"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.02, ease: "easeOut" }}
@@ -288,7 +310,7 @@ function HomeContent() {
                           href={show.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded transition-all duration-300 shadow-lg hover:shadow-emerald-600/50"
+                          className="px-4 sm:px-6 py-3 sm:py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold rounded transition-all duration-300 shadow-lg hover:shadow-emerald-600/50 min-h-[44px] flex items-center justify-center"
                           onClick={(e) => e.stopPropagation()}
                         >
                           Get Tickets
@@ -317,13 +339,13 @@ function HomeContent() {
       <motion.section
         ref={galleryRef}
         id="gallery"
-        className="min-h-screen overflow-hidden py-16"
+        className="min-h-screen overflow-hidden overflow-x-hidden w-full max-w-full py-16"
         style={{
           position: 'relative',
-          opacity: galleryOpacity,
-          y: galleryY,
-          scale: galleryScale,
-          willChange: "transform, opacity",
+          opacity: prefersReducedMotion ? 1 : galleryOpacity,
+          y: prefersReducedMotion ? 0 : galleryY,
+          scale: prefersReducedMotion ? 1 : galleryScale,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         <div className="relative z-10">
@@ -333,7 +355,7 @@ function HomeContent() {
             transition={{ duration: 1 }}
           >
             <h2
-              className="mb-16 text-center text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
+              className="mb-8 sm:mb-12 md:mb-16 text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light uppercase tracking-widest text-white"
               style={{
                 textShadow:
                   "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
@@ -344,12 +366,11 @@ function HomeContent() {
             </h2>
 
             {/* Bento Grid */}
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div
-                className="grid gap-4 md:gap-6"
+                className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
                 style={{
-                  gridTemplateColumns: "repeat(4, 1fr)",
-                  gridAutoRows: "160px",
+                  gridAutoRows: "200px",
                 }}
               >
                 {galleryImages.map((image, i) => {
@@ -359,8 +380,8 @@ function HomeContent() {
                       key={`gallery-${i}`}
                       className="group relative cursor-pointer overflow-hidden rounded-2xl"
                       style={{
-                        gridRow: pattern.row,
-                        gridColumn: pattern.col,
+                        gridRow: isDesktop ? pattern.row : 'auto',
+                        gridColumn: isDesktop ? pattern.col : 'auto',
                       }}
                       initial={{ opacity: 0, scale: 0.95 }}
                       whileInView={{
@@ -401,8 +422,9 @@ function HomeContent() {
                           alt={`Gallery image ${i + 1}`}
                           fill
                           loading={i < 4 ? "eager" : "lazy"}
+                          quality={isDesktop ? 85 : 75}
                           className="scale-125 object-cover transition-transform duration-500 group-hover:scale-100"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           draggable={false}
                         />
 
@@ -422,28 +444,31 @@ function HomeContent() {
       <motion.section
         ref={aboutRef}
         id="about"
-        className="flex min-h-screen items-center justify-center overflow-hidden py-20"
+        className="flex min-h-screen items-center justify-center overflow-hidden overflow-x-hidden w-full max-w-full py-20"
         style={{
           position: 'relative',
-          opacity: aboutOpacity,
-          scale: aboutScale,
-          willChange: "transform, opacity",
+          opacity: prefersReducedMotion ? 1 : aboutOpacity,
+          scale: prefersReducedMotion ? 1 : aboutScale,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         {/* Parallax background image (slower scroll) */}
         <motion.div
           className="absolute inset-0"
           style={{
-            y: aboutBgY,
-            willChange: "transform",
+            y: prefersReducedMotion ? 0 : aboutBgY,
+            willChange: prefersReducedMotion ? "auto" : "transform",
           }}
         >
+          {/* Mobile-only gradient overlay for better text contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent lg:hidden z-10" />
+
           <Image
-            src="/about-bg-1920.webp"
+            src={isDesktop ? "/about-bg-1920.webp" : "/about-bg-1280.webp"}
             alt="About background"
             fill
             priority
-            quality={85}
+            quality={isDesktop ? 85 : 70}
             className="object-cover"
             sizes="100vw"
           />
@@ -451,7 +476,7 @@ function HomeContent() {
 
         <div className="relative z-10 w-full px-6">
           <motion.h2
-            className="mb-12 text-center text-4xl font-light uppercase tracking-widest text-white md:text-6xl"
+            className="mb-8 sm:mb-10 md:mb-12 text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light uppercase tracking-widest text-white"
             style={{
               textShadow:
                 "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
@@ -465,12 +490,12 @@ function HomeContent() {
             About
           </motion.h2>
 
-          {/* Flex container for 50/50 split */}
-          <div className="w-full flex">
-            {/* Left section - text content */}
-            <div className="w-full lg:w-1/2 px-[30px]">
+          {/* Flex container for responsive layout */}
+          <div className="w-full flex justify-center lg:justify-start">
+            {/* Text content - centered on mobile, left-aligned on desktop */}
+            <div className="w-full max-w-3xl lg:max-w-none lg:w-1/2 px-4 sm:px-6 lg:px-[30px]">
               <div
-                className="space-y-6 text-white text-left"
+                className="space-y-4 sm:space-y-6 text-white text-left"
                 style={{
                   textShadow:
                     "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
@@ -481,8 +506,8 @@ function HomeContent() {
                     key={i}
                     className={
                       i === 0
-                        ? "text-xl font-medium leading-relaxed"
-                        : "text-lg font-normal leading-relaxed"
+                        ? "text-lg sm:text-xl font-medium leading-relaxed"
+                        : "text-base sm:text-lg font-normal leading-relaxed"
                     }
                   >
                     {paragraph}
@@ -491,7 +516,7 @@ function HomeContent() {
               </div>
             </div>
 
-            {/* Right section - empty for background visibility */}
+            {/* Right section - empty for background visibility on desktop */}
             <div className="hidden lg:block lg:w-1/2"></div>
           </div>
         </div>
@@ -515,6 +540,17 @@ function HomeContent() {
                 <motion.div
                   key={selectedImage}
                   custom={direction}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={(e, { offset, velocity }) => {
+                    const swipe = Math.abs(offset.x) * velocity.x;
+                    if (swipe > 10000) {
+                      navigateImage(offset.x > 0 ? "prev" : "next");
+                    } else if (Math.abs(offset.x) > 100) {
+                      navigateImage(offset.x > 0 ? "prev" : "next");
+                    }
+                  }}
                   initial={{
                     x: direction === "next" ? "100%" : direction === "prev" ? "-100%" : 0,
                     opacity: 0,
@@ -531,7 +567,7 @@ function HomeContent() {
                     x: { duration: 0.5, ease: [0.32, 0.72, 0, 1] },
                     opacity: { duration: 0.5, ease: "easeOut" },
                   }}
-                  className="absolute inset-0"
+                  className="absolute inset-0 cursor-grab active:cursor-grabbing"
                   style={{ willChange: "transform, opacity" }}
                 >
                   <Image
@@ -554,24 +590,24 @@ function HomeContent() {
 
               {/* Previous arrow */}
               <motion.button
-                className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-4 text-white backdrop-blur-sm transition-colors hover:bg-amber-500/20"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 sm:p-4 text-white backdrop-blur-sm transition-colors hover:bg-amber-500/20 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 onClick={() => navigateImage("prev")}
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronLeft className="h-8 w-8" />
+                <ChevronLeft className="h-6 w-6 sm:h-8 sm:w-8" />
               </motion.button>
 
               {/* Next arrow */}
               <motion.button
-                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-4 text-white backdrop-blur-sm transition-colors hover:bg-amber-500/20"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 sm:p-4 text-white backdrop-blur-sm transition-colors hover:bg-amber-500/20 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 onClick={() => navigateImage("next")}
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronRight className="h-8 w-8" />
+                <ChevronRight className="h-6 w-6 sm:h-8 sm:w-8" />
               </motion.button>
 
               {/* Image counter */}

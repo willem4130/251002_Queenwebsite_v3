@@ -15,7 +15,7 @@ export function Hero({ onScrollToSection }: HeroProps) {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1024);
     };
 
     checkMobile();
@@ -89,9 +89,9 @@ export function Hero({ onScrollToSection }: HeroProps) {
   };
 
   return (
-    <section id="home" className="relative h-screen overflow-hidden">
+    <section id="home" className="relative h-screen overflow-hidden overflow-x-hidden w-full max-w-full">
       {/* Background video */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 overflow-hidden">
         <video
           ref={videoRef}
           autoPlay
