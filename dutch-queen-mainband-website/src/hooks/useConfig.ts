@@ -108,8 +108,8 @@ export function useMediaPaths() {
     if (!media) {
       return {
         hero: {
-          background: "/hero-bg.jpg",
-          fallback: "/hero-bg.jpg",
+          background: "/hero-bg.webp",
+          fallback: "/hero-bg.webp",
         },
         sections: {
           about: ["/videos/about-bg-1.mp4"],
@@ -130,8 +130,8 @@ export function useMediaPaths() {
     console.error("Error loading media paths:", error);
     return {
       hero: {
-        background: "/hero-bg.jpg",
-        fallback: "/hero-bg.jpg",
+        background: "/hero-bg.webp",
+        fallback: "/hero-bg.webp",
       },
       sections: {
         about: ["/videos/about-bg-1.mp4"],

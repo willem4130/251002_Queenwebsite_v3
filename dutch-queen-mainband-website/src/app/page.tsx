@@ -3,7 +3,7 @@
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Hero } from "@/components/Hero";
 import { useBandContent, useMediaPaths } from "@/hooks/useConfig";
@@ -84,7 +84,7 @@ function HomeContent() {
     setSelectedIndex(index);
   };
 
-  const navigateImage = (dir: "prev" | "next") => {
+  const navigateImage = useCallback((dir: "prev" | "next") => {
     setDirection(dir);
     const newIndex =
       dir === "next"
@@ -93,7 +93,7 @@ function HomeContent() {
 
     setSelectedIndex(newIndex);
     setSelectedImage(`/gallery/${galleryImages[newIndex]}`);
-  };
+  }, [selectedIndex, galleryImages]);
 
   // Keyboard navigation for lightbox
   useEffect(() => {
@@ -111,7 +111,7 @@ function HomeContent() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedImage, selectedIndex, galleryImages]);
+  }, [selectedImage, navigateImage]);
 
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
@@ -137,11 +137,12 @@ function HomeContent() {
   ];
 
   return (
-    <div className="bg-black">
+    <div className="relative bg-black">
       {/* Hero Section - OPTIMIZED: zoom + tilt (will-change for GPU) */}
       <motion.div
         ref={heroRef}
         style={{
+          position: 'relative',
           opacity: heroOpacity,
           scale: heroScale,
           rotate: heroRotate,
@@ -155,8 +156,9 @@ function HomeContent() {
       <motion.section
         ref={showsRef}
         id="shows"
-        className="relative flex min-h-screen items-center justify-center overflow-hidden py-20"
+        className="flex min-h-screen items-center justify-center overflow-hidden py-20"
         style={{
+          position: 'relative',
           opacity: showsOpacity,
           scale: showsScale,
           willChange: "transform, opacity",
@@ -171,7 +173,7 @@ function HomeContent() {
           }}
         >
           <Image
-            src="/shows-bg-1920.jpg"
+            src="/shows-bg-1920.webp"
             alt="Shows background"
             fill
             priority
@@ -315,8 +317,9 @@ function HomeContent() {
       <motion.section
         ref={galleryRef}
         id="gallery"
-        className="relative min-h-screen overflow-hidden py-16"
+        className="min-h-screen overflow-hidden py-16"
         style={{
+          position: 'relative',
           opacity: galleryOpacity,
           y: galleryY,
           scale: galleryScale,
@@ -419,8 +422,9 @@ function HomeContent() {
       <motion.section
         ref={aboutRef}
         id="about"
-        className="relative flex min-h-screen items-center justify-center overflow-hidden py-20"
+        className="flex min-h-screen items-center justify-center overflow-hidden py-20"
         style={{
+          position: 'relative',
           opacity: aboutOpacity,
           scale: aboutScale,
           willChange: "transform, opacity",
@@ -435,7 +439,7 @@ function HomeContent() {
           }}
         >
           <Image
-            src="/about-bg-1920.jpg"
+            src="/about-bg-1920.webp"
             alt="About background"
             fill
             priority

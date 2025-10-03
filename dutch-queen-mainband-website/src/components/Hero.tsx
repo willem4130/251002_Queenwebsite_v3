@@ -35,9 +35,6 @@ export function Hero({ onScrollToSection }: HeroProps) {
       if (promise !== undefined) {
         promise
           .then(() => {
-            console.log("✓ Video playing successfully");
-            console.log(`📊 Video muted: ${videoRef.current?.muted}`);
-            console.log(`📊 Video volume: ${videoRef.current?.volume}`);
             // Call play again to ensure it works (Supabase pattern)
             videoRef.current?.play();
           })
@@ -45,11 +42,7 @@ export function Hero({ onScrollToSection }: HeroProps) {
             console.warn("⚠ Autoplay blocked. Video will play on user interaction:", error);
             // Add click listener to play on first interaction
             const playOnInteraction = () => {
-              videoRef.current?.play().then(() => {
-                console.log("✓ Video playing after user interaction");
-                console.log(`📊 Video muted: ${videoRef.current?.muted}`);
-                console.log(`📊 Video volume: ${videoRef.current?.volume}`);
-              });
+              videoRef.current?.play();
             };
             document.addEventListener("click", playOnInteraction, { once: true });
           });
@@ -87,12 +80,6 @@ export function Hero({ onScrollToSection }: HeroProps) {
 
       videoRef.current.muted = newMutedState;
       setIsMuted(newMutedState);
-
-      // Log audio state for debugging
-      console.log(`🔊 Audio ${newMutedState ? 'MUTED' : 'UNMUTED'}`);
-      console.log(`📊 Video element muted property: ${videoRef.current.muted}`);
-      console.log(`📊 Video element volume: ${videoRef.current.volume}`);
-      console.log(`📊 Video has audio track: ${videoRef.current.audioTracks?.length > 0 || 'unknown'}`);
 
       // Check if video actually has audio
       if (!newMutedState && videoRef.current.volume === 0) {

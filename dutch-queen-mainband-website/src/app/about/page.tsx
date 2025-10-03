@@ -13,7 +13,7 @@ export default function AboutPage() {
         {/* Background image */}
         <div className="absolute inset-0">
           <Image
-            src="/about-bg-1920.jpg"
+            src="/about-bg-1920.webp"
             alt="About background"
             fill
             priority

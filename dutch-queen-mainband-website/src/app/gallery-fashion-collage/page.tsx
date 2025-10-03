@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue } from "framer-motion";
 import { useState, useRef } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -199,8 +199,8 @@ export default function GalleryFashionCollagePage() {
                           }}
                           sizes="(max-width: 768px) 100vw, 600px"
                           draggable={false}
-                          onLoad={(e: any) => {
-                            const { naturalWidth, naturalHeight } = e.target;
+                          onLoad={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                            const { naturalWidth, naturalHeight } = e.currentTarget;
                             const aspectRatio = naturalWidth / naturalHeight;
                             setImageAspectRatios(prev => ({
                               ...prev,

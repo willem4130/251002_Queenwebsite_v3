@@ -142,7 +142,15 @@ const upcomingShows = [
   },
 ];
 
-const pastShows = [
+const pastShows: Array<{
+  date: string;
+  time: string;
+  venue: string;
+  city: string;
+  status: string;
+  ticketUrl: string;
+  featured: boolean;
+}> = [
   // Past shows will be added here after the tour
 ];
 
@@ -153,7 +161,7 @@ export default function ShowsPage() {
       <section className="relative overflow-hidden py-20">
         <div className="absolute inset-0">
           <Image
-            src="/shows-bg-1920.jpg"
+            src="/shows-bg-1920.webp"
             alt="Shows background"
             fill
             priority

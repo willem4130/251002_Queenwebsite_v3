@@ -25,7 +25,6 @@ export default function VideoBackground({
   // Ensure client-side only rendering
   useEffect(() => {
     setIsMounted(true);
-    console.log("VideoBackground mounted with videos:", videos);
   }, [videos]);
 
   // Rotate through videos if multiple provided
@@ -41,7 +40,6 @@ export default function VideoBackground({
 
   // Handle video loading
   const handleVideoLoad = () => {
-    console.log("Video loaded successfully:", videos[currentVideoIndex]);
     setIsLoading(false);
     setHasError(false);
     if (videoRef.current) {
@@ -94,12 +92,6 @@ export default function VideoBackground({
           poster="/forest-scene.jpg"
           onLoadedData={handleVideoLoad}
           onError={handleVideoError}
-          onLoadStart={() => {
-            console.log("Video load started:", videos[currentVideoIndex]);
-          }}
-          onCanPlay={() => {
-            console.log("Video can play:", videos[currentVideoIndex]);
-          }}
         >
           <source src={videos[currentVideoIndex]} type="video/mp4" />
           <source src={videos[currentVideoIndex]} type="video/quicktime" />
