@@ -3,7 +3,7 @@
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Hero } from "@/components/Hero";
 import { useBandContent, useMediaPaths } from "@/hooks/useConfig";
@@ -22,6 +22,7 @@ const bentoPatterns = [
 function HomeContent() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [direction, setDirection] = useState<"next" | "prev" | null>(null);
 
   // Configuration hooks
   const content = useBandContent();
@@ -69,6 +70,11 @@ function HomeContent() {
   const aboutOpacity = useTransform(aboutProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 1]);
   const aboutScale = useTransform(aboutProgress, [0, 0.4], [0.95, 1]);
 
+  // Gallery images from configuration (must be declared before navigateImage/useEffect)
+  const galleryImages = media.gallery.map((path) =>
+    path.replace("/gallery/", "")
+  );
+
   const getBentoPattern = (index: number) => {
     return bentoPatterns[index % bentoPatterns.length];
   };
@@ -78,9 +84,10 @@ function HomeContent() {
     setSelectedIndex(index);
   };
 
-  const navigateImage = (direction: "prev" | "next") => {
+  const navigateImage = (dir: "prev" | "next") => {
+    setDirection(dir);
     const newIndex =
-      direction === "next"
+      dir === "next"
         ? (selectedIndex + 1) % galleryImages.length
         : (selectedIndex - 1 + galleryImages.length) % galleryImages.length;
 
@@ -88,14 +95,27 @@ function HomeContent() {
     setSelectedImage(`/gallery/${galleryImages[newIndex]}`);
   };
 
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (!selectedImage) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        navigateImage("prev");
+      } else if (e.key === "ArrowRight") {
+        navigateImage("next");
+      } else if (e.key === "Escape") {
+        setSelectedImage(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedImage, selectedIndex, galleryImages]);
+
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
-
-  // Gallery images from configuration
-  const galleryImages = media.gallery.map((path) =>
-    path.replace("/gallery/", "")
-  );
 
   // All tour dates
   const tourDates = [
@@ -327,7 +347,6 @@ function HomeContent() {
                 style={{
                   gridTemplateColumns: "repeat(4, 1fr)",
                   gridAutoRows: "160px",
-                  gridAutoFlow: "dense",
                 }}
               >
                 {galleryImages.map((image, i) => {
@@ -386,11 +405,6 @@ function HomeContent() {
 
                         {/* Gradient overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-                        {/* Image counter */}
-                        <div className="absolute bottom-4 right-4 rounded-full bg-black/70 px-3 py-1.5 text-xs font-light tracking-wider text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
-                          {i + 1}/{galleryImages.length}
-                        </div>
                       </div>
                     </motion.div>
                   );
@@ -493,13 +507,38 @@ function HomeContent() {
               className="relative h-full max-h-[85vh] w-full max-w-5xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
-                src={selectedImage}
-                alt="Gallery image"
-                fill
-                className="object-contain"
-                sizes="100vw"
-              />
+              <AnimatePresence initial={false} custom={direction}>
+                <motion.div
+                  key={selectedImage}
+                  custom={direction}
+                  initial={{
+                    x: direction === "next" ? "100%" : direction === "prev" ? "-100%" : 0,
+                    opacity: 0,
+                  }}
+                  animate={{
+                    x: 0,
+                    opacity: 1,
+                  }}
+                  exit={{
+                    x: direction === "next" ? "-100%" : direction === "prev" ? "100%" : 0,
+                    opacity: 0,
+                  }}
+                  transition={{
+                    x: { duration: 0.5, ease: [0.32, 0.72, 0, 1] },
+                    opacity: { duration: 0.5, ease: "easeOut" },
+                  }}
+                  className="absolute inset-0"
+                  style={{ willChange: "transform, opacity" }}
+                >
+                  <Image
+                    src={selectedImage}
+                    alt="Gallery image"
+                    fill
+                    className="object-contain"
+                    sizes="100vw"
+                  />
+                </motion.div>
+              </AnimatePresence>
 
               {/* Close button */}
               <button
@@ -510,20 +549,26 @@ function HomeContent() {
               </button>
 
               {/* Previous arrow */}
-              <button
-                className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-amber-500/20"
+              <motion.button
+                className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-4 text-white backdrop-blur-sm transition-colors hover:bg-amber-500/20"
                 onClick={() => navigateImage("prev")}
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.2 }}
               >
                 <ChevronLeft className="h-8 w-8" />
-              </button>
+              </motion.button>
 
               {/* Next arrow */}
-              <button
-                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-amber-500/20"
+              <motion.button
+                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-4 text-white backdrop-blur-sm transition-colors hover:bg-amber-500/20"
                 onClick={() => navigateImage("next")}
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.2 }}
               >
                 <ChevronRight className="h-8 w-8" />
-              </button>
+              </motion.button>
 
               {/* Image counter */}
               <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 text-sm font-light tracking-wider text-white/70">
