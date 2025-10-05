@@ -84,14 +84,14 @@ function HomeContent() {
   const galleryY = useTransform(galleryProgress, [0, 0.25, 0.75, 1], [80, 0, 0, -40]);
   const galleryScale = useTransform(galleryProgress, [0, 0.25], [0.95, 1]);
 
-  // About section - OPTIMIZED: reduced parallax for smooth performance
+  // About section - Enhanced dramatic entrance with increased parallax and scale
   const { scrollYProgress: aboutProgress } = useScroll({
     target: aboutRef,
     offset: ["start end", "end start"],
   });
-  const aboutBgY = useTransform(aboutProgress, [0, 1], [80, -80]);
+  const aboutBgY = useTransform(aboutProgress, [0, 1], [150, -150]);
   const aboutOpacity = useTransform(aboutProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 1]);
-  const aboutScale = useTransform(aboutProgress, [0, 0.4], [0.95, 1]);
+  const aboutScale = useTransform(aboutProgress, [0, 0.4], [0.85, 1.08]);
 
   // Gallery images from configuration (must be declared before navigateImage/useEffect)
   const galleryImages = media.gallery.map((path) =>
