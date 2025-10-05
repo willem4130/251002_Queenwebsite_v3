@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Calendar, MapPin, Clock, Ticket, AlertCircle } from "lucide-react";
+import { MapPin, Clock, Ticket } from "lucide-react";
 
 const upcomingShows = [
   {
@@ -174,138 +174,109 @@ export default function ShowsPage() {
 
         <div className="relative z-10 mx-auto max-w-6xl px-6">
           <motion.div
-            className="mb-16 text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true }}
           >
-            <h1 className="mb-6 bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-5xl font-bold text-transparent md:text-7xl">
-              Tour Dates
-            </h1>
-            <p className="mx-auto max-w-3xl text-xl text-gray-300">
-              Experience the magic live. Each show is a unique theatrical
-              journey designed to transport you to another dimension.
-            </p>
-          </motion.div>
-
-          {/* Featured Show */}
-          {upcomingShows
-            .filter((show) => show.featured)
-            .map((show, index) => (
-              <motion.div
-                key={index}
-                className="mb-12 rounded-lg border border-orange-500/30 bg-gradient-to-r from-orange-600/20 to-red-600/20 p-8 backdrop-blur-sm"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <div className="mb-4 flex items-center space-x-2 text-orange-400">
-                  <AlertCircle className="h-5 w-5" />
-                  <span className="text-sm font-semibold uppercase tracking-wide">
-                    Featured Show
-                  </span>
-                </div>
-
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div>
-                    <h2 className="mb-4 text-3xl font-bold text-white">
-                      {show.venue}
-                    </h2>
-                    <div className="space-y-2 text-gray-300">
-                      <div className="flex items-center space-x-3">
-                        <Calendar className="h-5 w-5 text-orange-400" />
-                        <span>{show.date}</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <Clock className="h-5 w-5 text-orange-400" />
-                        <span>Doors at {show.time}</span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <MapPin className="h-5 w-5 text-orange-400" />
-                        <span>{show.city}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-center md:justify-end">
-                    <a
-                      href={show.ticketUrl}
-                      className="inline-flex items-center space-x-2 rounded-full bg-orange-600 px-8 py-4 font-semibold text-white hover:bg-white hover:text-black transition-all duration-200 ease-in-out"
-                      style={{ textShadow: 'none' }}
-                    >
-                      <Ticket className="h-5 w-5" />
-                      <span>Get Tickets</span>
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-
-          {/* Upcoming Shows */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <h2 className="mb-8 text-3xl font-bold text-white md:text-4xl">
-              Upcoming Shows
+            <h2
+              className="mb-6 sm:mb-8 text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light uppercase tracking-widest text-white"
+              style={{
+                textShadow:
+                  "0 3px 6px rgba(0, 0, 0, 0.95), 0 6px 12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.7)",
+                WebkitTextStroke: "0.5px rgba(255, 255, 255, 0.3)",
+              }}
+            >
+              Shows
             </h2>
 
             <div className="space-y-4">
-              {upcomingShows
-                .filter((show) => !show.featured)
-                .map((show, index) => (
-                  <motion.div
+              {upcomingShows.map((show, index) => (
+                <motion.div
                     key={index}
-                    className="rounded-lg border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.02, ease: "easeOut" }}
+                    viewport={{ once: true, amount: 0.1 }}
                   >
-                    <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-                      <div className="flex-1">
-                        <div className="flex flex-col gap-4 md:flex-row md:items-center">
-                          <div className="text-center md:text-left">
-                            <div className="text-2xl font-bold text-white">
-                              {show.date.split(",")[0]}
-                            </div>
-                            <div className="text-sm text-gray-400">
-                              {show.date.split(",")[1]}
+                    {show.status === "sold-out" ? (
+                      <div className="rounded-lg border border-white/10 bg-white/5 p-6 backdrop-blur-sm opacity-60">
+                        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                          <div className="flex-1">
+                            <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                              <div className="text-center md:text-left">
+                                <div className="text-2xl font-bold text-white">
+                                  {show.date.split(",")[0]}
+                                </div>
+                                <div className="text-sm text-gray-400">
+                                  {show.date.split(",")[1]}
+                                </div>
+                              </div>
+
+                              <div className="flex-1">
+                                <h3 className="text-lg font-semibold text-white">
+                                  {show.venue}
+                                </h3>
+                                <div className="flex items-center space-x-2 text-gray-400">
+                                  <MapPin className="h-4 w-4" />
+                                  <span>{show.city}</span>
+                                  <span>•</span>
+                                  <Clock className="h-4 w-4" />
+                                  <span>{show.time}</span>
+                                </div>
+                              </div>
                             </div>
                           </div>
 
-                          <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-white">
-                              {show.venue}
-                            </h3>
-                            <div className="flex items-center space-x-2 text-gray-400">
-                              <MapPin className="h-4 w-4" />
-                              <span>{show.city}</span>
-                              <span>•</span>
-                              <Clock className="h-4 w-4" />
-                              <span>{show.time}</span>
-                            </div>
+                          <div>
+                            <span className="inline-flex items-center space-x-2 rounded-full bg-gray-600 px-6 py-2 font-medium text-gray-300">
+                              <Ticket className="h-4 w-4" />
+                              <span>Sold Out</span>
+                            </span>
                           </div>
                         </div>
                       </div>
+                    ) : (
+                      <a
+                        href={show.ticketUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group block rounded-lg border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-200 ease-in-out hover:border-emerald-500/60 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:bg-white/10 active:border-emerald-500/60 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 cursor-pointer"
+                      >
+                        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                          <div className="flex-1">
+                            <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                              <div className="text-center md:text-left">
+                                <div className="text-2xl font-bold text-white">
+                                  {show.date.split(",")[0]}
+                                </div>
+                                <div className="text-sm text-gray-400">
+                                  {show.date.split(",")[1]}
+                                </div>
+                              </div>
 
-                      <div>
-                        {show.status === "sold-out" ? (
-                          <span className="inline-block rounded-full bg-gray-600 px-6 py-2 font-medium text-gray-300">
-                            Sold Out
-                          </span>
-                        ) : (
-                          <a
-                            href={show.ticketUrl}
-                            className="inline-flex items-center space-x-2 rounded-full bg-white px-6 py-2 font-medium text-black hover:bg-orange-600 hover:text-white transition-all duration-200 ease-in-out"
-                            style={{ textShadow: 'none' }}
-                          >
+                              <div className="flex-1">
+                                <h3 className="text-lg font-semibold text-white">
+                                  {show.venue}
+                                </h3>
+                                <div className="flex items-center space-x-2 text-gray-400">
+                                  <MapPin className="h-4 w-4" />
+                                  <span>{show.city}</span>
+                                  <span>•</span>
+                                  <Clock className="h-4 w-4" />
+                                  <span>{show.time}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center space-x-2 rounded-full bg-white px-6 py-2 font-medium text-black group-hover:bg-emerald-600 group-hover:text-white transition-all duration-200 ease-in-out">
                             <Ticket className="h-4 w-4" />
                             <span>Tickets</span>
-                          </a>
-                        )}
-                      </div>
-                    </div>
+                          </div>
+                        </div>
+                      </a>
+                    )}
                   </motion.div>
                 ))}
             </div>
@@ -342,39 +313,6 @@ export default function ShowsPage() {
               </div>
             </motion.div>
           )}
-        </div>
-      </section>
-
-      {/* Newsletter Section */}
-      <section className="bg-gradient-to-t from-orange-900/20 to-black py-20">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="mb-6 text-3xl font-bold text-white md:text-4xl">
-              Never Miss a Show
-            </h2>
-            <p className="mb-8 text-lg text-gray-300">
-              Get tour announcements and exclusive presale access delivered to
-              your inbox.
-            </p>
-            <form className="mx-auto flex max-w-md gap-4">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 rounded-full border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-              <button
-                type="submit"
-                className="rounded-full bg-orange-600 px-6 py-3 font-medium text-white transition-colors hover:bg-orange-700"
-              >
-                Subscribe
-              </button>
-            </form>
-          </motion.div>
         </div>
       </section>
     </div>
