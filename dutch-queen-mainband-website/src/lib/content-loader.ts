@@ -7,6 +7,8 @@
  * - Headless CMS (future)
  */
 
+import { readFile } from "fs/promises";
+import { join } from "path";
 import type {
   BandContent,
   BandProfile,
@@ -70,15 +72,15 @@ export class ContentLoader {
    */
   private async loadFromFiles(bandId: string): Promise<BandContent> {
     try {
-      const basePath = `${CONTENT_BASE_PATH}/${bandId}`;
+      const basePath = join(process.cwd(), "content", "bands", bandId);
 
       // Load all content files in parallel
       const [profile, about, social, contact, shows] = await Promise.all([
-        this.loadJsonFile<BandProfile>(`${basePath}/band-profile.json`),
-        this.loadJsonFile<AboutContent>(`${basePath}/data/about.json`),
-        this.loadJsonFile<SocialContent>(`${basePath}/data/social.json`),
-        this.loadJsonFile<ContactContent>(`${basePath}/data/contact.json`),
-        this.loadJsonFile<ShowsContent>(`${basePath}/data/shows.json`),
+        this.loadJsonFileFromDisk<BandProfile>(join(basePath, "band-profile.json")),
+        this.loadJsonFileFromDisk<AboutContent>(join(basePath, "data", "about.json")),
+        this.loadJsonFileFromDisk<SocialContent>(join(basePath, "data", "social.json")),
+        this.loadJsonFileFromDisk<ContactContent>(join(basePath, "data", "contact.json")),
+        this.loadJsonFileFromDisk<ShowsContent>(join(basePath, "data", "shows.json")),
       ]);
 
       return {
@@ -148,7 +150,30 @@ export class ContentLoader {
   }
 
   /**
-   * Load a single JSON file
+   * Load a single JSON file from disk (for server-side file loading)
+   */
+  private async loadJsonFileFromDisk<T>(filePath: string): Promise<T> {
+    // Check cache first
+    if (this.cache.has(filePath)) {
+      return this.cache.get(filePath) as T;
+    }
+
+    try {
+      const fileContent = await readFile(filePath, "utf-8");
+      const data = JSON.parse(fileContent) as T;
+
+      // Cache the result
+      this.cache.set(filePath, data);
+
+      return data;
+    } catch (error) {
+      console.error(`Failed to load JSON file ${filePath}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Load a single JSON file via HTTP (for API/CMS sources)
    */
   private async loadJsonFile<T>(path: string): Promise<T> {
     // Check cache first
@@ -284,10 +309,15 @@ export async function getBandProfile(bandId?: string): Promise<BandProfile> {
  */
 export async function contentExists(bandId: string): Promise<boolean> {
   try {
-    const response = await fetch(
-      `${CONTENT_BASE_PATH}/${bandId}/band-profile.json`
+    const filePath = join(
+      process.cwd(),
+      "content",
+      "bands",
+      bandId,
+      "band-profile.json"
     );
-    return response.ok;
+    await readFile(filePath, "utf-8");
+    return true;
   } catch {
     return false;
   }

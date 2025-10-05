@@ -162,7 +162,7 @@ function HomeContent() {
       {/* Hero Section - OPTIMIZED: zoom + tilt (will-change for GPU) */}
       <motion.div
         ref={heroRef}
-        className="overflow-x-hidden w-full max-w-full"
+        className="relative overflow-x-hidden w-full max-w-full"
         style={{
           position: 'relative',
           opacity: prefersReducedMotion ? 1 : heroOpacity,
@@ -178,7 +178,7 @@ function HomeContent() {
       <motion.section
         ref={showsRef}
         id="shows"
-        className="flex min-h-screen items-center justify-center overflow-hidden overflow-x-hidden w-full max-w-full py-20"
+        className="relative flex min-h-screen items-center justify-center overflow-hidden overflow-x-hidden w-full max-w-full py-20"
         style={{
           position: 'relative',
           opacity: prefersReducedMotion ? 1 : showsOpacity,
@@ -333,7 +333,7 @@ function HomeContent() {
       <motion.section
         ref={galleryRef}
         id="gallery"
-        className="min-h-screen overflow-hidden overflow-x-hidden w-full max-w-full py-16"
+        className="relative min-h-screen overflow-hidden overflow-x-hidden w-full max-w-full py-16"
         style={{
           position: 'relative',
           opacity: prefersReducedMotion ? 1 : galleryOpacity,
@@ -438,7 +438,7 @@ function HomeContent() {
       <motion.section
         ref={aboutRef}
         id="about"
-        className="flex min-h-screen items-center justify-center overflow-hidden overflow-x-hidden w-full max-w-full py-20"
+        className="relative flex min-h-screen items-center justify-center overflow-hidden overflow-x-hidden w-full max-w-full py-20"
         style={{
           position: 'relative',
           opacity: prefersReducedMotion ? 1 : aboutOpacity,

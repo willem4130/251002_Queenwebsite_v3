@@ -3,44 +3,28 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import { getBandProfile } from "@/lib/content-loader";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-// Generate metadata from band profile
-async function generateMetadata(): Promise<Metadata> {
-  try {
-    const profile = await getBandProfile();
-    return {
-      title: profile.seo?.metaTitle || `${profile.name} | Official Website`,
-      description:
-        profile.seo?.metaDescription || `Official website of ${profile.name}`,
-      keywords: profile.seo?.keywords || [],
-      openGraph: {
-        title: profile.seo?.metaTitle || `${profile.name} | Official Website`,
-        description:
-          profile.seo?.metaDescription || `Official website of ${profile.name}`,
-        images: profile.seo?.ogImage ? [profile.seo.ogImage] : [],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: profile.seo?.metaTitle || `${profile.name} | Official Website`,
-        description:
-          profile.seo?.metaDescription || `Official website of ${profile.name}`,
-      },
-    };
-  } catch {
-    return {
-      title: "Band Website",
-      description: "Official band website",
-    };
-  }
-}
-
-export const metadata = await generateMetadata();
+// Static metadata with fallback values
+export const metadata: Metadata = {
+  title: "The Dutch Queen | Official Website",
+  description: "Official website of The Dutch Queen - Europe's Premier Queen Tribute Band",
+  keywords: ["Queen", "tribute band", "live music", "Dutch Queen"],
+  openGraph: {
+    title: "The Dutch Queen | Official Website",
+    description: "Official website of The Dutch Queen - Europe's Premier Queen Tribute Band",
+    images: [],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Dutch Queen | Official Website",
+    description: "Official website of The Dutch Queen - Europe's Premier Queen Tribute Band",
+  },
+};
 
 export default function RootLayout({
   children,

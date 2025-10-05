@@ -10,17 +10,24 @@ interface HeroProps {
 
 export function Hero({ onScrollToSection }: HeroProps) {
   const [isMuted, setIsMuted] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
+    const checkDevice = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setDeviceType('mobile');
+      } else if (width < 1024) {
+        setDeviceType('tablet');
+      } else {
+        setDeviceType('desktop');
+      }
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    return () => window.removeEventListener("resize", checkDevice);
   }, []);
 
   useEffect(() => {
@@ -97,12 +104,18 @@ export function Hero({ onScrollToSection }: HeroProps) {
           autoPlay
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           className="h-full w-full object-cover"
         >
+          {/* Modern browsers: WebM VP9 (50% smaller, best compression) */}
           <source
-            src={isMobile ? "/videos/hero-mobile.mp4" : "/videos/hero-desktop.mp4"}
-            type="video/mp4"
+            src={deviceType === 'mobile' ? "/videos/hero-mobile.webm" : "/videos/hero-desktop.webm"}
+            type='video/webm; codecs="vp9, opus"'
+          />
+          {/* Fallback: MP4 H.264 for Safari and older browsers */}
+          <source
+            src={deviceType === 'mobile' ? "/videos/hero-mobile.mp4" : "/videos/hero-desktop.mp4"}
+            type='video/mp4; codecs="avc1.640028, mp4a.40.2"'
           />
         </video>
       </div>
