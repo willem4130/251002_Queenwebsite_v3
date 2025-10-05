@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ChevronDown, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, X, MapPin, Clock, Ticket } from "lucide-react";
 import Image from "next/image";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -139,22 +139,22 @@ function HomeContent() {
   };
 
   // All tour dates
-  const tourDates = [
-    { date: "DEC 4", year: "2025", venue: "Vorstin", city: "Hilversum", time: "20:30", price: "€30.50", url: "https://vorstin.stager.co/shop/default/events/111493445" },
-    { date: "DEC 6", year: "2025", venue: "Boerderij", city: "Zoetermeer", time: "20:30", price: "€32.00", url: "https://poppodiumboerderij.nl/programma/thedutchqueen2025/" },
-    { date: "DEC 11", year: "2025", venue: "Victorie", city: "Alkmaar", time: "20:30", price: "€33.90", url: "https://www.podiumvictorie.nl/programma/the-dutch-queen-2025" },
-    { date: "DEC 12", year: "2025", venue: "Vereeniging", city: "Nijmegen", time: "20:15", price: "€29.50", url: "https://www.stadsschouwburgendevereeniging.nl/programma/8266/50-jahr-bohemian-rhapsody/the-dutch-queen" },
-    { date: "DEC 13", year: "2025", venue: "Dru fabriek", city: "Ulft", time: "20:15", price: "€28.50", url: "https://www.dru-industriepark.nl/agenda/pop/2025/12/the-dutch-queen" },
-    { date: "DEC 18", year: "2025", venue: "Metropool", city: "Enschede", time: "20:15", price: "€30.00", url: "https://metropool.nl/agenda/the-dutch-queen-18-dec" },
-    { date: "DEC 19", year: "2025", venue: "Lantaarn", city: "Hellendoorn", time: "20:15", price: "€25.60", url: "https://mijnetickets.shop/de-lantaarn-exploitatie/67acf1f2dfc06" },
-    { date: "DEC 20", year: "2025", venue: "Hedon", city: "Zwolle", time: "19:30", price: "€29.50", url: "https://hedon-zwolle.nl/voorstelling/32447/the-dutch-queen" },
-    { date: "DEC 28", year: "2025", venue: "Effenaar", city: "Eindhoven", time: "20:30", price: "€29.50", url: "https://www.effenaar.nl/agenda/dutch-queen-50-jaar-bohemian-rhapsody" },
-    { date: "DEC 29", year: "2025", venue: "Oosterpoort", city: "Groningen", time: "20:30", price: "€29.50", url: "https://www.spotgroningen.nl/programma/the-dutch-queen-3/" },
-    { date: "DEC 30", year: "2025", venue: "Mezz", city: "Breda", time: "20:30", price: "€29.50", url: "https://www.mezz.nl/programma/the-dutch-queen/" },
-    { date: "JAN 2", year: "2026", venue: "Groene Engel", city: "Oss", time: "20:30", price: "€29.50", url: "https://groene-engel.stager.co/web/tickets/111471691" },
-    { date: "JAN 3", year: "2026", venue: "Grenswerk", city: "Venlo", time: "20:30", price: "€29.50", url: "https://www.grenswerk.nl/agenda/the-dutch-queen///" },
-    { date: "JAN 9", year: "2026", venue: "Gigant", city: "Apeldoorn", time: "20:30", price: "€29.50", url: "https://www.gigant.nl/concert/the-dutch-queen" },
-    { date: "JAN 10", year: "2026", venue: "Bibelot", city: "Dordrecht", time: "20:30", price: "€29.00", url: "https://bibelot.stager.co/web/tickets/111500178" },
+  const upcomingShows = [
+    { date: "Dec 4, 2025", time: "20:30", venue: "Vorstin", city: "Hilversum", status: "tickets", ticketUrl: "https://vorstin.stager.co/shop/default/events/111493445" },
+    { date: "Dec 6, 2025", time: "20:30", venue: "Boerderij", city: "Zoetermeer", status: "tickets", ticketUrl: "https://poppodiumboerderij.nl/programma/thedutchqueen2025/" },
+    { date: "Dec 11, 2025", time: "20:30", venue: "Victorie", city: "Alkmaar", status: "tickets", ticketUrl: "https://www.podiumvictorie.nl/programma/the-dutch-queen-2025" },
+    { date: "Dec 12, 2025", time: "20:15", venue: "Vereeniging", city: "Nijmegen", status: "tickets", ticketUrl: "https://www.stadsschouwburgendevereeniging.nl/programma/8266/50-jahr-bohemian-rhapsody/the-dutch-queen" },
+    { date: "Dec 13, 2025", time: "20:15", venue: "Dru fabriek", city: "Ulft", status: "tickets", ticketUrl: "https://www.dru-industriepark.nl/agenda/pop/2025/12/the-dutch-queen" },
+    { date: "Dec 18, 2025", time: "20:15", venue: "Metropool", city: "Enschede", status: "tickets", ticketUrl: "https://metropool.nl/agenda/the-dutch-queen-18-dec" },
+    { date: "Dec 19, 2025", time: "20:15", venue: "Lantaarn", city: "Hellendoorn", status: "tickets", ticketUrl: "https://mijnetickets.shop/de-lantaarn-exploitatie/67acf1f2dfc06" },
+    { date: "Dec 20, 2025", time: "19:30", venue: "Hedon", city: "Zwolle", status: "tickets", ticketUrl: "https://hedon-zwolle.nl/voorstelling/32447/the-dutch-queen" },
+    { date: "Dec 28, 2025", time: "20:30", venue: "Effenaar", city: "Eindhoven", status: "tickets", ticketUrl: "https://www.effenaar.nl/agenda/dutch-queen-50-jaar-bohemian-rhapsody" },
+    { date: "Dec 29, 2025", time: "20:30", venue: "Oosterpoort", city: "Groningen", status: "tickets", ticketUrl: "https://www.spotgroningen.nl/programma/the-dutch-queen-3/" },
+    { date: "Dec 30, 2025", time: "20:30", venue: "Mezz", city: "Breda", status: "tickets", ticketUrl: "https://www.mezz.nl/programma/the-dutch-queen/" },
+    { date: "Jan 2, 2026", time: "20:30", venue: "Groene Engel", city: "Oss", status: "tickets", ticketUrl: "https://groene-engel.stager.co/web/tickets/111471691" },
+    { date: "Jan 3, 2026", time: "20:30", venue: "Grenswerk", city: "Venlo", status: "tickets", ticketUrl: "https://www.grenswerk.nl/agenda/the-dutch-queen///" },
+    { date: "Jan 9, 2026", time: "20:30", venue: "Gigant", city: "Apeldoorn", status: "tickets", ticketUrl: "https://www.gigant.nl/concert/the-dutch-queen" },
+    { date: "Jan 10, 2026", time: "20:30", venue: "Bibelot", city: "Dordrecht", status: "tickets", ticketUrl: "https://bibelot.stager.co/web/tickets/111500178" },
   ];
 
   return (
@@ -223,97 +223,95 @@ function HomeContent() {
               Shows
             </h2>
 
-            {/* Scrollable Grid Container - Responsive layout */}
-            <div
-              className="overflow-y-auto max-h-[70vh] sm:max-h-[75vh] lg:max-h-[78vh] pr-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-              style={{
-                textShadow:
-                  "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
-              }}
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 sm:gap-x-8 md:gap-x-12 lg:gap-x-[165px] gap-y-4 sm:gap-y-5">
-                {tourDates.map((show, index) => (
-                  <motion.div
-                    key={index}
-                    className="group relative block cursor-pointer overflow-hidden border border-white/20 p-4 sm:p-5 bg-black/50 backdrop-blur-sm transition-all duration-200 ease-in-out hover:border-emerald-400"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.02, ease: "easeOut" }}
-                    viewport={{ once: true, amount: 0.1 }}
-                  >
-                    <div className="relative z-10 flex flex-col gap-2">
-                      {/* Date - Large and Bold */}
-                      <div className="flex items-baseline gap-3">
-                        <span
-                          className="text-xl md:text-2xl font-bold text-white"
-                          style={{
-                            textShadow:
-                              "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
-                          }}
-                        >
-                          {show.date}
-                        </span>
-                        <span
-                          className="text-lg text-white/60"
-                          style={{
-                            textShadow:
-                              "0 2px 4px rgba(0, 0, 0, 0.9)",
-                          }}
-                        >
-                          {show.year}
-                        </span>
-                      </div>
+            <div className="space-y-4 max-w-6xl mx-auto">
+              {upcomingShows.map((show, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.02, ease: "easeOut" }}
+                  viewport={{ once: true, amount: 0.1 }}
+                >
+                  {show.status === "sold-out" ? (
+                    <div className="rounded-lg border border-white/10 bg-black/70 p-6 backdrop-blur-md opacity-60">
+                      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                        <div className="flex-1">
+                          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                            <div className="text-center md:text-left">
+                              <div className="text-2xl font-bold text-white">
+                                {show.date.split(",")[0]}
+                              </div>
+                              <div className="text-sm text-gray-400">
+                                {show.date.split(",")[1]}
+                              </div>
+                            </div>
 
-                      {/* Venue - Prominent */}
-                      <div
-                        className="text-base md:text-lg font-semibold text-white uppercase tracking-wide"
-                        style={{
-                          textShadow:
-                            "0 2px 4px rgba(0, 0, 0, 0.9), 0 4px 8px rgba(0, 0, 0, 0.7)",
-                        }}
-                      >
-                        {show.venue}
-                      </div>
+                            <div className="flex-1">
+                              <h3 className="text-lg font-semibold text-white">
+                                {show.venue}
+                              </h3>
+                              <div className="flex items-center space-x-2 text-gray-400">
+                                <MapPin className="h-4 w-4" />
+                                <span>{show.city}</span>
+                                <span>•</span>
+                                <Clock className="h-4 w-4" />
+                                <span>{show.time}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
-                      {/* City and Time */}
-                      <div
-                        className="flex items-center gap-2 text-base text-white/80"
-                        style={{
-                          textShadow:
-                            "0 2px 4px rgba(0, 0, 0, 0.9)",
-                        }}
-                      >
-                        <span>{show.city}</span>
-                        <span className="text-white/40">•</span>
-                        <span>{show.time}</span>
-                      </div>
-
-                      {/* Price and CTA Button */}
-                      <div className="flex items-center justify-between mt-1 pt-2 border-t border-white/10">
-                        <span
-                          className="text-lg font-bold text-white"
-                          style={{
-                            textShadow:
-                              "0 2px 4px rgba(0, 0, 0, 0.9)",
-                          }}
-                        >
-                          {show.price}
-                        </span>
-                        <a
-                          href={show.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-4 sm:px-6 py-3 sm:py-2.5 bg-emerald-600 text-white hover:bg-white hover:text-black text-sm sm:text-base font-semibold rounded transition-all duration-200 ease-in-out min-h-[44px] flex items-center justify-center"
-                          onClick={(e) => e.stopPropagation()}
-                          style={{ textShadow: 'none' }}
-                        >
-                          Get Tickets
-                        </a>
+                        <div>
+                          <span className="inline-flex items-center space-x-2 rounded-full bg-gray-600 px-6 py-2 font-medium text-gray-300">
+                            <Ticket className="h-4 w-4" />
+                            <span>Sold Out</span>
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </motion.div>
-                ))}
-              </div>
+                  ) : (
+                    <a
+                      href={show.ticketUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group block rounded-lg border border-white/10 bg-black/70 p-6 backdrop-blur-md transition-all duration-200 ease-in-out hover:border-emerald-500/60 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:bg-black/80 active:border-emerald-500/60 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 cursor-pointer"
+                    >
+                      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                        <div className="flex-1">
+                          <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                            <div className="text-center md:text-left">
+                              <div className="text-2xl font-bold text-white">
+                                {show.date.split(",")[0]}
+                              </div>
+                              <div className="text-sm text-gray-400">
+                                {show.date.split(",")[1]}
+                              </div>
+                            </div>
+
+                            <div className="flex-1">
+                              <h3 className="text-lg font-semibold text-white">
+                                {show.venue}
+                              </h3>
+                              <div className="flex items-center space-x-2 text-gray-400">
+                                <MapPin className="h-4 w-4" />
+                                <span>{show.city}</span>
+                                <span>•</span>
+                                <Clock className="h-4 w-4" />
+                                <span>{show.time}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 rounded-full bg-white px-6 py-2 font-medium text-black group-hover:bg-emerald-600 group-hover:text-white transition-all duration-200 ease-in-out">
+                          <Ticket className="h-4 w-4" />
+                          <span>Tickets</span>
+                        </div>
+                      </div>
+                    </a>
+                  )}
+                </motion.div>
+              ))}
             </div>
           </motion.div>
 
