@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 // Static metadata with fallback values

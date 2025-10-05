@@ -7,6 +7,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Hero } from "@/components/Hero";
 import { useBandContent, useMediaPaths } from "@/hooks/useConfig";
+import { throttle } from "@/lib/performance-utils";
 
 const bentoPatterns = [
   { row: "span 2", col: "span 2" },
@@ -39,14 +40,15 @@ function HomeContent() {
 
     checkDesktop();
     checkMotion();
-    window.addEventListener('resize', () => {
+
+    const handleResize = () => {
       checkDesktop();
       checkMotion();
-    });
-    return () => window.removeEventListener('resize', () => {
-      checkDesktop();
-      checkMotion();
-    });
+    };
+
+    const throttledHandleResize = throttle(handleResize, 150);
+    window.addEventListener('resize', throttledHandleResize, { passive: true });
+    return () => window.removeEventListener('resize', throttledHandleResize);
   }, []);
 
   // Scroll animation refs

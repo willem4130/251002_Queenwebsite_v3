@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ChevronDown, Volume2, VolumeX } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { throttle } from "@/lib/performance-utils";
 
 interface HeroProps {
   onScrollToSection?: (sectionId: string) => void;
@@ -26,8 +27,9 @@ export function Hero({ onScrollToSection }: HeroProps) {
     };
 
     checkDevice();
-    window.addEventListener("resize", checkDevice);
-    return () => window.removeEventListener("resize", checkDevice);
+    const throttledCheckDevice = throttle(checkDevice, 150);
+    window.addEventListener("resize", throttledCheckDevice, { passive: true });
+    return () => window.removeEventListener("resize", throttledCheckDevice);
   }, []);
 
   useEffect(() => {
@@ -105,6 +107,7 @@ export function Hero({ onScrollToSection }: HeroProps) {
           loop
           playsInline
           preload="metadata"
+          poster="/hero-bg-optimized.webp"
           className="h-full w-full object-cover"
         >
           {/* Modern browsers: WebM VP9 (50% smaller, best compression) */}
