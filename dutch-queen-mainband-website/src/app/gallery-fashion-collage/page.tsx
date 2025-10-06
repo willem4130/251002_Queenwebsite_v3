@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, useMotionValue } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -34,7 +34,6 @@ export default function GalleryFashionCollagePage() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [imageAspectRatios, setImageAspectRatios] = useState<Record<number, number>>({});
   const constraintsRef = useRef<HTMLDivElement>(null);
-  const dragX = useMotionValue(0);
 
   const media = useMediaPaths();
   const galleryImages = media.gallery.map((path) =>
@@ -125,11 +124,7 @@ export default function GalleryFashionCollagePage() {
               className="scrollbar-hide h-full overflow-x-auto overflow-y-hidden px-12"
             >
               <motion.div
-                drag="x"
-                dragConstraints={constraintsRef}
-                dragElastic={0.1}
-                dragMomentum={false}
-                style={{ x: dragX, width: totalWidth }}
+                style={{ width: totalWidth }}
                 className="relative h-full"
               >
                 {galleryImages.map((image, i) => {
