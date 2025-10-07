@@ -11,7 +11,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-black pt-16">
       <section className="relative py-20">
         {/* Background image */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 hidden md:block">
           <Image
             src="/about-bg-1920.webp"
             alt="About background"
@@ -21,8 +21,6 @@ export default function AboutPage() {
             className="object-cover"
             sizes="100vw"
           />
-          {/* Dark gradient overlay for mobile readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/85 to-black/90 md:hidden" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-4xl px-6">
