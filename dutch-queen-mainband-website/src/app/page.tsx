@@ -177,7 +177,7 @@ function HomeContent() {
       </motion.div>
 
       {/* Spacer for smooth scroll animations */}
-      <div className="h-[20vh]"></div>
+      <div className="h-[10vh]"></div>
 
       {/* Shows Section - OPTIMIZED: reduced parallax for smooth scrolling */}
       <motion.section
@@ -341,7 +341,7 @@ function HomeContent() {
       </motion.section>
 
       {/* Spacer for smooth scroll animations */}
-      <div className="h-[20vh]"></div>
+      <div className="h-[10vh]"></div>
 
       {/* Gallery Section - OPTIMIZED: smooth reveal */}
       <motion.section
@@ -449,7 +449,7 @@ function HomeContent() {
       </motion.section>
 
       {/* Spacer for smooth scroll animations */}
-      <div className="h-[20vh]"></div>
+      <div className="h-[10vh]"></div>
 
       {/* About Section - OPTIMIZED: smooth parallax */}
       <motion.section
