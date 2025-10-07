@@ -190,3 +190,5 @@ npm run analyze
 This foundation includes 31 essential packages covering authentication, database, forms, UI components, state management, and more - everything needed to build modern web applications without constantly installing dependencies.
 
 **Next steps:** Run `/1-setup-design` to create your design system, then start building!
+
+<!-- Test: Vercel auto-deployment from GitHub v3 repo -->
