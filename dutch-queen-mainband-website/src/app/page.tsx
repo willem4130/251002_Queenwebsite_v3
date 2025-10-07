@@ -180,7 +180,7 @@ function HomeContent() {
       <motion.section
         ref={showsRef}
         id="shows"
-        className="relative flex min-h-screen items-center justify-center overflow-hidden w-full py-20"
+        className="relative flex h-screen overflow-hidden w-full"
         style={{
           position: 'relative',
           opacity: prefersReducedMotion ? 1 : showsOpacity,
@@ -207,14 +207,16 @@ function HomeContent() {
           />
         </motion.div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-          >
-            <h2
+        <div className="relative z-10 mx-auto max-w-7xl px-6 w-full h-full flex flex-col pt-12 pb-8">
+          {/* Title Section - Fixed at top */}
+          <div className="flex-shrink-0">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              viewport={{ once: true }}
+            >
+              <h2
               className="mb-6 sm:mb-8 text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light uppercase tracking-widest text-white"
               style={{
                 textShadow:
@@ -224,8 +226,12 @@ function HomeContent() {
             >
               Shows
             </h2>
+            </motion.div>
+          </div>
 
-            <div className="space-y-4 max-w-6xl mx-auto">
+          {/* Shows List - Scrollable */}
+          <div className="flex-1 overflow-y-auto scrollbar-hide min-h-0">
+            <div className="space-y-4 max-w-6xl mx-auto pb-24">
               {upcomingShows.map((show, index) => (
                 <motion.div
                   key={index}
@@ -315,17 +321,19 @@ function HomeContent() {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Scroll indicator */}
-          <motion.button
-            onClick={() => scrollToSection("gallery")}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 rounded-full p-2 text-white/60 transition-all duration-500 hover:bg-amber-900/20 hover:text-white/90 hover:shadow-lg hover:shadow-amber-900/30"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <ChevronDown className="h-8 w-8 drop-shadow-lg" />
-          </motion.button>
+          {/* Scroll indicator - Fixed at bottom */}
+          <div className="flex-shrink-0 relative h-16">
+            <motion.button
+              onClick={() => scrollToSection("gallery")}
+              className="absolute bottom-8 left-1/2 -translate-x-1/2 rounded-full p-2 text-white/60 transition-all duration-300 hover:bg-amber-900/20 hover:text-white/90 hover:shadow-lg hover:shadow-amber-900/30 hover:scale-110"
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <ChevronDown className="h-8 w-8 drop-shadow-lg" />
+            </motion.button>
+          </div>
         </div>
       </motion.section>
 
