@@ -165,10 +165,12 @@ function HomeContent() {
       <motion.div
         ref={heroRef}
         className="relative w-full overflow-x-hidden"
-        style={prefersReducedMotion ? {} : {
-          opacity: heroOpacity,
-          scale: heroScale,
-          rotate: heroRotate,
+        style={{
+          position: 'relative',
+          opacity: prefersReducedMotion ? 1 : heroOpacity,
+          scale: prefersReducedMotion ? 1 : heroScale,
+          rotate: prefersReducedMotion ? 0 : heroRotate,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         <Hero onScrollToSection={scrollToSection} />
@@ -179,16 +181,19 @@ function HomeContent() {
         ref={showsRef}
         id="shows"
         className="relative flex min-h-screen items-center justify-center overflow-hidden w-full py-20"
-        style={prefersReducedMotion ? {} : {
-          opacity: showsOpacity,
-          scale: showsScale,
+        style={{
+          position: 'relative',
+          opacity: prefersReducedMotion ? 1 : showsOpacity,
+          scale: prefersReducedMotion ? 1 : showsScale,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         {/* Parallax background image (moves slower than content) */}
         <motion.div
           className="absolute inset-0"
-          style={prefersReducedMotion ? {} : {
-            y: showsBgY,
+          style={{
+            y: prefersReducedMotion ? 0 : showsBgY,
+            willChange: prefersReducedMotion ? "auto" : "transform",
           }}
         >
           <Image
@@ -329,10 +334,12 @@ function HomeContent() {
         ref={galleryRef}
         id="gallery"
         className="relative min-h-screen overflow-hidden w-full py-16"
-        style={prefersReducedMotion ? {} : {
-          opacity: galleryOpacity,
-          y: galleryY,
-          scale: galleryScale,
+        style={{
+          position: 'relative',
+          opacity: prefersReducedMotion ? 1 : galleryOpacity,
+          y: prefersReducedMotion ? 0 : galleryY,
+          scale: prefersReducedMotion ? 1 : galleryScale,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         <div className="relative z-10">
@@ -432,16 +439,19 @@ function HomeContent() {
         ref={aboutRef}
         id="about"
         className="relative flex min-h-screen items-center justify-center overflow-hidden w-full py-20"
-        style={prefersReducedMotion ? {} : {
-          opacity: aboutOpacity,
-          scale: aboutScale,
+        style={{
+          position: 'relative',
+          opacity: prefersReducedMotion ? 1 : aboutOpacity,
+          scale: prefersReducedMotion ? 1 : aboutScale,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         {/* Parallax background image (slower scroll) */}
         <motion.div
           className="absolute inset-0"
-          style={prefersReducedMotion ? {} : {
-            y: aboutBgY,
+          style={{
+            y: prefersReducedMotion ? 0 : aboutBgY,
+            willChange: prefersReducedMotion ? "auto" : "transform",
           }}
         >
           {/* Mobile-only gradient overlay for better text contrast */}
