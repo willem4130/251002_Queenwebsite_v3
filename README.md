@@ -191,4 +191,4 @@ This foundation includes 31 essential packages covering authentication, database
 
 **Next steps:** Run `/1-setup-design` to create your design system, then start building!
 
-<!-- Test: Vercel auto-deployment from GitHub v3 repo -->
+<!-- Test #2: Verify new project auto-deployment -->
