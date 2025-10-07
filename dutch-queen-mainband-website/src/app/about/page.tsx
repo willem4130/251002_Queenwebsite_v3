@@ -11,7 +11,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-black pt-16">
       <section className="relative py-20">
         {/* Background image */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 hidden md:block">
           <Image
             src="/about-bg-1920.webp"
             alt="About background"
@@ -30,8 +30,8 @@ export default function AboutPage() {
             </h1>
           </div>
 
-          <div className="bg-black/70 backdrop-blur-sm px-6 py-3.5 md:px-10 md:py-6 rounded-lg">
-            <div className="space-y-6">
+          <div className="bg-black/70 backdrop-blur-sm px-6 py-3.5 rounded-lg md:px-8 md:py-5 lg:px-10 lg:py-6">
+            <div className="space-y-6 text-center md:text-left lg:text-center">
               {paragraphs.map((paragraph, index) => (
                 <p
                   key={index}
