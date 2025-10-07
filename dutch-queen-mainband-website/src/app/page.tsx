@@ -448,15 +448,12 @@ function HomeContent() {
       >
         {/* Parallax background image (slower scroll) */}
         <motion.div
-          className="absolute inset-0"
+          className="absolute inset-0 hidden md:block"
           style={{
             y: prefersReducedMotion ? 0 : aboutBgY,
             willChange: prefersReducedMotion ? "auto" : "transform",
           }}
         >
-          {/* Mobile-only gradient overlay for better text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent lg:hidden z-10" />
-
           <Image
             src={isDesktop ? "/about-bg-1920.webp" : "/about-bg-1280.webp"}
             alt="About background"
