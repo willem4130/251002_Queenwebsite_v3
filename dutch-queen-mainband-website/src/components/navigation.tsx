@@ -67,7 +67,7 @@ export function Navigation() {
           </div>
 
           {/* Centered Navigation - Desktop */}
-          <div className="absolute left-1/2 hidden -translate-x-1/2 transform md:block">
+          <div className="absolute left-1/2 hidden -translate-x-1/2 transform lg:block">
             <div className="flex items-center space-x-8">
               {navigation.map((item) => (
                 <a
@@ -83,7 +83,7 @@ export function Navigation() {
           </div>
 
           {/* Social Icons - Far Right Desktop */}
-          <div className="hidden items-center space-x-4 md:flex">
+          <div className="hidden items-center space-x-4 lg:flex">
             <a
               href={content.social.facebook || "#"}
               target="_blank"
@@ -123,7 +123,7 @@ export function Navigation() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button
               type="button"
               className="text-white/60 transition-all duration-300 hover:scale-110 hover:text-white/80"
@@ -141,7 +141,7 @@ export function Navigation() {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="bg-black/90 backdrop-blur-sm md:hidden">
+        <div className="bg-black/90 backdrop-blur-sm lg:hidden">
           <div className="space-y-4 px-6 py-4">
             {navigation.map((item) => (
               <a
