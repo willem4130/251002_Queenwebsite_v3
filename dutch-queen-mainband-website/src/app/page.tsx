@@ -176,6 +176,9 @@ function HomeContent() {
         <Hero onScrollToSection={scrollToSection} />
       </motion.div>
 
+      {/* Spacer for smooth scroll animations */}
+      <div className="h-[20vh]"></div>
+
       {/* Shows Section - OPTIMIZED: reduced parallax for smooth scrolling */}
       <motion.section
         ref={showsRef}
@@ -337,6 +340,9 @@ function HomeContent() {
         </div>
       </motion.section>
 
+      {/* Spacer for smooth scroll animations */}
+      <div className="h-[20vh]"></div>
+
       {/* Gallery Section - OPTIMIZED: smooth reveal */}
       <motion.section
         ref={galleryRef}
@@ -441,6 +447,9 @@ function HomeContent() {
           </motion.div>
         </div>
       </motion.section>
+
+      {/* Spacer for smooth scroll animations */}
+      <div className="h-[20vh]"></div>
 
       {/* About Section - OPTIMIZED: smooth parallax */}
       <motion.section
