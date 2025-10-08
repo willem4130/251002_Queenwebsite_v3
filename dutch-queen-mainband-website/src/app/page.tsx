@@ -91,9 +91,9 @@ function HomeContent() {
     offset: ["start end", "end start"],
   });
   const aboutBgY = useTransform(aboutProgress, [0, 1], [200, -200]);
-  const aboutOpacity = useTransform(aboutProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 1]);
-  const aboutScale = useTransform(aboutProgress, [0, 0.3], [0.85, 1.0]);
-  const aboutY = useTransform(aboutProgress, [0, 0.25], [120, 0]);
+  const aboutOpacity = useTransform(aboutProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.9]);
+  const aboutScale = useTransform(aboutProgress, [0, 0.2], [0.85, 1.0]);
+  const aboutY = useTransform(aboutProgress, [0, 0.2], [120, 0]);
 
   // Gallery images from configuration (must be declared before navigateImage/useEffect)
   const galleryImages = media.gallery.map((path) =>
