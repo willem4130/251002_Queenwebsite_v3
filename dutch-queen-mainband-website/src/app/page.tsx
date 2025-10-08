@@ -57,14 +57,13 @@ function HomeContent() {
   const galleryRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
 
-  // Hero section scroll animations - OPTIMIZED: zoom + tilt exit (blur removed for performance)
+  // Hero section scroll animations - OPTIMIZED: subtle zoom exit (rotation removed for smoothness)
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroOpacity = useTransform(heroProgress, [0, 0.6], [1, 0]);
-  const heroScale = useTransform(heroProgress, [0, 0.6], [1, 1.2]);
-  const heroRotate = useTransform(heroProgress, [0, 0.6], [0, -5]);
+  const heroScale = useTransform(heroProgress, [0, 0.6], [1, 1.05]);
 
   // Shows section - OPTIMIZED: reduced parallax + simplified transforms
   const { scrollYProgress: showsProgress } = useScroll({
@@ -161,7 +160,7 @@ function HomeContent() {
 
   return (
     <div className="relative bg-black w-full">
-      {/* Hero Section - OPTIMIZED: zoom + tilt exit */}
+      {/* Hero Section - OPTIMIZED: subtle zoom exit */}
       <motion.div
         ref={heroRef}
         className="relative w-full overflow-x-hidden"
@@ -169,12 +168,14 @@ function HomeContent() {
           position: 'relative',
           opacity: prefersReducedMotion ? 1 : heroOpacity,
           scale: prefersReducedMotion ? 1 : heroScale,
-          rotate: prefersReducedMotion ? 0 : heroRotate,
           willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         <Hero onScrollToSection={scrollToSection} />
       </motion.div>
+
+      {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
+      <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
 
       {/* Shows Section - OPTIMIZED: reduced parallax for smooth scrolling */}
       <motion.section
@@ -200,7 +201,7 @@ function HomeContent() {
             src="/shows-bg-1920.webp"
             alt="Shows background"
             fill
-            priority
+            loading="lazy"
             quality={isDesktop ? 85 : 70}
             className="object-cover"
             sizes="100vw"
@@ -337,6 +338,9 @@ function HomeContent() {
         </div>
       </motion.section>
 
+      {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
+      <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
+
       {/* Gallery Section - OPTIMIZED: smooth reveal */}
       <motion.section
         ref={galleryRef}
@@ -442,6 +446,9 @@ function HomeContent() {
         </div>
       </motion.section>
 
+      {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
+      <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
+
       {/* About Section - OPTIMIZED: smooth parallax */}
       <motion.section
         ref={aboutRef}
@@ -466,7 +473,7 @@ function HomeContent() {
             src={isDesktop ? "/about-bg-1920.webp" : "/about-bg-1280.webp"}
             alt="About background"
             fill
-            priority
+            loading="lazy"
             quality={isDesktop ? 85 : 70}
             className="object-cover"
             sizes="100vw"

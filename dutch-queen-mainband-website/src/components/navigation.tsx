@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
   Menu,
   X,
@@ -43,7 +44,12 @@ export function Navigation() {
   };
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-black/20 backdrop-blur-sm transition-all duration-300">
+    <motion.nav
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1.5, ease: "easeOut" }}
+      className="fixed top-0 z-50 w-full bg-black/20 backdrop-blur-sm transition-all duration-300"
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className={`flex items-center justify-between transition-all duration-300 ${isScrolled ? "h-12" : "h-16"}`}>
           {/* Website Toggle - Far Left */}
@@ -196,6 +202,6 @@ export function Navigation() {
           </div>
         </div>
       )}
-    </nav>
+    </motion.nav>
   );
 }

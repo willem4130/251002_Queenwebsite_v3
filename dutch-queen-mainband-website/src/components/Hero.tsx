@@ -38,24 +38,26 @@ export function Hero({ onScrollToSection }: HeroProps) {
       videoRef.current.defaultMuted = true;
       videoRef.current.muted = true;
 
-      // Play immediately (Supabase pattern - call play multiple times)
-      const promise = videoRef.current.play();
+      // Start video playback immediately
+      const playbackTimer = setTimeout(() => {
+        const promise = videoRef.current?.play();
 
-      if (promise !== undefined) {
-        promise
-          .then(() => {
-            // Call play again to ensure it works (Supabase pattern)
-            videoRef.current?.play();
-          })
-          .catch((error) => {
-            console.warn("⚠ Autoplay blocked. Video will play on user interaction:", error);
-            // Add click listener to play on first interaction
-            const playOnInteraction = () => {
+        if (promise !== undefined) {
+          promise
+            .then(() => {
+              // Call play again to ensure it works (Supabase pattern)
               videoRef.current?.play();
-            };
-            document.addEventListener("click", playOnInteraction, { once: true });
-          });
-      }
+            })
+            .catch((error) => {
+              console.warn("⚠ Autoplay blocked. Video will play on user interaction:", error);
+              // Add click listener to play on first interaction
+              const playOnInteraction = () => {
+                videoRef.current?.play();
+              };
+              document.addEventListener("click", playOnInteraction, { once: true });
+            });
+        }
+      }, 100);
 
       // Log errors
       videoRef.current.addEventListener("error", (e) => {
@@ -65,6 +67,10 @@ export function Hero({ onScrollToSection }: HeroProps) {
           console.error(`Error code: ${video.error.code} - ${video.error.message}`);
         }
       });
+
+      return () => {
+        clearTimeout(playbackTimer);
+      };
     }
   }, []);
 
@@ -100,14 +106,18 @@ export function Hero({ onScrollToSection }: HeroProps) {
   return (
     <section id="home" className="relative h-screen overflow-hidden overflow-x-hidden w-full max-w-full">
       {/* Background video */}
-      <div className="absolute inset-0 overflow-hidden">
+      <motion.div
+        className="absolute inset-0 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+      >
         <video
           ref={videoRef}
           autoPlay
           loop
           playsInline
           preload="metadata"
-          poster="/hero-bg-optimized.webp"
           className="h-full w-full object-cover"
         >
           {/* Modern browsers: WebM VP9 (50% smaller, best compression) */}
@@ -121,7 +131,7 @@ export function Hero({ onScrollToSection }: HeroProps) {
             type='video/mp4; codecs="avc1.640028, mp4a.40.2"'
           />
         </video>
-      </div>
+      </motion.div>
 
       {/* Hero content */}
       <div className="relative z-10 flex h-screen flex-col items-center justify-center">
@@ -133,7 +143,7 @@ export function Hero({ onScrollToSection }: HeroProps) {
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
         >
           {isMuted ? (
             <VolumeX className="h-5 w-5 drop-shadow-lg" />
@@ -146,8 +156,12 @@ export function Hero({ onScrollToSection }: HeroProps) {
         <motion.button
           onClick={() => scrollToSection("shows")}
           className="absolute bottom-8 rounded-full p-2 text-white/60 transition-all duration-500 hover:bg-amber-900/20 hover:text-white/90 hover:shadow-lg hover:shadow-amber-900/30"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: [0, 10, 0] }}
+          transition={{
+            opacity: { duration: 1.5, ease: "easeOut" },
+            y: { duration: 2, repeat: Infinity }
+          }}
         >
           <ChevronDown className="h-8 w-8 drop-shadow-lg" />
         </motion.button>
