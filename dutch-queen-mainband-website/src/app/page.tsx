@@ -25,37 +25,30 @@ function HomeContent() {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [direction, setDirection] = useState<"next" | "prev" | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [deviceTier, setDeviceTier] = useState<'mobile' | 'tablet' | 'desktop'>('mobile');
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   // Configuration hooks
   const content = useBandContent();
   const media = useMediaPaths();
 
-  // Detect device tier for animation intensity
-  // Mobile (<768px): No animations
-  // Tablet (768-1023px): Moderate animations (60% intensity)
-  // Desktop (≥1024px): Full dramatic animations
+  // Detect desktop for bento grid patterns and check motion preferences
   useEffect(() => {
-    const updateDeviceTier = () => {
-      const width = window.innerWidth;
-      const userPrefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+    const checkMotion = () => setPrefersReducedMotion(
+      window.innerWidth < 1024 || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
 
-      setIsDesktop(width >= 1024);
+    checkDesktop();
+    checkMotion();
 
-      if (userPrefersReduced || width < 768) {
-        setDeviceTier('mobile');
-      } else if (width >= 768 && width < 1024) {
-        setDeviceTier('tablet');
-      } else {
-        setDeviceTier('desktop');
-      }
+    const handleResize = () => {
+      checkDesktop();
+      checkMotion();
     };
 
-    updateDeviceTier();
-
-    const throttledUpdate = throttle(updateDeviceTier, 150);
-    window.addEventListener('resize', throttledUpdate, { passive: true });
-    return () => window.removeEventListener('resize', throttledUpdate);
+    const throttledHandleResize = throttle(handleResize, 150);
+    window.addEventListener('resize', throttledHandleResize, { passive: true });
+    return () => window.removeEventListener('resize', throttledHandleResize);
   }, []);
 
   // Scroll animation refs
@@ -64,54 +57,43 @@ function HomeContent() {
   const galleryRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
 
-  // Animation intensity helper - scales values based on device tier
-  const getAnimationValue = (desktopValue: number, mobileValue: number = 0) => {
-    if (deviceTier === 'mobile') return mobileValue;
-    if (deviceTier === 'tablet') return mobileValue + (desktopValue - mobileValue) * 0.6; // 60% intensity
-    return desktopValue; // desktop gets full intensity
-  };
-
   // Hero section scroll animations - DRAMATIC: zoom + tilt exit with SWOOSH
-  // Desktop: full intensity | Tablet: 60% | Mobile: none
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroOpacity = useTransform(heroProgress, [0, 0.5], [1, deviceTier === 'mobile' ? 1 : 0]);
-  const heroScale = useTransform(heroProgress, [0, 0.5], [1, 1 + getAnimationValue(0.3, 0)]); // Desktop: 1.3, Tablet: 1.18, Mobile: 1
-  const heroRotate = useTransform(heroProgress, [0, 0.5], [0, getAnimationValue(-8, 0)]); // Desktop: -8deg, Tablet: -4.8deg, Mobile: 0
+  const heroOpacity = useTransform(heroProgress, [0, 0.5], [1, 0]);
+  const heroScale = useTransform(heroProgress, [0, 0.5], [1, 1.3]);
+  const heroRotate = useTransform(heroProgress, [0, 0.5], [0, -8]);
 
   // Shows section - DRAMATIC: big parallax + scale swoosh
-  // Desktop: full intensity | Tablet: 60% | Mobile: none
   const { scrollYProgress: showsProgress } = useScroll({
     target: showsRef,
     offset: ["start end", "end start"],
   });
-  const showsBgY = useTransform(showsProgress, [0, 1], [getAnimationValue(150, 0), getAnimationValue(-150, 0)]); // Desktop: 150→-150, Tablet: 90→-90, Mobile: 0
-  const showsOpacity = useTransform(showsProgress, [0, 0.15, 0.85, 1], [0, 1, 1, deviceTier === 'mobile' ? 1 : 0.9]);
-  const showsScale = useTransform(showsProgress, [0, 0.15, 0.85, 1], [1 - getAnimationValue(0.15, 0), 1, 1, 1 + getAnimationValue(0.05, 0)]); // Desktop: 0.85→1.05, Tablet: 0.91→1.03, Mobile: 1→1
-  const showsY = useTransform(showsProgress, [0, 0.15], [getAnimationValue(100, 0), 0]); // Desktop: 100px, Tablet: 60px, Mobile: 0
+  const showsBgY = useTransform(showsProgress, [0, 1], [150, -150]);
+  const showsOpacity = useTransform(showsProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.9]);
+  const showsScale = useTransform(showsProgress, [0, 0.15, 0.85, 1], [0.85, 1, 1, 1.05]);
+  const showsY = useTransform(showsProgress, [0, 0.15], [100, 0]);
 
   // Gallery section - DRAMATIC: slide up + scale entrance
-  // Desktop: full intensity | Tablet: 60% | Mobile: none
   const { scrollYProgress: galleryProgress } = useScroll({
     target: galleryRef,
     offset: ["start end", "end start"],
   });
-  const galleryOpacity = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [0, 1, 1, deviceTier === 'mobile' ? 1 : 0.9]);
-  const galleryY = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [getAnimationValue(150, 0), 0, 0, getAnimationValue(-80, 0)]); // Desktop: 150→-80, Tablet: 90→-48, Mobile: 0
-  const galleryScale = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [1 - getAnimationValue(0.15, 0), 1, 1, 1 + getAnimationValue(0.05, 0)]); // Desktop: 0.85→1.05, Tablet: 0.91→1.03, Mobile: 1→1
+  const galleryOpacity = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.9]);
+  const galleryY = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [150, 0, 0, -80]);
+  const galleryScale = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [0.85, 1, 1, 1.05]);
 
   // About section - DRAMATIC: mega parallax + scale entrance
-  // Desktop: full intensity | Tablet: 60% | Mobile: none
   const { scrollYProgress: aboutProgress } = useScroll({
     target: aboutRef,
     offset: ["start end", "end start"],
   });
-  const aboutBgY = useTransform(aboutProgress, [0, 1], [getAnimationValue(200, 0), getAnimationValue(-200, 0)]); // Desktop: 200→-200, Tablet: 120→-120, Mobile: 0
+  const aboutBgY = useTransform(aboutProgress, [0, 1], [200, -200]);
   const aboutOpacity = useTransform(aboutProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 1]);
-  const aboutScale = useTransform(aboutProgress, [0, 0.3], [1 - getAnimationValue(0.15, 0), 1.0]); // Desktop: 0.85→1, Tablet: 0.91→1, Mobile: 1→1
-  const aboutY = useTransform(aboutProgress, [0, 0.25], [getAnimationValue(120, 0), 0]); // Desktop: 120px, Tablet: 72px, Mobile: 0
+  const aboutScale = useTransform(aboutProgress, [0, 0.3], [0.85, 1.0]);
+  const aboutY = useTransform(aboutProgress, [0, 0.25], [120, 0]);
 
   // Gallery images from configuration (must be declared before navigateImage/useEffect)
   const galleryImages = media.gallery.map((path) =>
@@ -187,17 +169,17 @@ function HomeContent() {
         className="relative w-full overflow-x-hidden"
         style={{
           position: 'relative',
-          opacity: heroOpacity,
-          scale: heroScale,
-          rotate: heroRotate,
-          willChange: deviceTier === 'mobile' ? "auto" : "transform, opacity",
+          opacity: prefersReducedMotion ? 1 : heroOpacity,
+          scale: prefersReducedMotion ? 1 : heroScale,
+          rotate: prefersReducedMotion ? 0 : heroRotate,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         <Hero onScrollToSection={scrollToSection} />
       </motion.div>
 
-      {/* Section Spacer - Tablet/Desktop (allows scroll animations to play fully) */}
-      <div className="hidden md:block h-[15vh]" aria-hidden="true" />
+      {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
+      <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
 
       {/* Shows Section - DRAMATIC: big parallax + scale swoosh */}
       <motion.section
@@ -206,18 +188,18 @@ function HomeContent() {
         className="relative flex h-screen overflow-hidden w-full"
         style={{
           position: 'relative',
-          opacity: showsOpacity,
-          scale: showsScale,
-          y: showsY,
-          willChange: deviceTier === 'mobile' ? "auto" : "transform, opacity",
+          opacity: prefersReducedMotion ? 1 : showsOpacity,
+          scale: prefersReducedMotion ? 1 : showsScale,
+          y: prefersReducedMotion ? 0 : showsY,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         {/* Parallax background image (moves slower than content) */}
         <motion.div
           className="absolute inset-0"
           style={{
-            y: showsBgY,
-            willChange: deviceTier === 'mobile' ? "auto" : "transform",
+            y: prefersReducedMotion ? 0 : showsBgY,
+            willChange: prefersReducedMotion ? "auto" : "transform",
           }}
         >
           <Image
@@ -361,8 +343,8 @@ function HomeContent() {
         </div>
       </motion.section>
 
-      {/* Section Spacer - Tablet/Desktop (allows scroll animations to play fully) */}
-      <div className="hidden md:block h-[15vh]" aria-hidden="true" />
+      {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
+      <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
 
       {/* Gallery Section - DRAMATIC: slide up + scale entrance */}
       <motion.section
@@ -371,10 +353,10 @@ function HomeContent() {
         className="relative min-h-screen overflow-hidden w-full py-16"
         style={{
           position: 'relative',
-          opacity: galleryOpacity,
-          y: galleryY,
-          scale: galleryScale,
-          willChange: deviceTier === 'mobile' ? "auto" : "transform, opacity",
+          opacity: prefersReducedMotion ? 1 : galleryOpacity,
+          y: prefersReducedMotion ? 0 : galleryY,
+          scale: prefersReducedMotion ? 1 : galleryScale,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         <div className="relative z-10">
@@ -469,8 +451,8 @@ function HomeContent() {
         </div>
       </motion.section>
 
-      {/* Section Spacer - Tablet/Desktop (allows scroll animations to play fully) */}
-      <div className="hidden md:block h-[15vh]" aria-hidden="true" />
+      {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
+      <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
 
       {/* About Section - DRAMATIC: mega parallax + scale entrance */}
       <motion.section
@@ -479,18 +461,18 @@ function HomeContent() {
         className="relative flex min-h-screen items-center justify-center overflow-hidden w-full py-20"
         style={{
           position: 'relative',
-          opacity: aboutOpacity,
-          scale: aboutScale,
-          y: aboutY,
-          willChange: deviceTier === 'mobile' ? "auto" : "transform, opacity",
+          opacity: prefersReducedMotion ? 1 : aboutOpacity,
+          scale: prefersReducedMotion ? 1 : aboutScale,
+          y: prefersReducedMotion ? 0 : aboutY,
+          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
         {/* Parallax background image (slower scroll) */}
         <motion.div
           className="absolute inset-0 hidden md:block"
           style={{
-            y: aboutBgY,
-            willChange: deviceTier === 'mobile' ? "auto" : "transform",
+            y: prefersReducedMotion ? 0 : aboutBgY,
+            willChange: prefersReducedMotion ? "auto" : "transform",
           }}
         >
           <Image
