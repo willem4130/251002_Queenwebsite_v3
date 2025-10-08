@@ -57,40 +57,43 @@ function HomeContent() {
   const galleryRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
 
-  // Hero section scroll animations - OPTIMIZED: subtle zoom exit (rotation removed for smoothness)
+  // Hero section scroll animations - DRAMATIC: zoom + tilt exit with SWOOSH
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroOpacity = useTransform(heroProgress, [0, 0.6], [1, 0]);
-  const heroScale = useTransform(heroProgress, [0, 0.6], [1, 1.05]);
+  const heroOpacity = useTransform(heroProgress, [0, 0.5], [1, 0]);
+  const heroScale = useTransform(heroProgress, [0, 0.5], [1, 1.3]);
+  const heroRotate = useTransform(heroProgress, [0, 0.5], [0, -8]);
 
-  // Shows section - OPTIMIZED: reduced parallax + simplified transforms
+  // Shows section - DRAMATIC: big parallax + scale swoosh
   const { scrollYProgress: showsProgress } = useScroll({
     target: showsRef,
     offset: ["start end", "end start"],
   });
-  const showsBgY = useTransform(showsProgress, [0, 1], [50, -50]);
-  const showsOpacity = useTransform(showsProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.95]);
-  const showsScale = useTransform(showsProgress, [0, 0.2, 0.8, 1], [0.95, 1, 1, 1.02]);
+  const showsBgY = useTransform(showsProgress, [0, 1], [150, -150]);
+  const showsOpacity = useTransform(showsProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.9]);
+  const showsScale = useTransform(showsProgress, [0, 0.15, 0.85, 1], [0.85, 1, 1, 1.05]);
+  const showsY = useTransform(showsProgress, [0, 0.15], [100, 0]);
 
-  // Gallery section - OPTIMIZED: smooth reveal without spring overhead
+  // Gallery section - DRAMATIC: slide up + scale entrance
   const { scrollYProgress: galleryProgress } = useScroll({
     target: galleryRef,
     offset: ["start end", "end start"],
   });
-  const galleryOpacity = useTransform(galleryProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 0.9]);
-  const galleryY = useTransform(galleryProgress, [0, 0.25, 0.75, 1], [80, 0, 0, -40]);
-  const galleryScale = useTransform(galleryProgress, [0, 0.25], [0.95, 1]);
+  const galleryOpacity = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.9]);
+  const galleryY = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [150, 0, 0, -80]);
+  const galleryScale = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [0.85, 1, 1, 1.05]);
 
-  // About section - Enhanced dramatic entrance with increased parallax and scale
+  // About section - DRAMATIC: mega parallax + scale entrance
   const { scrollYProgress: aboutProgress } = useScroll({
     target: aboutRef,
     offset: ["start end", "end start"],
   });
-  const aboutBgY = useTransform(aboutProgress, [0, 1], [150, -150]);
-  const aboutOpacity = useTransform(aboutProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 1]);
-  const aboutScale = useTransform(aboutProgress, [0, 0.4], [0.95, 1.0]);
+  const aboutBgY = useTransform(aboutProgress, [0, 1], [200, -200]);
+  const aboutOpacity = useTransform(aboutProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 1]);
+  const aboutScale = useTransform(aboutProgress, [0, 0.3], [0.85, 1.0]);
+  const aboutY = useTransform(aboutProgress, [0, 0.25], [120, 0]);
 
   // Gallery images from configuration (must be declared before navigateImage/useEffect)
   const galleryImages = media.gallery.map((path) =>
@@ -160,7 +163,7 @@ function HomeContent() {
 
   return (
     <div className="relative bg-black w-full">
-      {/* Hero Section - OPTIMIZED: subtle zoom exit */}
+      {/* Hero Section - DRAMATIC: zoom + tilt exit with SWOOSH */}
       <motion.div
         ref={heroRef}
         className="relative w-full overflow-x-hidden"
@@ -168,6 +171,7 @@ function HomeContent() {
           position: 'relative',
           opacity: prefersReducedMotion ? 1 : heroOpacity,
           scale: prefersReducedMotion ? 1 : heroScale,
+          rotate: prefersReducedMotion ? 0 : heroRotate,
           willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
@@ -177,7 +181,7 @@ function HomeContent() {
       {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
       <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
 
-      {/* Shows Section - OPTIMIZED: reduced parallax for smooth scrolling */}
+      {/* Shows Section - DRAMATIC: big parallax + scale swoosh */}
       <motion.section
         ref={showsRef}
         id="shows"
@@ -186,6 +190,7 @@ function HomeContent() {
           position: 'relative',
           opacity: prefersReducedMotion ? 1 : showsOpacity,
           scale: prefersReducedMotion ? 1 : showsScale,
+          y: prefersReducedMotion ? 0 : showsY,
           willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
@@ -341,7 +346,7 @@ function HomeContent() {
       {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
       <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
 
-      {/* Gallery Section - OPTIMIZED: smooth reveal */}
+      {/* Gallery Section - DRAMATIC: slide up + scale entrance */}
       <motion.section
         ref={galleryRef}
         id="gallery"
@@ -449,7 +454,7 @@ function HomeContent() {
       {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
       <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
 
-      {/* About Section - OPTIMIZED: smooth parallax */}
+      {/* About Section - DRAMATIC: mega parallax + scale entrance */}
       <motion.section
         ref={aboutRef}
         id="about"
@@ -458,6 +463,7 @@ function HomeContent() {
           position: 'relative',
           opacity: prefersReducedMotion ? 1 : aboutOpacity,
           scale: prefersReducedMotion ? 1 : aboutScale,
+          y: prefersReducedMotion ? 0 : aboutY,
           willChange: prefersReducedMotion ? "auto" : "transform, opacity",
         }}
       >
