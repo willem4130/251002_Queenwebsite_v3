@@ -195,7 +195,7 @@ function HomeContent() {
             alt="Shows background"
             fill
             loading="lazy"
-            quality={isDesktop ? 85 : 70}
+            quality={isDesktop ? 80 : 65}
             className="object-cover"
             sizes="100vw"
           />
@@ -417,7 +417,7 @@ function HomeContent() {
                           alt={`Gallery image ${i + 1}`}
                           fill
                           loading={i < 4 ? "eager" : "lazy"}
-                          quality={isDesktop ? 85 : 75}
+                          quality={isDesktop ? 80 : 70}
                           className="scale-125 object-cover transition-transform duration-500 group-hover:scale-100"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           draggable={false}
@@ -460,7 +460,7 @@ function HomeContent() {
             alt="About background"
             fill
             loading="lazy"
-            quality={isDesktop ? 85 : 70}
+            quality={isDesktop ? 80 : 65}
             className="object-cover"
             sizes="100vw"
           />

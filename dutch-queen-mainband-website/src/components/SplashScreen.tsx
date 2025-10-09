@@ -12,15 +12,15 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Start fading out after 4 seconds (to overlay video)
+    // Start fading out after 2 seconds (faster for better UX)
     const fadeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 4000);
+    }, 2000);
 
-    // Call onComplete after fade completes (4.5 seconds total)
+    // Call onComplete after fade completes (2.5 seconds total)
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 4500);
+    }, 2500);
 
     return () => {
       clearTimeout(fadeTimer);
@@ -39,7 +39,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
             duration: 0.4,
             ease: "easeOut",
           }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black pointer-events-none"
           style={{
             willChange: "opacity",
           }}

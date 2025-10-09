@@ -12,6 +12,7 @@ import {
   Youtube,
 } from "lucide-react";
 import { useBandContent } from "@/hooks/useConfig";
+import { throttle } from "@/lib/performance-utils";
 
 const navigation = [
   { name: "Shows", href: "#shows" },
@@ -29,8 +30,9 @@ export function Navigation() {
       setIsScrolled(window.scrollY > 50);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const throttledHandleScroll = throttle(handleScroll, 100);
+    window.addEventListener("scroll", throttledHandleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", throttledHandleScroll);
   }, []);
 
   const handleClick = (
