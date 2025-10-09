@@ -7,9 +7,10 @@ import { throttle } from "@/lib/performance-utils";
 
 interface HeroProps {
   onScrollToSection?: (sectionId: string) => void;
+  enableVideo?: boolean;
 }
 
-export function Hero({ onScrollToSection }: HeroProps) {
+export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   const [isMuted, setIsMuted] = useState(true);
   const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -33,12 +34,12 @@ export function Hero({ onScrollToSection }: HeroProps) {
   }, []);
 
   useEffect(() => {
-    if (videoRef.current) {
+    if (videoRef.current && enableVideo) {
       // Handle React bug with muted attribute (open since 2017)
       videoRef.current.defaultMuted = true;
       videoRef.current.muted = true;
 
-      // Start video playback immediately
+      // Start video playback after enableVideo is true (after splash screen)
       const playbackTimer = setTimeout(() => {
         const promise = videoRef.current?.play();
 
@@ -72,7 +73,7 @@ export function Hero({ onScrollToSection }: HeroProps) {
         clearTimeout(playbackTimer);
       };
     }
-  }, []);
+  }, [enableVideo]);
 
   const scrollToSection = (sectionId: string) => {
     if (onScrollToSection) {
@@ -104,20 +105,21 @@ export function Hero({ onScrollToSection }: HeroProps) {
   };
 
   return (
-    <section id="home" className="relative h-screen overflow-hidden overflow-x-hidden w-full max-w-full">
+    <section id="home" className="relative h-screen w-full max-w-full">
       {/* Background video */}
-      <motion.div
-        className="absolute inset-0 overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-      >
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          className="relative h-full w-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+        >
         <video
           ref={videoRef}
           autoPlay
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           className="h-full w-full object-cover"
         >
           {/* Modern browsers: WebM VP9 (50% smaller, best compression) */}
@@ -131,7 +133,8 @@ export function Hero({ onScrollToSection }: HeroProps) {
             type='video/mp4; codecs="avc1.640028, mp4a.40.2"'
           />
         </video>
-      </motion.div>
+        </motion.div>
+      </div>
 
       {/* Hero content */}
       <div className="relative z-10 flex h-screen flex-col items-center justify-center">

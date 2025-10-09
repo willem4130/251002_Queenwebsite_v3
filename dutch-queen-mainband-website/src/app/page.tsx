@@ -26,6 +26,7 @@ function HomeContent() {
   const [direction, setDirection] = useState<"next" | "prev" | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [enableScrollAnimations, setEnableScrollAnimations] = useState(false);
 
   // Configuration hooks
   const content = useBandContent();
@@ -41,6 +42,11 @@ function HomeContent() {
     checkDesktop();
     checkMotion();
 
+    // Delay scroll animations to prevent initial scroll lock (performance optimization)
+    const animationTimer = setTimeout(() => {
+      setEnableScrollAnimations(true);
+    }, 500);
+
     const handleResize = () => {
       checkDesktop();
       checkMotion();
@@ -48,28 +54,22 @@ function HomeContent() {
 
     const throttledHandleResize = throttle(handleResize, 150);
     window.addEventListener('resize', throttledHandleResize, { passive: true });
-    return () => window.removeEventListener('resize', throttledHandleResize);
+    return () => {
+      clearTimeout(animationTimer);
+      window.removeEventListener('resize', throttledHandleResize);
+    };
   }, []);
 
   // Scroll animation refs
-  const heroRef = useRef<HTMLDivElement>(null);
   const showsRef = useRef<HTMLElement>(null);
   const galleryRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
-
-  // Hero section scroll animations - DRAMATIC: zoom + tilt exit with SWOOSH
-  const { scrollYProgress: heroProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const heroOpacity = useTransform(heroProgress, [0, 0.5], [1, 0]);
-  const heroScale = useTransform(heroProgress, [0, 0.5], [1, 1.3]);
-  const heroRotate = useTransform(heroProgress, [0, 0.5], [0, -8]);
 
   // Shows section - DRAMATIC: big parallax + scale swoosh
   const { scrollYProgress: showsProgress } = useScroll({
     target: showsRef,
     offset: ["start end", "end start"],
+    layoutEffect: false,
   });
   const showsBgY = useTransform(showsProgress, [0, 1], [150, -150]);
   const showsOpacity = useTransform(showsProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.9]);
@@ -80,20 +80,22 @@ function HomeContent() {
   const { scrollYProgress: galleryProgress } = useScroll({
     target: galleryRef,
     offset: ["start end", "end start"],
+    layoutEffect: false,
   });
   const galleryOpacity = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.9]);
   const galleryY = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [150, 0, 0, -80]);
   const galleryScale = useTransform(galleryProgress, [0, 0.2, 0.8, 1], [0.85, 1, 1, 1.05]);
 
-  // About section - DRAMATIC: mega parallax + scale entrance
+  // About section - DRAMATIC: mega parallax + scale entrance (widened trigger window for reliability)
   const { scrollYProgress: aboutProgress } = useScroll({
     target: aboutRef,
     offset: ["start end", "end start"],
+    layoutEffect: false,
   });
   const aboutBgY = useTransform(aboutProgress, [0, 1], [200, -200]);
-  const aboutOpacity = useTransform(aboutProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.9]);
-  const aboutScale = useTransform(aboutProgress, [0, 0.2], [0.85, 1.0]);
-  const aboutY = useTransform(aboutProgress, [0, 0.2], [120, 0]);
+  const aboutOpacity = useTransform(aboutProgress, [0, 0.25, 0.85, 1], [0, 1, 1, 0.9]);
+  const aboutScale = useTransform(aboutProgress, [0, 0.3], [0.85, 1.0]);
+  const aboutY = useTransform(aboutProgress, [0, 0.3], [120, 0]);
 
   // Gallery images from configuration (must be declared before navigateImage/useEffect)
   const galleryImages = media.gallery.map((path) =>
@@ -163,23 +165,10 @@ function HomeContent() {
 
   return (
     <div className="relative bg-black w-full">
-      {/* Hero Section - DRAMATIC: zoom + tilt exit with SWOOSH */}
-      <motion.div
-        ref={heroRef}
-        className="relative w-full overflow-x-hidden"
-        style={{
-          position: 'relative',
-          opacity: prefersReducedMotion ? 1 : heroOpacity,
-          scale: prefersReducedMotion ? 1 : heroScale,
-          rotate: prefersReducedMotion ? 0 : heroRotate,
-          willChange: prefersReducedMotion ? "auto" : "transform, opacity",
-        }}
-      >
-        <Hero onScrollToSection={scrollToSection} />
-      </motion.div>
-
-      {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
-      <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
+      {/* Hero Section - Static (no scroll lock) */}
+      <div className="relative w-full">
+        <Hero onScrollToSection={scrollToSection} enableVideo={enableScrollAnimations} />
+      </div>
 
       {/* Shows Section - DRAMATIC: big parallax + scale swoosh */}
       <motion.section
@@ -187,7 +176,6 @@ function HomeContent() {
         id="shows"
         className="relative flex h-screen overflow-hidden w-full"
         style={{
-          position: 'relative',
           opacity: prefersReducedMotion ? 1 : showsOpacity,
           scale: prefersReducedMotion ? 1 : showsScale,
           y: prefersReducedMotion ? 0 : showsY,
@@ -243,7 +231,7 @@ function HomeContent() {
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.02, ease: "easeOut" }}
+                  transition={{ duration: 0.3, delay: Math.min(index * 0.01, 0.15), ease: "easeOut" }}
                   viewport={{ once: true, amount: 0.1 }}
                 >
                   {show.status === "sold-out" ? (
@@ -343,16 +331,12 @@ function HomeContent() {
         </div>
       </motion.section>
 
-      {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
-      <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
-
       {/* Gallery Section - DRAMATIC: slide up + scale entrance */}
       <motion.section
         ref={galleryRef}
         id="gallery"
         className="relative min-h-screen overflow-hidden w-full py-16"
         style={{
-          position: 'relative',
           opacity: prefersReducedMotion ? 1 : galleryOpacity,
           y: prefersReducedMotion ? 0 : galleryY,
           scale: prefersReducedMotion ? 1 : galleryScale,
@@ -451,16 +435,12 @@ function HomeContent() {
         </div>
       </motion.section>
 
-      {/* Section Spacer - Desktop Only (allows scroll animations to play fully) */}
-      <div className="hidden lg:block h-[15vh]" aria-hidden="true" />
-
       {/* About Section - DRAMATIC: mega parallax + scale entrance */}
       <motion.section
         ref={aboutRef}
         id="about"
         className="relative flex min-h-screen items-center justify-center overflow-hidden w-full py-20"
         style={{
-          position: 'relative',
           opacity: prefersReducedMotion ? 1 : aboutOpacity,
           scale: prefersReducedMotion ? 1 : aboutScale,
           y: prefersReducedMotion ? 0 : aboutY,
