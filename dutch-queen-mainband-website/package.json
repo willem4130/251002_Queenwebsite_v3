@@ -21,21 +21,11 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@radix-ui/react-slot": "^1.1.2",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "date-fns": "^3.6.0",
     "framer-motion": "^12.23.0",
     "lucide-react": "^0.525.0",
-    "nanoid": "^5.0.0",
     "next": "^15.0.0",
-    "next-seo": "^6.6.0",
-    "next-themes": "^0.4.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "sonner": "^1.5.0",
-    "tailwind-merge": "^3.3.1",
-    "zod": "^3.25.76"
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
