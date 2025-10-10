@@ -61,7 +61,7 @@ export function Navigation() {
               onClick={(e) => handleClick(e, "#home")}
               className={`font-semibold uppercase tracking-wide text-white/90 transition-all duration-300 hover:scale-110 ${isScrolled ? "text-base md:text-lg" : "text-lg md:text-xl"}`}
             >
-              full show
+              full band
             </a>
             <span className="text-white/40">|</span>
             <a
