@@ -15,6 +15,12 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Ensure scroll is never blocked on mount
+  useEffect(() => {
+    document.body.style.overflow = 'auto';
+    document.documentElement.style.overflow = 'auto';
+  }, []);
+
   useEffect(() => {
     const checkDevice = () => {
       const width = window.innerWidth;
@@ -101,21 +107,20 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   };
 
   return (
-    <section id="home" className="relative h-screen w-full max-w-full">
+    <section id="home" className="relative h-screen w-full max-w-full" style={{ touchAction: 'pan-y' }}>
       {/* Background video */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden" style={{ pointerEvents: 'none' }}>
         <motion.div
           className="relative h-full w-full"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
         <video
           ref={videoRef}
-          autoPlay
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           poster={deviceType === 'mobile' ? "/videos/poster-mobile.jpg" : "/videos/poster-desktop.jpg"}
           className="h-full w-full object-cover"
         >
@@ -143,7 +148,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           {isMuted ? (
             <VolumeX className="h-5 w-5 drop-shadow-lg" />
@@ -159,7 +164,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: [0, 10, 0] }}
           transition={{
-            opacity: { duration: 1.5, ease: "easeOut" },
+            opacity: { duration: 0.6, ease: "easeOut" },
             y: { duration: 2, repeat: Infinity }
           }}
         >

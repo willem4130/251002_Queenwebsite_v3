@@ -90,9 +90,11 @@ function HomeContent() {
     offset: ["start end", "end start"],
     layoutEffect: false,
   });
-  const aboutBgY = useTransform(aboutProgress, [0, 1], [200, -200]);
+  const aboutBgY = useTransform(aboutProgress, [0, 1], [350, -350]);
+  const aboutBgScale = useTransform(aboutProgress, [0, 0.3], [0.8, 1.1]);
+  const aboutBgOpacity = useTransform(aboutProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0.8]);
   const aboutOpacity = useTransform(aboutProgress, [0, 0.25, 0.85, 1], [0, 1, 1, 0.9]);
-  const aboutScale = useTransform(aboutProgress, [0, 0.3], [0.85, 1.0]);
+  const aboutScale = useTransform(aboutProgress, [0, 0.3], [0.95, 1.0]);
   const aboutY = useTransform(aboutProgress, [0, 0.3], [120, 0]);
 
   // Gallery images from configuration (must be declared before navigateImage/useEffect)
@@ -447,10 +449,12 @@ function HomeContent() {
       >
         {/* Parallax background image (slower scroll) */}
         <motion.div
-          className="absolute inset-0 hidden md:block"
+          className="absolute inset-0"
           style={{
+            opacity: prefersReducedMotion ? 1 : aboutBgOpacity,
             y: prefersReducedMotion ? 0 : aboutBgY,
-            willChange: prefersReducedMotion ? "auto" : "transform",
+            scale: prefersReducedMotion ? 1 : aboutBgScale,
+            willChange: prefersReducedMotion ? "auto" : "transform, opacity",
           }}
         >
           <Image
