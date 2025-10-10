@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ChevronDown, Volume2, VolumeX } from "lucide-react";
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { throttle } from "@/lib/performance-utils";
 
@@ -13,6 +14,7 @@ interface HeroProps {
 export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   const [isMuted, setIsMuted] = useState(true);
   const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Ensure scroll is never blocked on mount
@@ -74,6 +76,11 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
           console.error(`Error code: ${video.error.code} - ${video.error.message}`);
         }
       });
+
+      // Hide poster image once video has loaded enough data to play
+      videoRef.current.addEventListener("loadeddata", () => {
+        setVideoLoaded(true);
+      });
     }
   }, [enableVideo]);
 
@@ -107,7 +114,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   };
 
   return (
-    <section id="home" className="relative h-screen w-full max-w-full" style={{ touchAction: 'pan-y' }}>
+    <section id="home" className="relative h-screen w-full max-w-full" style={{ position: 'relative', touchAction: 'pan-y' }}>
       {/* Background video */}
       <div className="absolute inset-0 overflow-hidden" style={{ pointerEvents: 'none' }}>
         <motion.div
@@ -116,13 +123,24 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
+        {/* Poster image with Next.js Image optimization for LCP */}
+        <Image
+          src={deviceType === 'mobile' ? "/videos/poster-mobile.jpg" : "/videos/poster-desktop.jpg"}
+          alt="The Dutch Queen"
+          fill
+          priority
+          quality={90}
+          className="h-full w-full object-cover"
+          style={{ display: videoLoaded ? 'none' : 'block' }}
+          sizes="(max-width: 768px) 100vw, 100vw"
+        />
         <video
           ref={videoRef}
           loop
           playsInline
           preload="none"
-          poster={deviceType === 'mobile' ? "/videos/poster-mobile.jpg" : "/videos/poster-desktop.jpg"}
           className="h-full w-full object-cover"
+          style={{ opacity: videoLoaded ? 1 : 0 }}
         >
           {/* Modern browsers: WebM VP9 (50% smaller, best compression) */}
           <source
