@@ -112,7 +112,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
       <div className="absolute inset-0 overflow-hidden" style={{ pointerEvents: 'none' }}>
         <motion.div
           className="relative h-full w-full"
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
