@@ -1,13 +1,18 @@
 "use client";
 
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown, ChevronLeft, ChevronRight, X, MapPin, Clock, Ticket } from "lucide-react";
 import Image from "next/image";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, lazy, Suspense } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Hero } from "@/components/Hero";
 import { useBandContent, useMediaPaths } from "@/hooks/useConfig";
 import { throttle } from "@/lib/performance-utils";
+
+// Lazy load AnimatePresence for lightbox (only loads when user clicks gallery)
+const AnimatePresence = lazy(() =>
+  import("framer-motion").then(mod => ({ default: mod.AnimatePresence }))
+);
 
 const bentoPatterns = [
   { row: "span 2", col: "span 2" },
@@ -26,7 +31,6 @@ function HomeContent() {
   const [direction, setDirection] = useState<"next" | "prev" | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [enableScrollAnimations, setEnableScrollAnimations] = useState(false);
 
   // Configuration hooks
   const content = useBandContent();
@@ -42,20 +46,14 @@ function HomeContent() {
     checkDesktop();
     checkMotion();
 
-    // Delay scroll animations to prevent initial scroll lock (performance optimization)
-    const animationTimer = setTimeout(() => {
-      setEnableScrollAnimations(true);
-    }, 500);
-
     const handleResize = () => {
       checkDesktop();
       checkMotion();
     };
 
-    const throttledHandleResize = throttle(handleResize, 150);
+    const throttledHandleResize = throttle(handleResize, 200);
     window.addEventListener('resize', throttledHandleResize, { passive: true });
     return () => {
-      clearTimeout(animationTimer);
       window.removeEventListener('resize', throttledHandleResize);
     };
   }, []);
@@ -167,7 +165,7 @@ function HomeContent() {
     <div className="relative bg-black w-full">
       {/* Hero Section - Static (no scroll lock) */}
       <div className="relative w-full">
-        <Hero onScrollToSection={scrollToSection} enableVideo={enableScrollAnimations} />
+        <Hero onScrollToSection={scrollToSection} enableVideo={true} />
       </div>
 
       {/* Shows Section - DRAMATIC: big parallax + scale swoosh */}
@@ -194,7 +192,7 @@ function HomeContent() {
             src="/shows-bg-1920.webp"
             alt="Shows background"
             fill
-            loading="lazy"
+            priority
             quality={isDesktop ? 80 : 65}
             className="object-cover"
             sizes="100vw"
@@ -515,8 +513,9 @@ function HomeContent() {
       </motion.section>
 
       {/* Lightbox Modal */}
-      <AnimatePresence>
-        {selectedImage && (
+      <Suspense fallback={null}>
+        <AnimatePresence>
+          {selectedImage && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -609,7 +608,8 @@ function HomeContent() {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>
+      </Suspense>
     </div>
   );
 }

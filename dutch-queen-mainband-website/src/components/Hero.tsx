@@ -39,8 +39,8 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
       videoRef.current.defaultMuted = true;
       videoRef.current.muted = true;
 
-      // Start video playback after enableVideo is true (after splash screen)
-      const playbackTimer = setTimeout(() => {
+      // Defer video playback to next frame to prevent scroll lock
+      requestAnimationFrame(() => {
         const promise = videoRef.current?.play();
 
         if (promise !== undefined) {
@@ -58,7 +58,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
               document.addEventListener("click", playOnInteraction, { once: true });
             });
         }
-      }, 100);
+      });
 
       // Log errors
       videoRef.current.addEventListener("error", (e) => {
@@ -68,10 +68,6 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
           console.error(`Error code: ${video.error.code} - ${video.error.message}`);
         }
       });
-
-      return () => {
-        clearTimeout(playbackTimer);
-      };
     }
   }, [enableVideo]);
 
@@ -119,7 +115,8 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
           autoPlay
           loop
           playsInline
-          preload="none"
+          preload="metadata"
+          poster={deviceType === 'mobile' ? "/videos/poster-mobile.jpg" : "/videos/poster-desktop.jpg"}
           className="h-full w-full object-cover"
         >
           {/* Modern browsers: WebM VP9 (50% smaller, best compression) */}
