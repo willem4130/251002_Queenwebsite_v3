@@ -19,6 +19,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     "desktop"
   );
   const [showPoster, setShowPoster] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Detect device type on mount (client-side only)
@@ -61,13 +62,46 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     return () => window.removeEventListener("resize", throttledCheckDevice);
   }, []);
 
+  // Handle video ready state and poster timing
+  useEffect(() => {
+    if (!enableVideo || !videoRef.current) return;
+
+    const video = videoRef.current;
+
+    const handleCanPlay = () => {
+      console.log("✅ Video ready to play");
+      setVideoReady(true);
+    };
+
+    const handleLoadedMetadata = () => {
+      console.log("📊 Video metadata loaded");
+    };
+
+    const handleError = (e: Event) => {
+      console.error("❌ Video loading error:", e);
+      setVideoReady(false);
+      setShowPoster(false); // Hide poster on error to show fallback
+    };
+
+    video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    video.addEventListener("error", handleError);
+
+    return () => {
+      video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      video.removeEventListener("error", handleError);
+    };
+  }, [enableVideo]);
+
+  // Manage poster visibility based on device and video ready state
   useEffect(() => {
     if (!enableVideo) return;
 
     // Show audio controls
     setHasAudio(true);
 
-    console.log(`🎬 Device type: ${deviceType}`);
+    console.log(`🎬 Device type: ${deviceType}, Video ready: ${videoReady}`);
 
     // Only show poster on desktop and tablet, not on mobile
     if (deviceType === "mobile") {
@@ -76,22 +110,24 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
       return;
     }
 
-    // Show poster on desktop and tablet
-    const posterPath =
-      deviceType === "tablet"
-        ? "/videos/poster-mobile.jpg"
-        : "/videos/poster-desktop.jpg";
-    console.log(`🖥️ Desktop/Tablet - showing poster: ${posterPath}`);
-    setShowPoster(true);
+    // Show poster on desktop and tablet until video is ready
+    if (!videoReady) {
+      const posterPath =
+        deviceType === "tablet"
+          ? "/videos/poster-mobile.jpg"
+          : "/videos/poster-desktop.jpg";
+      console.log(`🖥️ Desktop/Tablet - showing poster: ${posterPath}`);
+      setShowPoster(true);
+    } else {
+      // Video is ready, hide poster with delay for smooth transition
+      const timer = setTimeout(() => {
+        console.log(`⏱️ Video ready, hiding poster`);
+        setShowPoster(false);
+      }, 300);
 
-    // Hide poster after 1.5 seconds
-    const timer = setTimeout(() => {
-      console.log(`⏱️ 1.5s elapsed, hiding poster`);
-      setShowPoster(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, [enableVideo, deviceType]);
+      return () => clearTimeout(timer);
+    }
+  }, [enableVideo, deviceType, videoReady]);
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -140,20 +176,37 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
         style={{ pointerEvents: "none" }}
       >
         <div className="relative h-full min-h-screen w-full">
-          {/* Video */}
+          {/* Video with WebM and MP4 sources for optimal performance */}
           <video
             ref={videoRef}
-            src={
-              deviceType === "mobile"
-                ? "/videos/hero-mobile.mp4"
-                : "/videos/hero-desktop.mp4"
-            }
             autoPlay
             loop
             muted
             playsInline
+            preload="metadata"
             className="absolute inset-0 z-0 h-full min-h-full w-full min-w-full object-cover"
-          />
+          >
+            {/* WebM format first (65% smaller, better compression) */}
+            <source
+              src={
+                deviceType === "mobile" || deviceType === "tablet"
+                  ? "/videos/hero-mobile.webm"
+                  : "/videos/hero-desktop.webm"
+              }
+              type="video/webm"
+            />
+            {/* MP4 fallback for older browsers */}
+            <source
+              src={
+                deviceType === "mobile" || deviceType === "tablet"
+                  ? "/videos/hero-mobile.mp4"
+                  : "/videos/hero-desktop.mp4"
+              }
+              type="video/mp4"
+            />
+            {/* Fallback text for browsers that don't support video */}
+            Your browser does not support the video tag.
+          </video>
 
           {/* Poster image - only show on desktop and tablet, NOT on mobile */}
           <AnimatePresence>
@@ -161,6 +214,10 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
               <motion.div
                 key="poster"
                 className="absolute inset-0 z-20"
+                style={{
+                  willChange: "opacity",
+                  transform: "translateZ(0)", // Force GPU layer for smooth animation
+                }}
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
