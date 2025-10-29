@@ -152,7 +152,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
             loop
             muted
             playsInline
-            className="absolute inset-0 h-full min-h-full w-full min-w-full object-cover"
+            className="absolute inset-0 z-0 h-full min-h-full w-full min-w-full object-cover"
           />
 
           {/* Poster image - only show on desktop and tablet, NOT on mobile */}
@@ -160,7 +160,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
             {showPoster && deviceType !== "mobile" && (
               <motion.div
                 key="poster"
-                className="absolute inset-0 z-10"
+                className="absolute inset-0 z-20"
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
