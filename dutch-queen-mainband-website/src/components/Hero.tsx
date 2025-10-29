@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Volume2, VolumeX } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
@@ -13,11 +13,26 @@ interface HeroProps {
 
 export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   const [isMuted, setIsMuted] = useState(true);
+  const [volume, setVolume] = useState(1);
+  const [hasAudio, setHasAudio] = useState(true); // Assume true, our videos have audio
+
   const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">(
     "desktop"
   );
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [showPoster, setShowPoster] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Detect device type on mount (client-side only)
+  useEffect(() => {
+    const width = window.innerWidth;
+    if (width < 768) {
+      setDeviceType("mobile");
+    } else if (width < 1024) {
+      setDeviceType("tablet");
+    } else {
+      setDeviceType("desktop");
+    }
+  }, []);
 
   // Ensure scroll is never blocked on mount
   useEffect(() => {
@@ -28,11 +43,15 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   useEffect(() => {
     const checkDevice = () => {
       const width = window.innerWidth;
+      console.log(`📱 Screen width: ${width}px`);
       if (width < 768) {
+        console.log("Device: Mobile");
         setDeviceType("mobile");
       } else if (width < 1024) {
+        console.log("Device: Tablet");
         setDeviceType("tablet");
       } else {
+        console.log("Device: Desktop");
         setDeviceType("desktop");
       }
     };
@@ -44,54 +63,30 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   }, []);
 
   useEffect(() => {
-    if (videoRef.current && enableVideo) {
-      // Handle React bug with muted attribute (open since 2017)
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
+    if (!enableVideo) return;
 
-      // Defer video playback to next frame to prevent scroll lock
-      requestAnimationFrame(() => {
-        const promise = videoRef.current?.play();
+    // Show audio controls
+    setHasAudio(true);
 
-        if (promise !== undefined) {
-          promise
-            .then(() => {
-              // Call play again to ensure it works (Supabase pattern)
-              videoRef.current?.play();
-            })
-            .catch((error) => {
-              console.warn(
-                "⚠ Autoplay blocked. Video will play on user interaction:",
-                error
-              );
-              // Add click listener to play on first interaction
-              const playOnInteraction = () => {
-                videoRef.current?.play();
-              };
-              document.addEventListener("click", playOnInteraction, {
-                once: true,
-              });
-            });
-        }
-      });
+    console.log(`🎬 Showing poster for device: ${deviceType}`);
 
-      // Log errors
-      videoRef.current.addEventListener("error", (e) => {
-        console.error("✗ Video error:", e);
-        const video = videoRef.current;
-        if (video?.error) {
-          console.error(
-            `Error code: ${video.error.code} - ${video.error.message}`
-          );
-        }
-      });
+    // Show poster on all devices
+    setShowPoster(true);
 
-      // Hide poster image once video has loaded enough data to play
-      videoRef.current.addEventListener("loadeddata", () => {
-        setVideoLoaded(true);
-      });
-    }
-  }, [enableVideo]);
+    // Hide poster after 1.5 seconds
+    const timer = setTimeout(() => {
+      console.log(`⏱️ 1.5s elapsed, hiding poster`);
+      setShowPoster(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [enableVideo, deviceType]);
+
+  useEffect(() => {
+    if (!videoRef.current) return;
+    // Set volume to 100% for when user unmutes
+    videoRef.current.volume = 1.0;
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     if (onScrollToSection) {
@@ -104,21 +99,21 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   };
 
   const toggleMute = () => {
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
+    const newMutedState = !isMuted;
+
+    video.muted = newMutedState;
+    video.volume = volume;
+    setIsMuted(newMutedState);
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
     if (videoRef.current) {
-      const newMutedState = !videoRef.current.muted;
-
-      // Ensure volume is 1 when unmuting (critical for audio playback)
-      if (!newMutedState) {
-        videoRef.current.volume = 1;
-      }
-
-      videoRef.current.muted = newMutedState;
-      setIsMuted(newMutedState);
-
-      // Check if video actually has audio
-      if (!newMutedState && videoRef.current.volume === 0) {
-        console.warn("⚠️ Volume is 0 - audio will not play!");
-      }
+      videoRef.current.volume = newVolume;
     }
   };
 
@@ -133,89 +128,116 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
         className="absolute inset-0 overflow-hidden"
         style={{ pointerEvents: "none" }}
       >
-        <motion.div
-          className="relative h-full w-full"
-          initial={false}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
-          {/* Poster image with Next.js Image optimization for LCP */}
-          <Image
-            src={
-              deviceType === "mobile"
-                ? "/videos/poster-mobile.jpg"
-                : "/videos/poster-desktop.jpg"
-            }
-            alt="The Dutch Queen"
-            fill
-            priority
-            quality={90}
-            className="h-full w-full object-cover"
-            style={{ display: videoLoaded ? "none" : "block" }}
-            sizes="(max-width: 768px) 100vw, 100vw"
-          />
+        <div className="relative h-full w-full">
+          {/* Video */}
           <video
             ref={videoRef}
+            src={
+              deviceType === "mobile"
+                ? "/videos/hero-mobile.mp4"
+                : "/videos/hero-desktop.mp4"
+            }
+            autoPlay
             loop
+            muted
             playsInline
-            preload="none"
             className="h-full w-full object-cover"
-            style={{ opacity: videoLoaded ? 1 : 0 }}
-          >
-            {/* Modern browsers: WebM VP9 (50% smaller, best compression) */}
-            <source
-              src={
-                deviceType === "mobile"
-                  ? "/videos/hero-mobile.webm"
-                  : "/videos/hero-desktop.webm"
-              }
-              type='video/webm; codecs="vp9, opus"'
-            />
-            {/* Fallback: MP4 H.264 for Safari and older browsers */}
-            <source
-              src={
-                deviceType === "mobile"
-                  ? "/videos/hero-mobile.mp4"
-                  : "/videos/hero-desktop.mp4"
-              }
-              type='video/mp4; codecs="avc1.640028, mp4a.40.2"'
-            />
-          </video>
-        </motion.div>
+          />
+
+          {/* Poster image - shows on all devices, fades out after 1.5s */}
+          <AnimatePresence>
+            {showPoster && (
+              <motion.div
+                key="poster"
+                className="absolute inset-0 z-10"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <Image
+                  src={
+                    deviceType === "mobile"
+                      ? "/videos/poster-mobile.jpg"
+                      : "/videos/poster-desktop.jpg"
+                  }
+                  alt="The Dutch Queen"
+                  fill
+                  priority
+                  quality={90}
+                  className="h-full w-full object-cover"
+                  sizes="(max-width: 768px) 100vw, 100vw"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* Hero content */}
       <div className="relative z-10 flex h-screen flex-col items-center justify-center">
-        {/* Mute toggle button */}
-        <motion.button
-          onClick={toggleMute}
-          className="absolute bottom-6 right-6 rounded-full bg-black/30 p-3 text-white/80 backdrop-blur-sm transition-all duration-300 hover:bg-amber-900/40 hover:text-white hover:shadow-lg hover:shadow-amber-900/30 md:bottom-8 md:right-8"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
-          {isMuted ? (
-            <VolumeX className="h-5 w-5 drop-shadow-lg" />
-          ) : (
-            <Volume2 className="h-5 w-5 drop-shadow-lg" />
-          )}
-        </motion.button>
+        {/* Audio controls - only show if video has audio */}
+        {hasAudio && (
+          <div className="absolute bottom-6 right-6 flex items-center gap-3 md:bottom-8 md:right-8">
+            {/* Volume slider - only show when unmuted */}
+            {!isMuted && (
+              <motion.div
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: "auto" }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="flex items-center gap-2 rounded-full bg-black/30 px-4 py-2 backdrop-blur-sm"
+              >
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={handleVolumeChange}
+                  className="w-20 cursor-pointer accent-amber-600 md:w-24"
+                  aria-label="Volume control"
+                />
+                <span className="text-xs tabular-nums text-white/70">
+                  {Math.round(volume * 100)}%
+                </span>
+              </motion.div>
+            )}
+
+            {/* Mute toggle button */}
+            <motion.button
+              onClick={toggleMute}
+              className="rounded-full bg-black/30 p-3 text-white/80 backdrop-blur-sm transition-all duration-300 hover:bg-amber-900/40 hover:text-white hover:shadow-lg hover:shadow-amber-900/30"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              aria-label={isMuted ? "Unmute video" : "Mute video"}
+            >
+              {isMuted ? (
+                <VolumeX className="h-5 w-5 drop-shadow-lg" />
+              ) : (
+                <Volume2 className="h-5 w-5 drop-shadow-lg" />
+              )}
+            </motion.button>
+          </div>
+        )}
 
         {/* Scroll indicator */}
-        <motion.button
-          onClick={() => scrollToSection("shows")}
-          className="absolute bottom-8 rounded-full p-2 text-white/60 transition-all duration-500 hover:bg-amber-900/20 hover:text-white/90 hover:shadow-lg hover:shadow-amber-900/30"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: [0, 10, 0] }}
-          transition={{
-            opacity: { duration: 0.6, ease: "easeOut" },
-            y: { duration: 2, repeat: Infinity },
-          }}
-        >
-          <ChevronDown className="h-8 w-8 drop-shadow-lg" />
-        </motion.button>
+        <div className="absolute bottom-8" style={{ position: "absolute" }}>
+          <motion.button
+            onClick={() => scrollToSection("shows")}
+            className="rounded-full p-2 text-white/60 transition-all duration-500 hover:bg-amber-900/20 hover:text-white/90 hover:shadow-lg hover:shadow-amber-900/30"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: [0, 10, 0] }}
+            transition={{
+              opacity: { duration: 0.6, ease: "easeOut" },
+              y: { duration: 2, repeat: Infinity },
+            }}
+          >
+            <ChevronDown className="h-8 w-8 drop-shadow-lg" />
+          </motion.button>
+        </div>
       </div>
     </section>
   );
