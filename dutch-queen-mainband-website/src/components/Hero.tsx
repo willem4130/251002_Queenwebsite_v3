@@ -20,7 +20,41 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   );
   const [showPoster, setShowPoster] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Detect network quality and Save Data mode
+  useEffect(() => {
+    // Check for Save Data mode
+    interface NetworkInformation {
+      saveData?: boolean;
+      effectiveType?: string;
+    }
+
+    const connection = (navigator as { connection?: NetworkInformation })
+      .connection;
+
+    if (connection?.saveData) {
+      console.log("💾 Save Data mode enabled - optimizing video loading");
+      setShouldLoadVideo(false);
+      return;
+    }
+
+    // Detect network quality
+    if (connection) {
+      const effectiveType = connection.effectiveType;
+      console.log(`📡 Network type detected: ${effectiveType}`);
+
+      if (effectiveType === "slow-2g" || effectiveType === "2g") {
+        // On very slow connections, show warning
+        console.warn(
+          "⚠️ Slow connection detected - video may take time to load"
+        );
+      }
+    }
+
+    setShouldLoadVideo(true);
+  }, []);
 
   // Detect device type on mount (client-side only)
   useEffect(() => {
@@ -135,6 +169,41 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     videoRef.current.volume = 1.0;
   }, []);
 
+  // Intersection Observer for smart autoplay/pause
+  useEffect(() => {
+    if (!videoRef.current || !enableVideo) return;
+
+    const video = videoRef.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Video is visible, play it
+          console.log("👁️ Hero section visible, playing video");
+          video
+            .play()
+            .catch((err) => console.warn("Video autoplay prevented:", err));
+        } else {
+          // Video is not visible, pause to save resources
+          console.log("👁️ Hero section not visible, pausing video");
+          video.pause();
+        }
+      },
+      {
+        threshold: 0.5, // Trigger when 50% of video is visible
+        rootMargin: "0px",
+      }
+    );
+
+    const section = document.getElementById("home");
+    if (section) {
+      observer.observe(section);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [enableVideo]);
+
   const scrollToSection = (sectionId: string) => {
     if (onScrollToSection) {
       onScrollToSection(sectionId);
@@ -176,37 +245,60 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
         style={{ pointerEvents: "none" }}
       >
         <div className="relative h-full min-h-screen w-full">
-          {/* Video with WebM and MP4 sources for optimal performance */}
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 z-0 h-full min-h-full w-full min-w-full object-cover"
-          >
-            {/* WebM format first (65% smaller, better compression) */}
-            <source
-              src={
-                deviceType === "mobile" || deviceType === "tablet"
-                  ? "/videos/hero-mobile.webm"
-                  : "/videos/hero-desktop.webm"
-              }
-              type="video/webm"
-            />
-            {/* MP4 fallback for older browsers */}
-            <source
-              src={
-                deviceType === "mobile" || deviceType === "tablet"
-                  ? "/videos/hero-mobile.mp4"
-                  : "/videos/hero-desktop.mp4"
-              }
-              type="video/mp4"
-            />
-            {/* Fallback text for browsers that don't support video */}
-            Your browser does not support the video tag.
-          </video>
+          {shouldLoadVideo ? (
+            <>
+              {/* Video with WebM and MP4 sources for optimal performance */}
+              <video
+                ref={videoRef}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 z-0 h-full min-h-full w-full min-w-full object-cover"
+              >
+                {/* WebM format first (65% smaller, better compression) */}
+                <source
+                  src={
+                    deviceType === "mobile" || deviceType === "tablet"
+                      ? "/videos/hero-mobile.webm"
+                      : "/videos/hero-desktop.webm"
+                  }
+                  type="video/webm"
+                />
+                {/* MP4 fallback for older browsers */}
+                <source
+                  src={
+                    deviceType === "mobile" || deviceType === "tablet"
+                      ? "/videos/hero-mobile.mp4"
+                      : "/videos/hero-desktop.mp4"
+                  }
+                  type="video/mp4"
+                />
+                {/* Fallback text for browsers that don't support video */}
+                Your browser does not support the video tag.
+              </video>
+            </>
+          ) : (
+            // Fallback static poster for Save Data mode
+            <div className="absolute inset-0 z-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={
+                  deviceType === "mobile" || deviceType === "tablet"
+                    ? "/videos/poster-mobile.jpg"
+                    : "/videos/poster-desktop.jpg"
+                }
+                alt="The Dutch Queen"
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                <p className="text-sm text-white/60">
+                  Video disabled (Data Saver mode)
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Poster image - only show on desktop and tablet, NOT on mobile */}
           <AnimatePresence>
