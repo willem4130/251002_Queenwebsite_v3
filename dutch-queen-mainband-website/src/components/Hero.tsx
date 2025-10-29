@@ -163,13 +163,29 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
                 <Image
-                  src="/videos/poster-desktop.jpg"
+                  src={
+                    deviceType === "tablet"
+                      ? "/videos/poster-mobile.jpg"
+                      : "/videos/poster-desktop.jpg"
+                  }
                   alt="The Dutch Queen"
                   fill
                   priority
                   quality={90}
                   className="h-full w-full object-cover"
-                  sizes="100vw"
+                  sizes="(max-width: 1024px) 100vw, 100vw"
+                  onError={(e) => {
+                    console.error(
+                      "Failed to load hero poster image:",
+                      deviceType,
+                      e
+                    );
+                  }}
+                  onLoad={() => {
+                    console.log(
+                      `✅ Hero poster loaded successfully for ${deviceType}`
+                    );
+                  }}
                 />
               </motion.div>
             )}
