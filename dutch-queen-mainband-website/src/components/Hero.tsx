@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Volume2, VolumeX } from "lucide-react";
-import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { throttle } from "@/lib/performance-utils";
 
@@ -162,18 +161,15 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={
                     deviceType === "tablet"
                       ? "/videos/poster-mobile.jpg"
                       : "/videos/poster-desktop.jpg"
                   }
                   alt="The Dutch Queen"
-                  fill
-                  priority
-                  quality={90}
-                  className="h-full w-full object-cover"
-                  sizes="(max-width: 1024px) 100vw, 100vw"
+                  className="absolute inset-0 h-full w-full object-cover"
                   onError={(e) => {
                     console.error(
                       "Failed to load hero poster image:",
