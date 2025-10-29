@@ -68,9 +68,17 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     // Show audio controls
     setHasAudio(true);
 
-    console.log(`🎬 Showing poster for device: ${deviceType}`);
+    console.log(`🎬 Device type: ${deviceType}`);
 
-    // Show poster on all devices
+    // Only show poster on desktop and tablet, not on mobile
+    if (deviceType === "mobile") {
+      console.log(`📱 Mobile detected - skipping poster`);
+      setShowPoster(false);
+      return;
+    }
+
+    // Show poster on desktop and tablet
+    console.log(`🖥️ Desktop/Tablet - showing poster`);
     setShowPoster(true);
 
     // Hide poster after 1.5 seconds
@@ -120,15 +128,15 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   return (
     <section
       id="home"
-      className="relative h-screen w-full max-w-full"
+      className="relative h-screen w-full max-w-full overflow-hidden"
       style={{ position: "relative", touchAction: "pan-y" }}
     >
       {/* Background video */}
       <div
-        className="absolute inset-0 overflow-hidden"
+        className="absolute inset-0 min-h-screen overflow-hidden"
         style={{ pointerEvents: "none" }}
       >
-        <div className="relative h-full w-full">
+        <div className="relative h-full min-h-screen w-full">
           {/* Video */}
           <video
             ref={videoRef}
@@ -141,12 +149,12 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
             loop
             muted
             playsInline
-            className="h-full w-full object-cover"
+            className="absolute inset-0 h-full min-h-full w-full min-w-full object-cover"
           />
 
-          {/* Poster image - shows on all devices, fades out after 1.5s */}
+          {/* Poster image - only show on desktop and tablet, NOT on mobile */}
           <AnimatePresence>
-            {showPoster && (
+            {showPoster && deviceType !== "mobile" && (
               <motion.div
                 key="poster"
                 className="absolute inset-0 z-10"
@@ -155,17 +163,13 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
                 <Image
-                  src={
-                    deviceType === "mobile"
-                      ? "/videos/poster-mobile.jpg"
-                      : "/videos/poster-desktop.jpg"
-                  }
+                  src="/videos/poster-desktop.jpg"
                   alt="The Dutch Queen"
                   fill
                   priority
                   quality={90}
                   className="h-full w-full object-cover"
-                  sizes="(max-width: 768px) 100vw, 100vw"
+                  sizes="100vw"
                 />
               </motion.div>
             )}

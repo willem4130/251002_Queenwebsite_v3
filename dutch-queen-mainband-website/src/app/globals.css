@@ -606,6 +606,37 @@ section {
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Hero section mobile safety */
+@media (max-width: 768px) {
+  #home {
+    position: relative;
+    overflow: hidden !important;
+    max-width: 100vw;
+  }
+
+  #home video,
+  #home img {
+    max-width: 100vw;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Prevent horizontal overflow on small screens */
+  section {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}
+
+/* Tablet safety adjustments */
+@media (min-width: 768px) and (max-width: 1024px) {
+  #home video,
+  #home img {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   * {
