@@ -77,7 +77,11 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     }
 
     // Show poster on desktop and tablet
-    console.log(`🖥️ Desktop/Tablet - showing poster`);
+    const posterPath =
+      deviceType === "tablet"
+        ? "/videos/poster-mobile.jpg"
+        : "/videos/poster-desktop.jpg";
+    console.log(`🖥️ Desktop/Tablet - showing poster: ${posterPath}`);
     setShowPoster(true);
 
     // Hide poster after 1.5 seconds
@@ -160,6 +164,12 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
+                onAnimationStart={() => {
+                  console.log("🎬 Poster animation starting");
+                }}
+                onAnimationComplete={() => {
+                  console.log("🎬 Poster animation complete");
+                }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -172,14 +182,16 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                   className="absolute inset-0 h-full w-full object-cover"
                   onError={(e) => {
                     console.error(
-                      "Failed to load hero poster image:",
+                      "❌ Failed to load hero poster image:",
                       deviceType,
+                      (e.target as HTMLImageElement).src,
                       e
                     );
                   }}
-                  onLoad={() => {
+                  onLoad={(e) => {
                     console.log(
-                      `✅ Hero poster loaded successfully for ${deviceType}`
+                      `✅ Hero poster loaded successfully for ${deviceType}`,
+                      (e.target as HTMLImageElement).src
                     );
                   }}
                 />
