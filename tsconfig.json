@@ -17,7 +17,7 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",
+    "baseUrl": "./dutch-queen-mainband-website",
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -27,6 +27,12 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "types/**/*.d.ts"],
+  "include": [
+    "dutch-queen-mainband-website/next-env.d.ts",
+    "dutch-queen-mainband-website/**/*.ts",
+    "dutch-queen-mainband-website/**/*.tsx",
+    "dutch-queen-mainband-website/.next/types/**/*.ts",
+    "types/**/*.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

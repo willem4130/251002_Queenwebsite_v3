@@ -1,9 +1,11 @@
 # Performance Analysis Report
+
 ## The Dutch Queen Website - Local vs V2 Hosted
 
 ### Build Analysis (Local Version)
 
 **Bundle Sizes:**
+
 - Homepage: 8.8 kB (158 kB First Load JS)
 - Shared JS: 101 kB
 - Largest chunks:
@@ -16,6 +18,7 @@
 ### Critical Performance Issues Found
 
 #### 🚨 SEVERE: Massive Video Files
+
 - hero-desktop.mp4: **41MB** ⚠️
 - about-bg-1.mp4: **25MB** ⚠️
 - shows-bg-1.mp4: **24MB** ⚠️
@@ -23,9 +26,9 @@
 - Total video size: **~102MB**
 
 #### 🚨 HIGH: Large Background Images
+
 - shows-bg.jpg: **17MB** ⚠️
 - hero-bg.jpg: **5.9MB** ⚠️
 - about-bg.jpg: **3.2MB** ⚠️
 
 ### Performance Metrics Comparison
-

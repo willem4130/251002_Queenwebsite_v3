@@ -39,7 +39,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
             duration: 0.4,
             ease: "easeOut",
           }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black pointer-events-none"
+          className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-black"
           style={{
             willChange: "opacity",
           }}
@@ -57,7 +57,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                 ease: "easeOut",
               },
             }}
-            className="relative w-full max-w-[80vw] md:max-w-[500px] px-8"
+            className="relative w-full max-w-[80vw] px-8 md:max-w-[500px]"
             style={{
               willChange: "opacity, transform",
             }}
@@ -68,10 +68,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                 srcSet="/logo/splash-logo-mobile.webp"
                 type="image/webp"
               />
-              <source
-                srcSet="/logo/splash-logo.webp"
-                type="image/webp"
-              />
+              <source srcSet="/logo/splash-logo.webp" type="image/webp" />
               <Image
                 src="/logo/splash-logo.png"
                 alt="The Dutch Queen Logo"
@@ -79,7 +76,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                 height={800}
                 priority
                 quality={95}
-                className="w-full h-auto object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.8)]"
+                className="h-auto w-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.8)]"
                 sizes="(max-width: 768px) 90vw, 600px"
               />
             </picture>

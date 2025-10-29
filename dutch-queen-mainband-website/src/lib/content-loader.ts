@@ -76,11 +76,21 @@ export class ContentLoader {
 
       // Load all content files in parallel
       const [profile, about, social, contact, shows] = await Promise.all([
-        this.loadJsonFileFromDisk<BandProfile>(join(basePath, "band-profile.json")),
-        this.loadJsonFileFromDisk<AboutContent>(join(basePath, "data", "about.json")),
-        this.loadJsonFileFromDisk<SocialContent>(join(basePath, "data", "social.json")),
-        this.loadJsonFileFromDisk<ContactContent>(join(basePath, "data", "contact.json")),
-        this.loadJsonFileFromDisk<ShowsContent>(join(basePath, "data", "shows.json")),
+        this.loadJsonFileFromDisk<BandProfile>(
+          join(basePath, "band-profile.json")
+        ),
+        this.loadJsonFileFromDisk<AboutContent>(
+          join(basePath, "data", "about.json")
+        ),
+        this.loadJsonFileFromDisk<SocialContent>(
+          join(basePath, "data", "social.json")
+        ),
+        this.loadJsonFileFromDisk<ContactContent>(
+          join(basePath, "data", "contact.json")
+        ),
+        this.loadJsonFileFromDisk<ShowsContent>(
+          join(basePath, "data", "shows.json")
+        ),
       ]);
 
       return {

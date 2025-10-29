@@ -1,4 +1,5 @@
 # Technical Performance Assessment Report
+
 **Date**: 2025-10-10
 **Website**: The Dutch Queen Main Band Website
 **Next.js Version**: 15.3.5
@@ -16,6 +17,7 @@ Your website demonstrates strong technical fundamentals with modern Next.js 15 a
 ## 🎨 Animation Libraries
 
 ### Finding: Framer Motion Only ✅
+
 - **Library Used**: Framer Motion v11.3.0
 - **GSAP**: Not detected (confirmed)
 - **Implementation**: 10 components use Framer Motion
@@ -23,6 +25,7 @@ Your website demonstrates strong technical fundamentals with modern Next.js 15 a
 - **Accessibility**: Motion preferences checked via `prefers-reduced-motion`
 
 **Components Using Framer Motion**:
+
 1. `src/app/page.tsx` - Scroll animations (useScroll, useTransform)
 2. `src/components/Hero.tsx` - Mute button, scroll indicator
 3. `src/components/navigation.tsx` - Navigation animations
@@ -55,6 +58,7 @@ Route (app)                              Size     First Load JS
 **Build Time**: 2 seconds (excellent)
 
 ### Chunk Breakdown (Top 10 Largest)
+
 1. `684.js` - 172 KB (React + main bundle)
 2. `4bd1b696.js` - 168 KB (Framer Motion + utilities)
 3. `framework.js` - 140 KB (Next.js framework)
@@ -70,13 +74,13 @@ Route (app)                              Size     First Load JS
 
 ### Industry Benchmark Comparison
 
-| Metric | Your Site | Next.js 15 Avg | Mother Mercury (WP) | Rating |
-|--------|-----------|----------------|---------------------|--------|
-| First Load JS | 162 KB | 150-200 KB | ~500+ KB | ✅ Excellent |
-| Homepage JS | 15.5 KB | 10-20 KB | ~100+ KB | ✅ Good |
-| Code Splitting | Yes | Yes | Limited | ✅ Optimal |
-| Build Time | 2s | 2-5s | N/A | ✅ Fast |
-| Tree Shaking | Yes | Yes | No | ✅ Optimal |
+| Metric         | Your Site | Next.js 15 Avg | Mother Mercury (WP) | Rating       |
+| -------------- | --------- | -------------- | ------------------- | ------------ |
+| First Load JS  | 162 KB    | 150-200 KB     | ~500+ KB            | ✅ Excellent |
+| Homepage JS    | 15.5 KB   | 10-20 KB       | ~100+ KB            | ✅ Good      |
+| Code Splitting | Yes       | Yes            | Limited             | ✅ Optimal   |
+| Build Time     | 2s        | 2-5s           | N/A                 | ✅ Fast      |
+| Tree Shaking   | Yes       | Yes            | No                  | ✅ Optimal   |
 
 ---
 
@@ -85,6 +89,7 @@ Route (app)                              Size     First Load JS
 ### Images (Excellent ✅)
 
 **Background Images** (WebP optimized):
+
 - `about-bg-1280.webp` - 24 KB
 - `about-bg-1920.webp` - 52 KB
 - `about-bg-2560.webp` - 88 KB
@@ -93,11 +98,13 @@ Route (app)                              Size     First Load JS
 - `shows-bg-2560.webp` - 148 KB
 
 **Gallery Images** (WebP, 18 images):
+
 - Average size: 64-136 KB per image
 - Format: WebP (excellent compression)
 - Responsive: Multiple breakpoints served
 
 **Video Posters**:
+
 - `poster-desktop.jpg` - 184 KB
 - `poster-mobile.jpg` - 112 KB
 
@@ -109,16 +116,17 @@ Route (app)                              Size     First Load JS
 
 ### Critical Finding: WebM Files Larger Than MP4 ⚠️
 
-| File | Format | Size | Duration | Bitrate | Issue |
-|------|--------|------|----------|---------|-------|
-| hero-desktop.mp4 | MP4 | 15.8 MB | 37.8s | 3.35 Mbps | ✅ Good |
-| hero-desktop.webm | WebM | **19.0 MB** | 37.8s | 4.03 Mbps | ⚠️ **+21% bloat** |
-| hero-mobile.mp4 | MP4 | 5.7 MB | 23.2s | 1.98 Mbps | ✅ Good |
-| hero-mobile.webm | WebM | **6.4 MB** | 23.2s | 2.22 Mbps | ⚠️ **+12% bloat** |
+| File              | Format | Size        | Duration | Bitrate   | Issue             |
+| ----------------- | ------ | ----------- | -------- | --------- | ----------------- |
+| hero-desktop.mp4  | MP4    | 15.8 MB     | 37.8s    | 3.35 Mbps | ✅ Good           |
+| hero-desktop.webm | WebM   | **19.0 MB** | 37.8s    | 4.03 Mbps | ⚠️ **+21% bloat** |
+| hero-mobile.mp4   | MP4    | 5.7 MB      | 23.2s    | 1.98 Mbps | ✅ Good           |
+| hero-mobile.webm  | WebM   | **6.4 MB**  | 23.2s    | 2.22 Mbps | ⚠️ **+12% bloat** |
 
-**Problem**: WebM files should be 30-50% *smaller* than MP4, not larger. Current encoding is suboptimal.
+**Problem**: WebM files should be 30-50% _smaller_ than MP4, not larger. Current encoding is suboptimal.
 
 **Expected Sizes** (proper encoding):
+
 - Desktop WebM: ~8-11 MB (currently 19 MB)
 - Mobile WebM: ~3-4 MB (currently 6.4 MB)
 
@@ -127,6 +135,7 @@ Route (app)                              Size     First Load JS
 ### Additional Video Issues
 
 **Backups Folder**: ⚠️ 77 MB in `/public/videos/backups`
+
 - Should be removed from production deployment
 - Consider moving to external storage or .gitignore
 
@@ -135,18 +144,21 @@ Route (app)                              Size     First Load JS
 ## 🧹 Code Quality
 
 ### TypeScript ✅
+
 ```bash
 > tsc --noEmit
 ✓ No errors found
 ```
 
 ### ESLint ✅
+
 ```bash
 > eslint .
 ✓ No errors found
 ```
 
 ### Console Logs (Development Only)
+
 - **Total**: 21 occurrences across 7 files
 - **Files**: Hero.tsx, VideoBackground.tsx, ErrorBoundary.tsx, etc.
 - **Recommendation**: Remove for production or use proper logging library
@@ -158,6 +170,7 @@ Route (app)                              Size     First Load JS
 ### Unused Dependencies (Low Priority) ⚠️
 
 **Can Be Removed** (10 packages):
+
 1. `@radix-ui/react-slot` - Not used in code
 2. `class-variance-authority` - Not used
 3. `clsx` - Not used
@@ -170,6 +183,7 @@ Route (app)                              Size     First Load JS
 10. `zod` - Not used
 
 **Disabled Dependencies** (Intentional):
+
 - `next-auth` - Auth files disabled (.ts.disabled)
 - `@prisma/client` - Database files disabled (.ts.disabled)
 - `@auth/prisma-adapter` - Adapter disabled
@@ -183,12 +197,14 @@ Route (app)                              Size     First Load JS
 ### Mother Mercury (mothermercury.be)
 
 **Technology Stack**:
+
 - WordPress with Elementor page builder
 - Polylang (multilingual plugin)
 - Multiple JavaScript libraries
 - Inline CSS with extensive preset variables
 
 **Performance Characteristics**:
+
 - Large number of HTTP requests
 - Multiple script/CSS files (not consolidated)
 - Moderate lazy loading implementation
@@ -196,6 +212,7 @@ Route (app)                              Size     First Load JS
 - Heavy Elementor overhead
 
 **Estimated Metrics**:
+
 - First Load JS: ~500+ KB
 - Total Page Weight: ~2-3 MB
 - Build/Optimization: Limited
@@ -203,12 +220,14 @@ Route (app)                              Size     First Load JS
 ### Your Site (The Dutch Queen)
 
 **Technology Stack**:
+
 - Next.js 15 with React 18
 - Framer Motion (single animation library)
 - Custom performance utilities (throttle/debounce)
 - Modern build optimizations
 
 **Performance Characteristics**:
+
 - Excellent code splitting
 - Optimized image formats (WebP/AVIF)
 - Fast compile times (2s)
@@ -216,6 +235,7 @@ Route (app)                              Size     First Load JS
 - Modern caching headers
 
 **Measured Metrics**:
+
 - First Load JS: 162 KB
 - Total Page Weight: ~20-25 MB (mostly video)
 - Build Time: 2 seconds
@@ -231,8 +251,10 @@ Your site is **significantly more performant** than Mother Mercury in all techni
 ### High Priority (Performance Impact)
 
 #### 1. Re-encode Video Files
+
 **Problem**: WebM files are 12-21% larger than MP4
 **Solution**: Re-encode with proper WebM/VP9 settings
+
 ```bash
 # Desktop video (target: ~10MB WebM)
 ffmpeg -i hero-desktop.mp4 -c:v libvpx-vp9 -crf 35 -b:v 2M \
@@ -242,52 +264,66 @@ ffmpeg -i hero-desktop.mp4 -c:v libvpx-vp9 -crf 35 -b:v 2M \
 ffmpeg -i hero-mobile.mp4 -c:v libvpx-vp9 -crf 37 -b:v 1.5M \
   -c:a libopus -b:a 96k hero-mobile.webm
 ```
+
 **Impact**: 6-8 MB savings per page load
 
 #### 2. Remove Backups Folder
+
 **Problem**: 77 MB in public/videos/backups
 **Solution**:
+
 ```bash
 # Move to external storage or add to .gitignore
 mv public/videos/backups ~/desktop-backups/
 echo "public/videos/backups/" >> .gitignore
 ```
+
 **Impact**: Faster deployments, cleaner repo
 
 ### Medium Priority (Bundle Size)
 
 #### 3. Remove Unused Dependencies
+
 **Solution**:
+
 ```bash
 npm uninstall @radix-ui/react-slot class-variance-authority clsx \
   date-fns nanoid next-seo next-themes sonner tailwind-merge zod
 ```
+
 **Impact**: ~15 MB node_modules reduction, ~5-10 KB bundle reduction
 
 #### 4. Enable Bundle Analyzer
-**Solution**: Add to `next.config.ts`:
-```typescript
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
 
-module.exports = withBundleAnalyzer(nextConfig)
+**Solution**: Add to `next.config.ts`:
+
+```typescript
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+
+module.exports = withBundleAnalyzer(nextConfig);
 ```
+
 **Impact**: Visual bundle analysis for ongoing monitoring
 
 ### Low Priority (Code Quality)
 
 #### 5. Remove Development Console Logs
+
 **Files**: 21 occurrences in 7 files
 **Solution**: Use proper logging library or environment checks
+
 ```typescript
-if (process.env.NODE_ENV === 'development') {
-  console.log('Debug info')
+if (process.env.NODE_ENV === "development") {
+  console.log("Debug info");
 }
 ```
 
 #### 6. Clean Up Disabled Files
+
 **Files**:
+
 - `src/lib/auth.ts.disabled`
 - `src/lib/prisma.ts.disabled`
 - `src/types/next-auth.d.ts` (references @prisma/client)
@@ -302,21 +338,21 @@ if (process.env.NODE_ENV === 'development') {
 
 Based on bundle analysis and file sizes:
 
-| Metric | Score | Notes |
-|--------|-------|-------|
-| Performance | 85-90 | Video files impact LCP |
-| Accessibility | 95+ | Good semantic HTML |
-| Best Practices | 95+ | Modern Next.js patterns |
-| SEO | 90+ | Server-side rendering |
+| Metric         | Score | Notes                   |
+| -------------- | ----- | ----------------------- |
+| Performance    | 85-90 | Video files impact LCP  |
+| Accessibility  | 95+   | Good semantic HTML      |
+| Best Practices | 95+   | Modern Next.js patterns |
+| SEO            | 90+   | Server-side rendering   |
 
 ### Core Web Vitals (Production Estimates)
 
-| Metric | Target | Expected | Status |
-|--------|--------|----------|--------|
-| LCP (Largest Contentful Paint) | <2.5s | ~2-3s | ⚠️ (video-dependent) |
-| FID (First Input Delay) | <100ms | <50ms | ✅ |
-| CLS (Cumulative Layout Shift) | <0.1 | <0.05 | ✅ |
-| TTFB (Time to First Byte) | <800ms | ~300ms | ✅ |
+| Metric                         | Target | Expected | Status               |
+| ------------------------------ | ------ | -------- | -------------------- |
+| LCP (Largest Contentful Paint) | <2.5s  | ~2-3s    | ⚠️ (video-dependent) |
+| FID (First Input Delay)        | <100ms | <50ms    | ✅                   |
+| CLS (Cumulative Layout Shift)  | <0.1   | <0.05    | ✅                   |
+| TTFB (Time to First Byte)      | <800ms | ~300ms   | ✅                   |
 
 ---
 
@@ -347,6 +383,7 @@ headers: {
 ## 📝 Summary & Action Plan
 
 ### What's Working Well ✅
+
 1. Modern Next.js 15 architecture
 2. Excellent code splitting (162 KB First Load JS)
 3. Clean TypeScript/ESLint (zero errors)
@@ -357,6 +394,7 @@ headers: {
 8. Accessibility considerations
 
 ### What Needs Attention ⚠️
+
 1. Video WebM encoding (HIGH - 6-8 MB savings)
 2. Remove backups folder (MEDIUM - 77 MB)
 3. Unused dependencies (LOW - 15 MB node_modules)
@@ -365,6 +403,7 @@ headers: {
 ### Estimated Performance Gains
 
 If all optimizations implemented:
+
 - **Initial Load**: 20-30% faster (video compression)
 - **Deployment Size**: ~92 MB smaller (backups + deps)
 - **Bundle Size**: ~5-10 KB smaller (unused deps)

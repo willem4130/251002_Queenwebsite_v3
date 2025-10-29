@@ -13,25 +13,27 @@ interface HeroProps {
 
 export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
   const [isMuted, setIsMuted] = useState(true);
-  const [deviceType, setDeviceType] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">(
+    "desktop"
+  );
   const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Ensure scroll is never blocked on mount
   useEffect(() => {
-    document.body.style.overflow = 'auto';
-    document.documentElement.style.overflow = 'auto';
+    document.body.style.overflow = "auto";
+    document.documentElement.style.overflow = "auto";
   }, []);
 
   useEffect(() => {
     const checkDevice = () => {
       const width = window.innerWidth;
       if (width < 768) {
-        setDeviceType('mobile');
+        setDeviceType("mobile");
       } else if (width < 1024) {
-        setDeviceType('tablet');
+        setDeviceType("tablet");
       } else {
-        setDeviceType('desktop');
+        setDeviceType("desktop");
       }
     };
 
@@ -58,12 +60,17 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
               videoRef.current?.play();
             })
             .catch((error) => {
-              console.warn("⚠ Autoplay blocked. Video will play on user interaction:", error);
+              console.warn(
+                "⚠ Autoplay blocked. Video will play on user interaction:",
+                error
+              );
               // Add click listener to play on first interaction
               const playOnInteraction = () => {
                 videoRef.current?.play();
               };
-              document.addEventListener("click", playOnInteraction, { once: true });
+              document.addEventListener("click", playOnInteraction, {
+                once: true,
+              });
             });
         }
       });
@@ -73,7 +80,9 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
         console.error("✗ Video error:", e);
         const video = videoRef.current;
         if (video?.error) {
-          console.error(`Error code: ${video.error.code} - ${video.error.message}`);
+          console.error(
+            `Error code: ${video.error.code} - ${video.error.message}`
+          );
         }
       });
 
@@ -108,51 +117,70 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
 
       // Check if video actually has audio
       if (!newMutedState && videoRef.current.volume === 0) {
-        console.warn('⚠️ Volume is 0 - audio will not play!');
+        console.warn("⚠️ Volume is 0 - audio will not play!");
       }
     }
   };
 
   return (
-    <section id="home" className="relative h-screen w-full max-w-full" style={{ position: 'relative', touchAction: 'pan-y' }}>
+    <section
+      id="home"
+      className="relative h-screen w-full max-w-full"
+      style={{ position: "relative", touchAction: "pan-y" }}
+    >
       {/* Background video */}
-      <div className="absolute inset-0 overflow-hidden" style={{ pointerEvents: 'none' }}>
+      <div
+        className="absolute inset-0 overflow-hidden"
+        style={{ pointerEvents: "none" }}
+      >
         <motion.div
           className="relative h-full w-full"
           initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-        {/* Poster image with Next.js Image optimization for LCP */}
-        <Image
-          src={deviceType === 'mobile' ? "/videos/poster-mobile.jpg" : "/videos/poster-desktop.jpg"}
-          alt="The Dutch Queen"
-          fill
-          priority
-          quality={90}
-          className="h-full w-full object-cover"
-          style={{ display: videoLoaded ? 'none' : 'block' }}
-          sizes="(max-width: 768px) 100vw, 100vw"
-        />
-        <video
-          ref={videoRef}
-          loop
-          playsInline
-          preload="none"
-          className="h-full w-full object-cover"
-          style={{ opacity: videoLoaded ? 1 : 0 }}
-        >
-          {/* Modern browsers: WebM VP9 (50% smaller, best compression) */}
-          <source
-            src={deviceType === 'mobile' ? "/videos/hero-mobile.webm" : "/videos/hero-desktop.webm"}
-            type='video/webm; codecs="vp9, opus"'
+          {/* Poster image with Next.js Image optimization for LCP */}
+          <Image
+            src={
+              deviceType === "mobile"
+                ? "/videos/poster-mobile.jpg"
+                : "/videos/poster-desktop.jpg"
+            }
+            alt="The Dutch Queen"
+            fill
+            priority
+            quality={90}
+            className="h-full w-full object-cover"
+            style={{ display: videoLoaded ? "none" : "block" }}
+            sizes="(max-width: 768px) 100vw, 100vw"
           />
-          {/* Fallback: MP4 H.264 for Safari and older browsers */}
-          <source
-            src={deviceType === 'mobile' ? "/videos/hero-mobile.mp4" : "/videos/hero-desktop.mp4"}
-            type='video/mp4; codecs="avc1.640028, mp4a.40.2"'
-          />
-        </video>
+          <video
+            ref={videoRef}
+            loop
+            playsInline
+            preload="none"
+            className="h-full w-full object-cover"
+            style={{ opacity: videoLoaded ? 1 : 0 }}
+          >
+            {/* Modern browsers: WebM VP9 (50% smaller, best compression) */}
+            <source
+              src={
+                deviceType === "mobile"
+                  ? "/videos/hero-mobile.webm"
+                  : "/videos/hero-desktop.webm"
+              }
+              type='video/webm; codecs="vp9, opus"'
+            />
+            {/* Fallback: MP4 H.264 for Safari and older browsers */}
+            <source
+              src={
+                deviceType === "mobile"
+                  ? "/videos/hero-mobile.mp4"
+                  : "/videos/hero-desktop.mp4"
+              }
+              type='video/mp4; codecs="avc1.640028, mp4a.40.2"'
+            />
+          </video>
         </motion.div>
       </div>
 
@@ -183,7 +211,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
           animate={{ opacity: 1, y: [0, 10, 0] }}
           transition={{
             opacity: { duration: 0.6, ease: "easeOut" },
-            y: { duration: 2, repeat: Infinity }
+            y: { duration: 2, repeat: Infinity },
           }}
         >
           <ChevronDown className="h-8 w-8 drop-shadow-lg" />

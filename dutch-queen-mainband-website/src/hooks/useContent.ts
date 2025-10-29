@@ -38,7 +38,11 @@ export function useBandContent(
   });
 
   const fetchContent = useCallback(async () => {
-    setState((prev) => ({ ...prev, loading: true, error: null }));
+    setState((prev: ContentLoadState) => ({
+      ...prev,
+      loading: true,
+      error: null,
+    }));
 
     try {
       const content = await loadBandContent(bandId, source);
@@ -161,12 +165,18 @@ export function useActiveSocialPlatforms(): Array<{
   if (!social) return [];
 
   return Object.entries(social.platforms)
-    .filter(([, platform]) => platform.active)
-    .map(([name, platform]) => ({
-      name,
-      url: platform.url,
-      handle: platform.handle,
-    }))
+    .filter(([, platform]: [string, unknown]) => {
+      const p = platform as { active?: boolean };
+      return p.active;
+    })
+    .map(([name, platform]: [string, unknown]) => {
+      const p = platform as { url: string; handle?: string };
+      return {
+        name,
+        url: p.url,
+        handle: p.handle,
+      };
+    })
     .sort((a, b) => {
       const orderA = social.preferredOrder.indexOf(a.name);
       const orderB = social.preferredOrder.indexOf(b.name);
@@ -188,8 +198,11 @@ export function useUpcomingShows(limit?: number): ShowsContent["upcoming"] {
   if (!shows?.upcoming) return [];
 
   const upcoming = shows.upcoming
-    .filter((show) => new Date(show.date) >= new Date())
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    .filter((show: { date: string }) => new Date(show.date) >= new Date())
+    .sort(
+      (a: { date: string }, b: { date: string }) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
 
   return limit ? upcoming.slice(0, limit) : upcoming;
 }
@@ -203,8 +216,14 @@ export function useFeaturedShows(): ShowsContent["upcoming"] {
   if (!shows?.upcoming) return [];
 
   return shows.upcoming
-    .filter((show) => show.featured && new Date(show.date) >= new Date())
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    .filter(
+      (show: { featured?: boolean; date: string }) =>
+        show.featured && new Date(show.date) >= new Date()
+    )
+    .sort(
+      (a: { date: string }, b: { date: string }) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
 }
 
 /**

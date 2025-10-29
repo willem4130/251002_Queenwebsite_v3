@@ -5,27 +5,32 @@ A modern Next.js application built with Queen Claude foundation.
 ## 🚀 What's Included (31 Packages)
 
 ### Core Stack
+
 - ⚡ **Next.js 15** with App Router
-- 🔒 **TypeScript** in strict mode  
+- 🔒 **TypeScript** in strict mode
 - 🎨 **Tailwind CSS** with dark mode support
 
 ### Authentication & Database
+
 - 🔐 **NextAuth.js v5** - GitHub, Google, email auth
 - 🗄️ **Prisma** - Type-safe database ORM
 - ⚙️ **Type-safe env vars** - Runtime validation
 
 ### Forms & UI
+
 - 📝 **React Hook Form + Zod** - Forms with validation
 - 🎯 **Radix UI** - 8 primitive components (modals, dropdowns, etc.)
 - 🌟 **Framer Motion** - Smooth animations
 - 📁 **React Dropzone** - File upload handling
 
 ### State & Data
-- 🏪 **Zustand** - Client state management  
+
+- 🏪 **Zustand** - Client state management
 - 🔄 **TanStack Query** - Server state, caching, mutations
 - 📡 **Axios** - HTTP client
 
-### Developer Experience  
+### Developer Experience
+
 - 🧪 **Vitest + Testing Library** - Fast testing
 - 🛠️ **ESLint + Prettier** - Code quality
 - 🪝 **Husky** - Git hooks
@@ -48,8 +53,9 @@ A modern Next.js application built with Queen Claude foundation.
 ```
 
 This will:
+
 1. Let you choose from 8 proven color themes (Apple, Stripe, GitHub, etc.)
-2. Select from 5 battle-tested font pairings (Inter, Montserrat, etc.)  
+2. Select from 5 battle-tested font pairings (Inter, Montserrat, etc.)
 3. Configure spacing and styling preferences
 4. Generate `DESIGN_SYSTEM.md` + update `tailwind.config.js` + create `COMPONENT_TEMPLATES.md`
 
@@ -90,11 +96,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Available Scripts
 
 ### Development
+
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run start` - Start production server
 
 ### Code Quality
+
 - `npm run lint` - Run ESLint
 - `npm run lint:fix` - Fix ESLint errors
 - `npm run type-check` - Run TypeScript type checking
@@ -102,17 +110,20 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - `npm run format:check` - Check code formatting
 
 ### Database (Prisma)
+
 - `npm run db:push` - Push schema to database
 - `npm run db:generate` - Generate Prisma client
-- `npm run db:migrate` - Run database migrations  
+- `npm run db:migrate` - Run database migrations
 - `npm run db:studio` - Open database GUI
 
 ### Testing
+
 - `npm test` - Run tests with Vitest
 - `npm run test:ui` - Run tests with UI
 - `npm run test:coverage` - Run tests with coverage report
 
 ### Analysis
+
 - `npm run analyze` - Analyze bundle size
 
 ## Project Structure
@@ -130,7 +141,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 │   │   └── __tests__/      # Page tests
 │   ├── components/         # Reusable components + providers
 │   ├── lib/               # Auth, Prisma, utilities
-│   ├── stores/            # Zustand state management  
+│   ├── stores/            # Zustand state management
 │   └── types/             # TypeScript definitions
 ├── styles/globals.css     # Minimal Tailwind foundation
 └── ...config files
@@ -139,6 +150,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Quality Gates
 
 This project includes pre-commit hooks that automatically:
+
 - Run ESLint and fix issues
 - Format code with Prettier
 - Ensure type safety with TypeScript
@@ -172,7 +184,7 @@ npm run analyze
 ## 🚀 Quick Start Checklist
 
 1. ✅ **Install dependencies:** `npm install`
-2. ✅ **Set up environment:** `cp .env.example .env.local` 
+2. ✅ **Set up environment:** `cp .env.example .env.local`
 3. ✅ **Initialize database:** `npm run db:push`
 4. 🎨 **Create design system:** Run `/1-setup-design` in Claude Code
 5. 📦 **Check capabilities:** Read `CAPABILITIES.md` for available packages
@@ -181,6 +193,7 @@ npm run analyze
 ## 🤖 For Autonomous Development
 
 **Key Files for AI Agents:**
+
 - **CAPABILITIES.md** - Prevents unnecessary package installations
 - **DESIGN_SYSTEM.md** - Ensures consistent UI design (created by `/1-setup-design`)
 - **Examples:** Check `src/components/` and `src/lib/` for usage patterns

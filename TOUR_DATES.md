@@ -5,6 +5,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 ## December 2025
 
 ### December 4, 2025
+
 - **Venue:** Vorstin
 - **City:** Hilversum
 - **Time:** 20:30
@@ -12,6 +13,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://vorstin.stager.co/shop/default/events/111493445
 
 ### December 6, 2025
+
 - **Venue:** Boerderij
 - **City:** Zoetermeer
 - **Time:** 20:30
@@ -19,6 +21,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://poppodiumboerderij.nl/programma/thedutchqueen2025/
 
 ### December 11, 2025
+
 - **Venue:** Victorie
 - **City:** Alkmaar
 - **Time:** 20:30
@@ -26,6 +29,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://www.podiumvictorie.nl/programma/the-dutch-queen-2025
 
 ### December 12, 2025
+
 - **Venue:** Vereeniging
 - **City:** Nijmegen
 - **Time:** 20:15
@@ -33,6 +37,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://www.stadsschouwburgendevereeniging.nl/programma/8266/50-jahr-bohemian-rhapsody/the-dutch-queen
 
 ### December 13, 2025
+
 - **Venue:** Dru fabriek
 - **City:** Ulft
 - **Time:** 20:15
@@ -40,6 +45,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://www.dru-industriepark.nl/agenda/pop/2025/12/the-dutch-queen
 
 ### December 18, 2025
+
 - **Venue:** Metropool
 - **City:** Enschede
 - **Time:** 20:15
@@ -47,6 +53,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://metropool.nl/agenda/the-dutch-queen-18-dec
 
 ### December 19, 2025
+
 - **Venue:** Lantaarn
 - **City:** Hellendoorn
 - **Time:** 20:15
@@ -54,6 +61,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://mijnetickets.shop/de-lantaarn-exploitatie/67acf1f2dfc06
 
 ### December 20, 2025
+
 - **Venue:** Hedon
 - **City:** Zwolle
 - **Time:** 19:30
@@ -61,6 +69,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://hedon-zwolle.nl/voorstelling/32447/the-dutch-queen
 
 ### December 28, 2025
+
 - **Venue:** Effenaar
 - **City:** Eindhoven
 - **Time:** 20:30
@@ -68,6 +77,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://www.effenaar.nl/agenda/dutch-queen-50-jaar-bohemian-rhapsody
 
 ### December 29, 2025
+
 - **Venue:** Oosterpoort
 - **City:** Groningen
 - **Time:** 20:30
@@ -75,6 +85,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://www.spotgroningen.nl/programma/the-dutch-queen-3/
 
 ### December 30, 2025
+
 - **Venue:** Mezz
 - **City:** Breda
 - **Time:** 20:30
@@ -84,6 +95,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 ## January 2026
 
 ### January 2, 2026
+
 - **Venue:** Groene Engel
 - **City:** Oss
 - **Time:** 20:30
@@ -91,6 +103,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://groene-engel.stager.co/web/tickets/111471691
 
 ### January 3, 2026
+
 - **Venue:** Grenswerk
 - **City:** Venlo
 - **Time:** 20:30
@@ -98,6 +111,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://www.grenswerk.nl/agenda/the-dutch-queen///
 
 ### January 9, 2026
+
 - **Venue:** Gigant
 - **City:** Apeldoorn
 - **Time:** 20:30
@@ -105,6 +119,7 @@ Complete tour schedule scraped from https://thedutchqueen.com
 - **Tickets:** https://www.gigant.nl/concert/the-dutch-queen
 
 ### January 10, 2026
+
 - **Venue:** Bibelot
 - **City:** Dordrecht
 - **Time:** 20:30

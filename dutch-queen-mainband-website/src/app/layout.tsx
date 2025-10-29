@@ -13,17 +13,20 @@ const inter = Inter({
 // Static metadata with fallback values
 export const metadata: Metadata = {
   title: "The Dutch Queen | Official Website",
-  description: "Official website of The Dutch Queen - Europe's Premier Queen Tribute Band",
+  description:
+    "Official website of The Dutch Queen - Europe's Premier Queen Tribute Band",
   keywords: ["Queen", "tribute band", "live music", "Dutch Queen"],
   openGraph: {
     title: "The Dutch Queen | Official Website",
-    description: "Official website of The Dutch Queen - Europe's Premier Queen Tribute Band",
+    description:
+      "Official website of The Dutch Queen - Europe's Premier Queen Tribute Band",
     images: [],
   },
   twitter: {
     card: "summary_large_image",
     title: "The Dutch Queen | Official Website",
-    description: "Official website of The Dutch Queen - Europe's Premier Queen Tribute Band",
+    description:
+      "Official website of The Dutch Queen - Europe's Premier Queen Tribute Band",
   },
 };
 

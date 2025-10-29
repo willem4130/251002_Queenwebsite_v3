@@ -9,10 +9,10 @@
 
 Current video files show **reverse optimization** where WebM files are LARGER than MP4:
 
-| File | Current Size | Expected Size | Bloat |
-|------|-------------|---------------|-------|
-| hero-desktop.webm | 19.0 MB | ~10 MB | +90% |
-| hero-mobile.webm | 6.4 MB | ~4 MB | +60% |
+| File              | Current Size | Expected Size | Bloat |
+| ----------------- | ------------ | ------------- | ----- |
+| hero-desktop.webm | 19.0 MB      | ~10 MB        | +90%  |
+| hero-mobile.webm  | 6.4 MB       | ~4 MB         | +60%  |
 
 **Impact**: Users on WebM-capable browsers download LARGER files than necessary.
 
@@ -97,11 +97,13 @@ ffmpeg -i hero-mobile.mp4 \
 ## 📊 Expected Results
 
 ### Before Optimization
+
 - Desktop: 15.8 MB (MP4) + 19.0 MB (WebM) = 34.8 MB
 - Mobile: 5.7 MB (MP4) + 6.4 MB (WebM) = 12.1 MB
 - **Total**: 46.9 MB
 
 ### After Optimization
+
 - Desktop: 15.8 MB (MP4) + ~10 MB (WebM) = 25.8 MB
 - Mobile: 5.7 MB (MP4) + ~4 MB (WebM) = 9.7 MB
 - **Total**: ~35.5 MB

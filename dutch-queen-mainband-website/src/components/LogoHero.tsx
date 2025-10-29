@@ -126,7 +126,7 @@ export function LogoHero({ className = "" }: LogoHeroProps) {
       <motion.div
         initial={variants.initial}
         animate={variants.animate}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
         transition={variants.transition as any}
         className="relative"
         style={{

@@ -5,12 +5,14 @@ AI development guidelines for autonomous feature development with perfect code q
 ## 📦 Package-First Philosophy
 
 ### Core Rule: Check CAPABILITIES.md First
+
 - **Step 1**: Read CAPABILITIES.md for available packages (31 included)
 - **Step 2**: Use existing tools (NextAuth, Prisma, react-hook-form, Radix UI, zustand, React Query, axios, etc.)
 - **Step 3**: Only install new packages if user confirms necessity
 - **Decision flow**: Need functionality? → Check CAPABILITIES.md → Use existing → Ask user before installing new
 
 ### Our Foundation Includes
+
 - **Authentication**: NextAuth v5 with GitHub/Google providers
 - **Database**: Prisma ORM with SQLite ready
 - **Forms**: react-hook-form + zod validation
@@ -21,6 +23,7 @@ AI development guidelines for autonomous feature development with perfect code q
 ## 🎨 Design System Compliance
 
 ### Mandatory References
+
 - **Read CAPABILITIES.md**: Available packages and tools (31 total)
 - **Read DESIGN_SYSTEM.md**: Colors, fonts, spacing specifications
 - **Read COMPONENT_TEMPLATES.md**: Ready-to-use component patterns
@@ -28,6 +31,7 @@ AI development guidelines for autonomous feature development with perfect code q
 - **Follow exact specifications**: No color/font deviations without user approval
 
 ### Design Consistency Rules
+
 - **Colors**: Use Tailwind design tokens (bg-primary, text-primary) from tailwind.config.js
 - **Typography**: Use configured font classes (font-heading, font-body)
 - **Spacing**: Use design system spacing classes (ds-1, ds-2, etc.)
@@ -35,6 +39,7 @@ AI development guidelines for autonomous feature development with perfect code q
 - **Accessibility**: Ensure 4.5:1 contrast ratio minimum
 
 ### Critical UI Rules (Prevent Common LLM Mistakes)
+
 - ✅ **ALWAYS**: White text on dark backgrounds, dark text on light backgrounds
 - ✅ **ALWAYS**: Check contrast before applying colors
 - ❌ **NEVER**: Light gray text on white backgrounds
@@ -44,11 +49,13 @@ AI development guidelines for autonomous feature development with perfect code q
 ## 🎯 Self-Documenting Code
 
 ### Comment Rules
+
 - **Code comments**: NEVER add unless absolutely necessary
 - **Design system comments**: ALLOWED in CSS/styling for clarity
 - **Example comments**: ALLOWED in DESIGN_SYSTEM.md for agent guidance
 
 ### Function Naming
+
 - Function names explain purpose: `validateUserEmailForAuthentication()` not `validate()`
 - Variable names are obvious: `userAuthToken` not `token`
 - Small, focused functions (max 20 lines)
@@ -56,6 +63,7 @@ AI development guidelines for autonomous feature development with perfect code q
 - Type definitions explain data relationships
 
 ### File Organization
+
 ```
 src/
 ├── app/
@@ -76,6 +84,7 @@ src/
 ## 🧹 Zero Clutter Rules
 
 ### File Hygiene
+
 - Every file has single, obvious purpose
 - No "misc" or "utils" folders - name what it actually does
 - Delete unused imports immediately
@@ -83,6 +92,7 @@ src/
 - No commented-out code ever
 
 ### Code Cleanup
+
 - Fix TypeScript errors before continuing
 - Remove unused variables before moving on
 - Run formatter after every change
@@ -92,6 +102,7 @@ src/
 ## ⚡ YAGNI Enforcement
 
 ### Build Only What's Needed
+
 - No "flexible" architecture until needed twice
 - No configuration options until requested
 - No optimization until performance problem exists
@@ -99,6 +110,7 @@ src/
 - Delete features that aren't being used
 
 ### Complexity Prevention
+
 - Max 3 levels of nesting in functions
 - Direct solutions over clever ones
 - Copy-paste over premature abstraction
@@ -107,6 +119,7 @@ src/
 ## 🧪 Test-Driven Development
 
 ### TDD Rules
+
 - Write failing test first (immediate feedback)
 - Make test pass with minimal code
 - Refactor while keeping tests green
@@ -114,6 +127,7 @@ src/
 - Integration tests over unit tests (prove it works)
 
 ### Frequent Validation
+
 - Test after every 5-10 lines of code
 - Run build after major changes
 - Validate in browser/CLI immediately
@@ -122,6 +136,7 @@ src/
 ## 📱 Response Guidelines
 
 ### Status-First Communication
+
 ```
 ✅ LoginForm component complete. Testing now...
 ⚠️ Type error in auth.ts line 23. Fixing...
@@ -129,6 +144,7 @@ src/
 ```
 
 ### Visual Over Verbal
+
 - Status symbols: ✅ ⚠️ 🔄 ❌
 - Progress bars: [████████░░] 80%
 - Bullet points over paragraphs
@@ -136,6 +152,7 @@ src/
 - Always end with clear NEXT STEP
 
 ### Response Format Rules
+
 ❌ Never: Long explanations of what you did
 ❌ Never: Verbose status updates
 ❌ Never: Theoretical discussions
@@ -144,6 +161,7 @@ src/
 ## 🔄 Quality Gates
 
 ### Before Marking coding_done
+
 - Code actually runs without errors
 - Tests pass (run them, don't assume)
 - **ESLint passes:** Run `npm run lint:fix` to catch quote escaping and JSX issues
@@ -152,6 +170,7 @@ src/
 - Simple integration test demonstrates core functionality
 
 ### Technical Debt Prevention
+
 - Similar files in same directory
 - Consistent naming patterns across project
 - Dependencies flow in one direction
@@ -161,6 +180,7 @@ src/
 ## 🗄️ Queen Database Integration
 
 ### When to Store Memory
+
 ```
 ALWAYS store when you:
 - Solve a tricky problem (store the solution approach)
@@ -175,6 +195,7 @@ EXAMPLES:
 ```
 
 ### When to Report Problems
+
 ```
 ALWAYS report when you encounter:
 - Build/compile errors
@@ -191,6 +212,7 @@ IMMEDIATELY mark as solved when fixed:
 ```
 
 ### Database Tool Usage
+
 ```
 Before starting work: mcp__queen-mcp__get_project_context (get full context)
 During development: mcp__queen-mcp__update_agent_activity (show progress)
@@ -202,7 +224,9 @@ Task dependencies: mcp__queen-mcp__check_task_dependencies (can I start this?)
 ```
 
 ### Foundation File References
+
 **Always read these files created by setup commands:**
+
 - **DESIGN_SYSTEM.md**: Color palette, fonts, spacing (from /1-setup-design)
 - **COMPONENT_TEMPLATES.md**: Ready-to-use component patterns (from /3-setup-features)
 - **tailwind.config.js**: Design tokens and theme configuration (from /2-setup-foundation)
@@ -212,6 +236,7 @@ Task dependencies: mcp__queen-mcp__check_task_dependencies (can I start this?)
 - **src/lib/prisma.ts**: Database client setup (from /2b-setup-backend)
 
 ### Memory Categories
+
 - **important_pattern**: Code templates and structures
 - **key_decision**: Why we chose X over Y
 - **critical_knowledge**: Must-know project rules
@@ -221,6 +246,7 @@ Task dependencies: mcp__queen-mcp__check_task_dependencies (can I start this?)
 ## 🎪 Agent Workflow Integration
 
 ### Status Transitions
+
 ```
 Building agents (nextking/nextfront/thebackend/typegod): todo → in_progress → coding_done
 Frontend validation (cheeky_frontend): coding_done → validated OR needs_fixes (for UI/design tasks)
@@ -230,11 +256,13 @@ Final: validated → complete
 ```
 
 ### Validation Agent Selection
+
 - **Frontend tasks** (UI, components, styling) → Use `cheeky_frontend`
 - **Backend tasks** (APIs, database, auth) → Use `cheeky_backend`
 - **Full-stack features** → Use both agents for respective parts
 
 ### Memory-First Development
+
 - Check Queen memory before building anything new
 - Store successful approaches immediately
 - Update agent status frequently for dashboard visibility

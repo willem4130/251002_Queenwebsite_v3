@@ -5,6 +5,7 @@
 **Purpose**: Enable secure access to personalized shopping experiences and order history for registered customers
 
 **User Journey**:
+
 1. New user clicks "Sign Up" from any page header
 2. Fills registration form with email, password, and name
 3. Receives confirmation email with verification link
@@ -14,6 +15,7 @@
 7. Can logout from user menu in header
 
 **Functional Scope**:
+
 - User registration with email and password
 - Email verification before first login
 - Login with email/password credentials
@@ -25,6 +27,7 @@
 - NOT included: Two-factor authentication, SMS verification
 
 **Interface Elements**:
+
 ```
 /login page layout:
 ┌─────────────────────────────┐
@@ -52,6 +55,7 @@
 ```
 
 **User Interactions**:
+
 - Email field: Validates email format on blur, shows red error text if invalid
 - Password field: Shows/hides password with eye icon, min 8 characters
 - Remember me: Checkbox, extends session to 30 days when checked
@@ -61,6 +65,7 @@
 - Sign up link: Navigates to /register page
 
 **Business Rules**:
+
 - Email must be unique in system (case-insensitive)
 - Password minimum 8 characters, must include letter and number
 - Account locks for 5 minutes after 3 consecutive failed attempts
@@ -70,6 +75,7 @@
 - Only one active session per user allowed
 
 **Success Indicators**:
+
 - User can register and receive verification email within 30 seconds
 - Email verification link works and activates account
 - User can login with correct credentials
@@ -81,6 +87,7 @@
 - Account locks after 3 failed attempts and shows timeout message
 
 **Data Handled**:
+
 - User profile (email, name, created date, verified status)
 - Password (hashed, never stored in plain text)
 - Session tokens (JWT or session ID)
@@ -89,6 +96,7 @@
 - OAuth provider data (provider name, provider user ID)
 
 **Integration Points**:
+
 - Email service for verification and password reset emails
 - Google OAuth for social login
 - Session storage (cookies or localStorage)
@@ -103,6 +111,7 @@
 **Purpose**: Allow customers to browse, search, and filter products to find items they want to purchase
 
 **User Journey**:
+
 1. User lands on homepage, sees featured products
 2. Clicks "Shop All" or category from navigation
 3. Sees product grid with images, names, and prices
@@ -114,6 +123,7 @@
 9. Adds product to cart or wishlist
 
 **Functional Scope**:
+
 - Product listing page with grid/list view toggle
 - Category pages with breadcrumb navigation
 - Search bar with autocomplete suggestions
@@ -126,6 +136,7 @@
 - NOT included: Product reviews, Q&A section
 
 **Interface Elements**:
+
 ```
 /products page layout:
 ┌─────────────────────────────────────┐
@@ -152,6 +163,7 @@
 ```
 
 **User Interactions**:
+
 - Search bar: Shows suggestions after 3 characters, searches on enter
 - Filter checkboxes: Instantly updates results, shows count per filter
 - Sort dropdown: Re-orders products immediately
@@ -160,6 +172,7 @@
 - Grid/List toggle: Switches view layout, remembers preference
 
 **Business Rules**:
+
 - Show maximum 20 products initially, load more on demand
 - Out of stock products shown but marked as unavailable
 - Search includes product name, description, and SKU
@@ -169,6 +182,7 @@
 - New products show "New" badge for 30 days
 
 **Success Indicators**:
+
 - Product grid loads within 2 seconds
 - Search returns relevant results instantly
 - Filters update results without page reload
@@ -179,6 +193,7 @@
 - Add to cart works from listing and detail pages
 
 **Data Handled**:
+
 - Product information (name, description, SKU, category)
 - Pricing (regular price, sale price, currency)
 - Inventory (stock level, availability status)
@@ -188,6 +203,7 @@
 - Filter selections (for user preferences)
 
 **Integration Points**:
+
 - Product database or CMS for product data
 - Image CDN for optimized product images
 - Search service (Algolia, Elasticsearch) for fast search
@@ -202,6 +218,7 @@
 **Purpose**: Allow customers to collect products, review selections, and manage quantities before proceeding to checkout
 
 **User Journey**:
+
 1. User browses products and clicks "Add to Cart"
 2. Sees confirmation message "Added to cart"
 3. Cart icon in header shows item count
@@ -214,6 +231,7 @@
 10. Clicks "Checkout" to proceed to payment
 
 **Functional Scope**:
+
 - Add products to cart from any product page
 - Cart slide-out panel from right side
 - View all cart items with product details
@@ -227,6 +245,7 @@
 - NOT included: Save for later, cart sharing
 
 **Interface Elements**:
+
 ```
 Cart Panel (slides from right):
 ┌──────────────────────────┐
@@ -258,6 +277,7 @@ Cart Panel (slides from right):
 ```
 
 **User Interactions**:
+
 - Add to Cart button: Shows loading, then success message, updates cart count
 - Cart icon: Shows badge with item count, clicks opens panel
 - Quantity buttons: +/- updates quantity, disables at min/max
@@ -267,6 +287,7 @@ Cart Panel (slides from right):
 - Continue shopping: Closes panel, returns to browsing
 
 **Business Rules**:
+
 - Maximum 10 of same item per order
 - Minimum order value $10 for checkout
 - Cart items reserved for 15 minutes (then stock released)
@@ -277,6 +298,7 @@ Cart Panel (slides from right):
 - Guest carts merge with account cart on login
 
 **Success Indicators**:
+
 - Products add to cart successfully with confirmation
 - Cart count updates everywhere immediately
 - Cart panel opens/closes smoothly
@@ -289,6 +311,7 @@ Cart Panel (slides from right):
 - Checkout button leads to payment flow
 
 **Data Handled**:
+
 - Cart items (product ID, variant, quantity, added price)
 - User/session identifier for cart ownership
 - Applied coupons and discounts
@@ -297,6 +320,7 @@ Cart Panel (slides from right):
 - Product availability at time of cart action
 
 **Integration Points**:
+
 - Product catalog for current prices and stock
 - Coupon system for discount validation
 - Tax calculation service (TaxJar, Avalara)
