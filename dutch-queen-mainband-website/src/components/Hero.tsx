@@ -260,18 +260,22 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 {/* WebM format first (65% smaller, better compression) */}
                 <source
                   src={
-                    deviceType === "mobile" || deviceType === "tablet"
+                    deviceType === "mobile"
                       ? "/videos/hero-mobile.webm"
-                      : "/videos/hero-desktop.webm"
+                      : deviceType === "tablet"
+                        ? "/videos/hero-tablet.webm"
+                        : "/videos/hero-desktop.webm"
                   }
                   type="video/webm"
                 />
                 {/* MP4 fallback for older browsers */}
                 <source
                   src={
-                    deviceType === "mobile" || deviceType === "tablet"
+                    deviceType === "mobile"
                       ? "/videos/hero-mobile.mp4"
-                      : "/videos/hero-desktop.mp4"
+                      : deviceType === "tablet"
+                        ? "/videos/hero-tablet.mp4"
+                        : "/videos/hero-desktop.mp4"
                   }
                   type="video/mp4"
                 />
@@ -285,7 +289,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={
-                  deviceType === "mobile" || deviceType === "tablet"
+                  deviceType === "mobile"
                     ? "/videos/poster-mobile.jpg"
                     : "/videos/poster-desktop.jpg"
                 }
