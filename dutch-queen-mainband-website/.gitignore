@@ -58,3 +58,4 @@ website-comparison-report/
 # Large video source files (keep optimized versions only)
 /public/videos/*.mp4.backup
 /public/videos/*.webm.backup
+/video-originals/

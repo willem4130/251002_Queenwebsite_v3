@@ -61,7 +61,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     const width = window.innerWidth;
     if (width < 768) {
       setDeviceType("mobile");
-    } else if (width < 1024) {
+    } else if (width <= 1024) {
       setDeviceType("tablet");
     } else {
       setDeviceType("desktop");
@@ -81,7 +81,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
       if (width < 768) {
         console.log("Device: Mobile");
         setDeviceType("mobile");
-      } else if (width < 1024) {
+      } else if (width <= 1024) {
         console.log("Device: Tablet");
         setDeviceType("tablet");
       } else {
@@ -103,12 +103,21 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     const video = videoRef.current;
 
     const handleCanPlay = () => {
-      console.log("✅ Video ready to play");
+      console.log("✅ Video can play - setting ready state");
+      setVideoReady(true);
+    };
+
+    const handleLoadedData = () => {
+      console.log("✅ Video data loaded - setting ready state");
       setVideoReady(true);
     };
 
     const handleLoadedMetadata = () => {
       console.log("📊 Video metadata loaded");
+    };
+
+    const handlePlaying = () => {
+      console.log("▶️ Video is now playing");
     };
 
     const handleError = (e: Event) => {
@@ -118,12 +127,16 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
     };
 
     video.addEventListener("canplay", handleCanPlay);
+    video.addEventListener("loadeddata", handleLoadedData);
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    video.addEventListener("playing", handlePlaying);
     video.addEventListener("error", handleError);
 
     return () => {
       video.removeEventListener("canplay", handleCanPlay);
+      video.removeEventListener("loadeddata", handleLoadedData);
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      video.removeEventListener("playing", handlePlaying);
       video.removeEventListener("error", handleError);
     };
   }, [enableVideo]);
@@ -137,30 +150,8 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
 
     console.log(`🎬 Device type: ${deviceType}, Video ready: ${videoReady}`);
 
-    // Only show poster on desktop and tablet, not on mobile
-    if (deviceType === "mobile") {
-      console.log(`📱 Mobile detected - skipping poster`);
-      setShowPoster(false);
-      return;
-    }
-
-    // Show poster on desktop and tablet until video is ready
-    if (!videoReady) {
-      const posterPath =
-        deviceType === "tablet"
-          ? "/videos/poster-mobile.jpg"
-          : "/videos/poster-desktop.jpg";
-      console.log(`🖥️ Desktop/Tablet - showing poster: ${posterPath}`);
-      setShowPoster(true);
-    } else {
-      // Video is ready, hide poster with delay for smooth transition
-      const timer = setTimeout(() => {
-        console.log(`⏱️ Video ready, hiding poster`);
-        setShowPoster(false);
-      }, 300);
-
-      return () => clearTimeout(timer);
-    }
+    // Don't show poster - let video play immediately
+    setShowPoster(false);
   }, [enableVideo, deviceType, videoReady]);
 
   useEffect(() => {
@@ -328,7 +319,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
                 <img
                   src={
                     deviceType === "tablet"
-                      ? "/videos/poster-mobile.jpg"
+                      ? "/videos/poster-desktop.jpg"
                       : "/videos/poster-desktop.jpg"
                   }
                   alt="The Dutch Queen"
@@ -358,7 +349,7 @@ export function Hero({ onScrollToSection, enableVideo = false }: HeroProps) {
       <div className="relative z-10 flex h-screen flex-col items-center justify-center">
         {/* Audio controls - only show if video has audio */}
         {hasAudio && (
-          <div className="absolute bottom-6 right-6 flex items-center gap-3 md:bottom-8 md:right-8">
+          <div className="absolute bottom-6 left-6 flex items-center gap-3 md:bottom-8 md:left-8">
             {/* Volume slider - only show when unmuted */}
             {!isMuted && (
               <motion.div
